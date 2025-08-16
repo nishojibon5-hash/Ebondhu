@@ -1,20 +1,23 @@
 import { useState } from "react";
-import { 
-  Send, 
-  Download, 
-  Upload, 
-  Smartphone, 
-  Receipt, 
-  QrCode, 
-  Bell, 
-  Settings, 
-  Eye, 
+import {
+  Send,
+  Download,
+  Upload,
+  Smartphone,
+  Receipt,
+  QrCode,
+  Bell,
+  Settings,
+  Eye,
   EyeOff,
   Globe,
   CreditCard,
   Home,
-  Banknote
+  Banknote,
+  PiggyBank,
+  Users
 } from "lucide-react";
+import { Link } from "react-router-dom";
 import { Language } from "../App";
 
 interface DashboardProps {
