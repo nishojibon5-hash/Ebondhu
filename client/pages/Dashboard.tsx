@@ -63,7 +63,7 @@ const translations = {
     recentTransactions: "সাম্প্রতিক লেনদেন",
     viewAll: "সব দেখুন",
     sent: "পাঠানো",
-    received: "পে��়েছেন", 
+    received: "পেয়েছেন", 
     recharged: "রিচার্জ",
     today: "আজ",
     yesterday: "গতকাল",
@@ -216,6 +216,32 @@ export default function Dashboard({ language, setLanguage }: DashboardProps) {
                     </span>
                   </div>
                 </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Special Features */}
+        <div className="bg-white rounded-2xl shadow-lg p-4 mb-6">
+          <h3 className="font-bold text-gray-800 mb-4 text-center">বিশেষ সেবাসমূহ</h3>
+          <div className="grid grid-cols-1 gap-3">
+            {specialFeatures.map((feature, index) => {
+              const Icon = feature.icon;
+              return (
+                <Link
+                  key={index}
+                  to={feature.link}
+                  className={`${feature.color} p-4 rounded-xl hover:scale-105 transition-all duration-200 text-white`}
+                >
+                  <div className="flex items-center space-x-4">
+                    <div className="p-3 bg-white/20 rounded-full">
+                      <Icon className="h-6 w-6 text-white" />
+                    </div>
+                    <div>
+                      <span className="font-bold text-lg">{feature.label}</span>
+                    </div>
+                  </div>
+                </Link>
               );
             })}
           </div>
