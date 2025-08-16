@@ -24,6 +24,9 @@ function App() {
             <Route path="/tasks" element={<Tasks language={language} />} />
             <Route path="/somiti" element={<Somiti language={language} />} />
             <Route path="/profile" element={<Profile language={language} />} />
+            <Route path="/task-earning" element={<TaskEarning />} />
+            <Route path="/loan-application" element={<LoanApplication />} />
+            <Route path="/somiti-manager" element={<SomitiManager />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
           <BottomNavigation language={language} />
