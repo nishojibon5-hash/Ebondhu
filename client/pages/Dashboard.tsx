@@ -44,7 +44,10 @@ const translations = {
     recharged: "রিচার্জ",
     today: "আজ",
     yesterday: "গতকাল",
-    tapToSeeBalance: "ব্যালেন্স দেখতে ট্যাপ করুন"
+    tapToSeeBalance: "ব্যালেন্স দেখতে ট্যাপ করুন",
+    taskEarning: "টাস্ক আর্নিং",
+    loanService: "লোন সার্ভিস",
+    somitiManager: "সমিতি ম্যানেজার"
   },
   bn: {
     goodMorning: "শুভ সকাল",
@@ -60,11 +63,14 @@ const translations = {
     recentTransactions: "সাম্প্রতিক লেনদেন",
     viewAll: "সব দেখুন",
     sent: "পাঠানো",
-    received: "পেয়েছেন", 
+    received: "পে��়েছেন", 
     recharged: "রিচার্জ",
     today: "আজ",
     yesterday: "গতকাল",
-    tapToSeeBalance: "ব্যালেন্স দেখতে ট্যাপ করুন"
+    tapToSeeBalance: "ব্যালেন্স দেখতে ট্যাপ করুন",
+    taskEarning: "টাস্ক আর্নিং",
+    loanService: "লোন সার্ভিস",
+    somitiManager: "সমিতি ম্যানেজার"
   }
 };
 
