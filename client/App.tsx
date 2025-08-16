@@ -15,24 +15,91 @@ import { useState, useEffect } from "react";
 
 export type Language = 'en' | 'bn';
 
+// Protected Route Component
+function ProtectedRoute({ children }: { children: React.ReactNode }) {
+  const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+  return isLoggedIn ? <>{children}</> : <Navigate to="/login" replace />;
+}
+
+// Public Route Component (redirect to dashboard if logged in)
+function PublicRoute({ children }: { children: React.ReactNode }) {
+  const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+  return !isLoggedIn ? <>{children}</> : <Navigate to="/" replace />;
+}
+
 function App() {
-  const [language, setLanguage] = useState<Language>('en');
+  const [language, setLanguage] = useState<Language>('bn'); // Default to Bengali
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const loggedIn = localStorage.getItem('isLoggedIn') === 'true';
+    setIsLoggedIn(loggedIn);
+  }, []);
 
   return (
     <BrowserRouter>
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">
         <div className="max-w-md mx-auto bg-white dark:bg-gray-900 min-h-screen shadow-xl">
           <Routes>
-            <Route path="/" element={<Dashboard language={language} setLanguage={setLanguage} />} />
-            <Route path="/tasks" element={<Tasks language={language} />} />
-            <Route path="/somiti" element={<Somiti language={language} />} />
-            <Route path="/profile" element={<Profile language={language} />} />
-            <Route path="/task-earning" element={<TaskEarning />} />
-            <Route path="/loan-application" element={<LoanApplication />} />
-            <Route path="/somiti-manager" element={<SomitiManager />} />
+            {/* Public Routes */}
+            <Route path="/login" element={
+              <PublicRoute>
+                <Login />
+              </PublicRoute>
+            } />
+            <Route path="/register" element={
+              <PublicRoute>
+                <Register />
+              </PublicRoute>
+            } />
+            <Route path="/forgot-pin" element={
+              <PublicRoute>
+                <ForgotPin />
+              </PublicRoute>
+            } />
+
+            {/* Protected Routes */}
+            <Route path="/" element={
+              <ProtectedRoute>
+                <Dashboard language={language} setLanguage={setLanguage} />
+              </ProtectedRoute>
+            } />
+            <Route path="/tasks" element={
+              <ProtectedRoute>
+                <Tasks language={language} />
+              </ProtectedRoute>
+            } />
+            <Route path="/somiti" element={
+              <ProtectedRoute>
+                <Somiti language={language} />
+              </ProtectedRoute>
+            } />
+            <Route path="/profile" element={
+              <ProtectedRoute>
+                <Profile language={language} />
+              </ProtectedRoute>
+            } />
+            <Route path="/task-earning" element={
+              <ProtectedRoute>
+                <TaskEarning />
+              </ProtectedRoute>
+            } />
+            <Route path="/loan-application" element={
+              <ProtectedRoute>
+                <LoanApplication />
+              </ProtectedRoute>
+            } />
+            <Route path="/somiti-manager" element={
+              <ProtectedRoute>
+                <SomitiManager />
+              </ProtectedRoute>
+            } />
+
             <Route path="*" element={<NotFound />} />
           </Routes>
-          <BottomNavigation language={language} />
+
+          {/* Show bottom navigation only for logged in users */}
+          {isLoggedIn && <BottomNavigation language={language} />}
         </div>
       </div>
     </BrowserRouter>
