@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
 import Tasks from "./pages/Tasks";
 import Somiti from "./pages/Somiti";
@@ -6,9 +6,12 @@ import Profile from "./pages/Profile";
 import TaskEarning from "./pages/TaskEarning";
 import LoanApplication from "./pages/LoanApplication";
 import SomitiManager from "./pages/SomitiManager";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import ForgotPin from "./pages/ForgotPin";
 import NotFound from "./pages/NotFound";
 import { BottomNavigation } from "./components/BottomNavigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export type Language = 'en' | 'bn';
 
