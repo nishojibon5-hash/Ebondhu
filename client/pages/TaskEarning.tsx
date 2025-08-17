@@ -85,7 +85,7 @@ export default function TaskEarning() {
       {
         id: 1002,
         title: "ইনস্টাগ্রাম পোস্টে লাইক দিন",
-        description: "নতুন পণ্যের পোস্টে লাইক দিয়ে ৩০ টাকা পান",
+        description: "নতুন প���্যের পোস্টে লাইক দিয়ে ৩০ টাকা পান",
         category: 'social-media',
         platform: 'instagram',
         taskType: 'like',
@@ -285,7 +285,7 @@ export default function TaskEarning() {
             <div className="flex items-start space-x-3">
               <AlertTriangle className="h-5 w-5 text-blue-600 mt-1" />
               <div>
-                <h4 className="font-bold text-blue-900 mb-2">নির্দেশনা:</h4>
+                <h4 className="font-bold text-blue-900 mb-2">নির্দ��শনা:</h4>
                 <ol className="text-sm text-blue-800 space-y-1">
                   <li>১. নিচের লিংকে ক্লিক করুন</li>
                   <li>২. পেজটি {getTaskTypeText(selectedTask.taskType)}</li>
@@ -371,9 +371,14 @@ export default function TaskEarning() {
             <Link to="/" className="p-2 bg-white/20 rounded-full hover:bg-white/30 transition-colors">
               <ArrowLeft className="h-5 w-5" />
             </Link>
-            <h1 className="text-xl font-bold">টাস্ক আর্নিং</h1>
+            <div>
+              <h1 className="text-xl font-bold">টাস্ক আর্নিং</h1>
+              <p className="text-sm text-white/80">
+                ব্যালেন্স: ৳{parseFloat(localStorage.getItem('userBalance') || '5000').toLocaleString()}
+              </p>
+            </div>
           </div>
-          <Link 
+          <Link
             to="/task-earning/create"
             className="p-2 bg-white/20 rounded-full hover:bg-white/30 transition-colors"
           >
