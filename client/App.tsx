@@ -95,6 +95,11 @@ function App() {
                 <SomitiManager />
               </ProtectedRoute>
             } />
+            <Route path="/somiti-setup" element={
+              <ProtectedRoute>
+                <SomitiSetup />
+              </ProtectedRoute>
+            } />
 
             <Route path="*" element={<NotFound />} />
           </Routes>
