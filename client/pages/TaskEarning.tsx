@@ -24,8 +24,9 @@ interface Task {
   id: number;
   title: string;
   description: string;
-  platform: 'facebook' | 'instagram' | 'youtube' | 'whatsapp';
-  taskType: 'follow' | 'like' | 'share' | 'comment' | 'subscribe';
+  category: string;
+  platform: 'facebook' | 'instagram' | 'youtube' | 'whatsapp' | 'website' | 'other';
+  taskType: string;
   reward: number;
   targetUrl: string;
   createdBy: string;
@@ -33,13 +34,90 @@ interface Task {
   completed: number;
   maxCompletions: number;
   status: 'active' | 'paused' | 'completed';
+  createdAt?: string;
+  requirements?: Array<{id: number; description: string; isRequired: boolean}>;
+  verificationMethod?: string;
+  budget?: number;
+  totalCost?: number;
 }
 
 export default function TaskEarning() {
-  const [activeTab, setActiveTab] = useState<'browse' | 'create' | 'myTasks'>('browse');
+  const [activeTab, setActiveTab] = useState<'browse' | 'myTasks'>('browse');
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [isWorking, setIsWorking] = useState(false);
   const [trackingStatus, setTrackingStatus] = useState<'idle' | 'checking' | 'success' | 'failed'>('idle');
+  const [availableTasks, setAvailableTasks] = useState<Task[]>([]);
+  const [myTasks, setMyTasks] = useState<Task[]>([]);
+  const [completedTasks, setCompletedTasks] = useState<any[]>([]);
+
+  // Load tasks from localStorage on component mount
+  useEffect(() => {
+    loadTasks();
+    loadCompletedTasks();
+  }, []);
+
+  const loadTasks = () => {
+    // Load user's created tasks
+    const userTasks = JSON.parse(localStorage.getItem('userTasks') || '[]');
+    setMyTasks(userTasks);
+
+    // Load available tasks (demo tasks + other users' tasks)
+    const demoTasks: Task[] = [
+      {
+        id: 1001,
+        title: "আমার ফেসবুক পেজ ফলো করুন",
+        description: "ব্যবসায়িক পেজে ফলো দিন এবং ৫০ টাকা আয় করুন",
+        category: 'social-media',
+        platform: 'facebook',
+        taskType: 'follow',
+        reward: 50,
+        targetUrl: "https://facebook.com/example-page",
+        createdBy: "রহিম উদ্দিন",
+        timeLimit: "২৪ ঘন্টা",
+        completed: 15,
+        maxCompletions: 100,
+        status: 'active'
+      },
+      {
+        id: 1002,
+        title: "ইনস্টাগ্রাম পোস্টে লাইক দিন",
+        description: "নতুন পণ্যের পোস্টে লাইক দিয়ে ৩০ টাকা পান",
+        category: 'social-media',
+        platform: 'instagram',
+        taskType: 'like',
+        reward: 30,
+        targetUrl: "https://instagram.com/p/example",
+        createdBy: "ফাতেমা খাতুন",
+        timeLimit: "১২ ঘন্টা",
+        completed: 8,
+        maxCompletions: 50,
+        status: 'active'
+      },
+      {
+        id: 1003,
+        title: "ইউটিউব চ্যানেল সাবস্ক্রাইব",
+        description: "শিক্ষামূলক চ্যানেল সাবস্ক্রাইব করে ১০০ টাকা আয় করুন",
+        category: 'social-media',
+        platform: 'youtube',
+        taskType: 'subscribe',
+        reward: 100,
+        targetUrl: "https://youtube.com/c/example",
+        createdBy: "করিম আহমেদ",
+        timeLimit: "৪৮ ঘন্টা",
+        completed: 25,
+        maxCompletions: 200,
+        status: 'active'
+      }
+    ];
+
+    // Combine demo tasks with other users' tasks (excluding current user's tasks)
+    setAvailableTasks(demoTasks);
+  };
+
+  const loadCompletedTasks = () => {
+    const completed = JSON.parse(localStorage.getItem('completedTasks') || '[]');
+    setCompletedTasks(completed);
+  };
 
   const availableTasks: Task[] = [
     {
@@ -72,7 +150,7 @@ export default function TaskEarning() {
     },
     {
       id: 3,
-      title: "ইউটিউব চ্যানে�� সাবস্ক্রাইব",
+      title: "ইউটিউব চ্যানেল সাবস্ক্রাইব",
       description: "শিক্ষামূলক চ্যানেল সাবস্ক্রাইব করে ১০০ টাকা আয় করুন",
       platform: 'youtube',
       taskType: 'subscribe',
@@ -254,7 +332,7 @@ export default function TaskEarning() {
                   onClick={() => setTrackingStatus('idle')}
                   className="mt-3 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
                 >
-                  আ���ার চেষ্টা করুন
+                  আবার চেষ্টা করুন
                 </button>
               </div>
             )}
