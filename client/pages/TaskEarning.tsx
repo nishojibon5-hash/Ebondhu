@@ -1,17 +1,22 @@
-import { useState } from "react";
-import { 
-  Plus, 
-  Facebook, 
-  Instagram, 
-  Youtube, 
-  MessageCircle, 
-  Eye, 
-  DollarSign, 
-  Clock, 
-  CheckCircle, 
+import { useState, useEffect } from "react";
+import {
+  Plus,
+  Facebook,
+  Instagram,
+  Youtube,
+  MessageCircle,
+  Eye,
+  DollarSign,
+  Clock,
+  CheckCircle,
   ArrowLeft,
   ExternalLink,
-  AlertTriangle
+  AlertTriangle,
+  Edit,
+  Pause,
+  Play,
+  Trash2,
+  TrendingUp
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -67,7 +72,7 @@ export default function TaskEarning() {
     },
     {
       id: 3,
-      title: "ইউটিউব চ্যানেল সাবস্ক্রাইব",
+      title: "ইউটিউব চ্যানে�� সাবস্ক্রাইব",
       description: "শিক্ষামূলক চ্যানেল সাবস্ক্রাইব করে ১০০ টাকা আয় করুন",
       platform: 'youtube',
       taskType: 'subscribe',
@@ -249,7 +254,7 @@ export default function TaskEarning() {
                   onClick={() => setTrackingStatus('idle')}
                   className="mt-3 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
                 >
-                  আবার চেষ্টা করুন
+                  আ���ার চেষ্টা করুন
                 </button>
               </div>
             )}
