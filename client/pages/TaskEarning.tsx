@@ -126,13 +126,15 @@ export default function TaskEarning() {
       case 'instagram': return <Instagram className="h-5 w-5 text-pink-600" />;
       case 'youtube': return <Youtube className="h-5 w-5 text-red-600" />;
       case 'whatsapp': return <MessageCircle className="h-5 w-5 text-green-600" />;
+      case 'website': return <Eye className="h-5 w-5 text-gray-600" />;
+      case 'other': return <DollarSign className="h-5 w-5 text-purple-600" />;
       default: return <Eye className="h-5 w-5 text-gray-600" />;
     }
   };
 
   const getTaskTypeText = (taskType: string) => {
     switch (taskType) {
-      case 'follow': return 'ফলো করুন';
+      case 'follow': return 'ফল�� করুন';
       case 'like': return 'লাইক দিন';
       case 'share': return 'শেয়ার করুন';
       case 'comment': return 'কমেন্ট করুন';
@@ -345,7 +347,7 @@ export default function TaskEarning() {
                   onClick={() => setTrackingStatus('idle')}
                   className="mt-3 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
                 >
-                  আবার চে��্টা করুন
+                  আবার চেষ্টা করুন
                 </button>
               </div>
             )}
