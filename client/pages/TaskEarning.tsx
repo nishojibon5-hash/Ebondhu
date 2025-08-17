@@ -72,7 +72,7 @@ export default function TaskEarning() {
         taskType: 'follow',
         reward: 50,
         targetUrl: "https://facebook.com/example-page",
-        createdBy: "রহ��ম উদ্দিন",
+        createdBy: "রহিম উদ্দিন",
         timeLimit: "২৪ ঘন্টা",
         completed: 15,
         maxCompletions: 100,
@@ -309,7 +309,7 @@ export default function TaskEarning() {
                 onClick={handleTaskComplete}
                 className="w-full bg-green-600 hover:bg-green-700 text-white py-4 rounded-xl font-bold text-lg transition-colors"
               >
-                কাজ সম্পন্ন হয়েছে
+                কাজ সম্পন্ন হয���েছে
               </button>
             )}
 
@@ -339,7 +339,7 @@ export default function TaskEarning() {
                 <div className="flex items-center space-x-3">
                   <AlertTriangle className="h-5 w-5 text-red-600" />
                   <div>
-                    <p className="text-red-800 font-bold">কাজটি যাচাই করা যায়নি</p>
+                    <p className="text-red-800 font-bold">ক��জটি যাচাই করা যায়নি</p>
                     <p className="text-red-600 text-sm">সম্ভাব্য কারণ: অপর্যাপ্ত সময়, ভুল URL, বা প্রতারণামূলক কার্যকলাপ</p>
                     <p className="text-red-600 text-xs mt-1">আমাদের স্বয়ংক্রিয় সিস্টেম প্রতারণা প্রতিরোধে কাজ করে</p>
                   </div>
@@ -387,7 +387,7 @@ export default function TaskEarning() {
                 : 'text-white/80 hover:text-white'
             }`}
           >
-            কাজ খুঁজুন
+            কাজ খুঁজুন ({availableTasks.length})
           </button>
           <button
             onClick={() => setActiveTab('myTasks')}
@@ -397,7 +397,7 @@ export default function TaskEarning() {
                 : 'text-white/80 hover:text-white'
             }`}
           >
-            আমার টাস্ক
+            আমার টাস্ক ({myTasks.length})
           </button>
         </div>
       </div>
