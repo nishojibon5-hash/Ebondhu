@@ -6,6 +6,7 @@ import Profile from "./pages/Profile";
 import TaskEarning from "./pages/TaskEarning";
 import LoanApplication from "./pages/LoanApplication";
 import SomitiManager from "./pages/SomitiManager";
+import SomitiSetup from "./pages/SomitiSetup";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import ForgotPin from "./pages/ForgotPin";
