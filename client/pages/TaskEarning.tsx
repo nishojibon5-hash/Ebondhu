@@ -72,7 +72,7 @@ export default function TaskEarning() {
         taskType: 'follow',
         reward: 50,
         targetUrl: "https://facebook.com/example-page",
-        createdBy: "রহিম উদ্দিন",
+        createdBy: "রহ��ম উদ্দিন",
         timeLimit: "২৪ ঘন্টা",
         completed: 15,
         maxCompletions: 100,
@@ -134,7 +134,7 @@ export default function TaskEarning() {
 
   const getTaskTypeText = (taskType: string) => {
     switch (taskType) {
-      case 'follow': return 'ফল�� করুন';
+      case 'follow': return 'ফলো করুন';
       case 'like': return 'লাইক দিন';
       case 'share': return 'শেয়ার করুন';
       case 'comment': return 'কমেন্ট করুন';
@@ -339,8 +339,9 @@ export default function TaskEarning() {
                 <div className="flex items-center space-x-3">
                   <AlertTriangle className="h-5 w-5 text-red-600" />
                   <div>
-                    <p className="text-red-800 font-bold">দুঃখিত! কাজটি সঠিকভাবে সম্পন্ন হয়নি</p>
-                    <p className="text-red-600 text-sm">দয়া করে আবার চেষ্টা করুন</p>
+                    <p className="text-red-800 font-bold">কাজটি যাচাই করা যায়নি</p>
+                    <p className="text-red-600 text-sm">সম্ভাব্য কারণ: অপর্যাপ্ত সময়, ভুল URL, বা প্রতারণামূলক কার্যকলাপ</p>
+                    <p className="text-red-600 text-xs mt-1">আমাদের স্বয়ংক্রিয় সিস্টেম প্রতারণা প্রতিরোধে কাজ করে</p>
                   </div>
                 </div>
                 <button
