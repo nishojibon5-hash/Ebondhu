@@ -138,7 +138,7 @@ export default function TaskCreate() {
   const validateStep2 = () => {
     const newErrors: {[key: string]: string} = {};
     if (!formData.targetUrl.trim()) newErrors.targetUrl = 'টার্গেট URL আবশ্যক';
-    if (formData.reward < 5) newErrors.reward = 'ন্যূনতম পুরস্ক��র ৫ টাকা';
+    if (formData.reward < 5) newErrors.reward = 'ন্যূনতম পুরস্কার ৫ টাকা';
     if (formData.maxCompletions < 1) newErrors.maxCompletions = 'কমপক্ষে ১টি কাজ থাকতে হবে';
     if (!formData.timeLimit) newErrors.timeLimit = 'সময়সীমা নির্বাচন করুন';
     setErrors(newErrors);
@@ -307,7 +307,7 @@ export default function TaskCreate() {
                 <textarea
                   value={formData.description}
                   onChange={(e) => setFormData({...formData, description: e.target.value})}
-                  placeholder="কী কা��� করতে হবে তার বিস্তারিত লিখুন..."
+                  placeholder="কী কাজ করতে হবে তার বিস্তারিত লিখুন..."
                   rows={4}
                   className={`w-full p-3 border rounded-xl focus:ring-2 focus:ring-bkash-500 focus:border-transparent ${
                     errors.description ? 'border-red-500' : 'border-gray-300'
@@ -448,7 +448,7 @@ export default function TaskCreate() {
                   />
                 </div>
                 {errors.reward && <p className="text-red-500 text-sm mt-1">{errors.reward}</p>}
-                <p className="text-xs text-gray-500 mt-1">ন্যূনতম ১০ টাকা</p>
+                <p className="text-xs text-gray-500 mt-1">ন্যূনতম ৫ টাকা</p>
               </div>
 
               {/* Max Completions */}
@@ -487,7 +487,7 @@ export default function TaskCreate() {
                   <option value="12">১২ ঘন্টা</option>
                   <option value="24">২৪ ঘন্টা</option>
                   <option value="48">৪৮ ঘন্টা</option>
-                  <option value="72">��২ ঘ���্টা</option>
+                  <option value="72">৭২ ঘ���্টা</option>
                   <option value="168">১ সপ্তাহ</option>
                   <option value="336">২ সপ্তাহ</option>
                   <option value="720">১ মাস</option>
@@ -659,7 +659,7 @@ export default function TaskCreate() {
                       <p className="text-bkash-500 font-bold">৳{formData.reward}</p>
                     </div>
                     <div>
-                      <span className="font-medium">সর্বোচ্চ কাজ:</span>
+                      <span className="font-medium">���র্বোচ্চ কাজ:</span>
                       <p className="text-gray-600">{formData.maxCompletions}টি</p>
                     </div>
                     <div>
