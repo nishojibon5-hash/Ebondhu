@@ -54,6 +54,10 @@ export default function TaskEarning() {
   useEffect(() => {
     loadTasks();
     loadCompletedTasks();
+    // Initialize user balance if not exists
+    if (!localStorage.getItem('userBalance')) {
+      localStorage.setItem('userBalance', '5000');
+    }
   }, []);
 
   const loadTasks = () => {
@@ -72,7 +76,7 @@ export default function TaskEarning() {
         taskType: 'follow',
         reward: 50,
         targetUrl: "https://facebook.com/example-page",
-        createdBy: "রহিম ���দ্দিন",
+        createdBy: "রহিম উদ্দিন",
         timeLimit: "২৪ ঘন্টা",
         completed: 15,
         maxCompletions: 100,
@@ -455,7 +459,7 @@ export default function TaskEarning() {
                   {/* Progress Bar */}
                   <div className="mb-3">
                     <div className="flex justify-between text-xs text-gray-500 mb-1">
-                      <span>স���্পন্ন</span>
+                      <span>সম্পন্ন</span>
                       <span>{task.completed}/{task.maxCompletions}</span>
                     </div>
                     <div className="w-full bg-gray-200 rounded-full h-1.5">
@@ -535,7 +539,7 @@ export default function TaskEarning() {
                 <div className="grid grid-cols-3 gap-4 text-center">
                   <div>
                     <p className="text-xl font-bold text-bkash-500">{myTasks.length}</p>
-                    <p className="text-xs text-gray-500">মোট টাস��ক</p>
+                    <p className="text-xs text-gray-500">মোট টাস্ক</p>
                   </div>
                   <div>
                     <p className="text-xl font-bold text-green-600">
@@ -607,7 +611,7 @@ export default function TaskEarning() {
                         className="bg-yellow-100 hover:bg-yellow-200 text-yellow-700 px-3 py-2 rounded-lg text-sm transition-colors flex items-center space-x-1"
                       >
                         <Pause className="h-4 w-4" />
-                        <span>বি��তি</span>
+                        <span>বিরতি</span>
                       </button>
                     ) : task.status === 'paused' ? (
                       <button
