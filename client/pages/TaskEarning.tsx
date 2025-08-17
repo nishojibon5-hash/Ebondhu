@@ -137,7 +137,7 @@ export default function TaskEarning() {
       case 'share': return 'শেয়ার করুন';
       case 'comment': return 'কমেন্ট করুন';
       case 'subscribe': return 'সাবস্ক্রাইব করুন';
-      default: return '��েখুন';
+      default: return 'দেখুন';
     }
   };
 
@@ -148,21 +148,95 @@ export default function TaskEarning() {
   };
 
   const handleTaskComplete = () => {
+    if (!selectedTask) return;
+
     setTrackingStatus('checking');
-    
-    // Simulate API call to verify task completion
+
+    // Enhanced fraud detection simulation
     setTimeout(() => {
-      const success = Math.random() > 0.3; // 70% success rate simulation
+      // Multiple verification checks
+      const verificationChecks = {
+        urlVisited: Math.random() > 0.2, // 80% pass rate
+        timeSpent: Math.random() > 0.3, // 70% pass rate (minimum time check)
+        genuineAction: Math.random() > 0.25, // 75% pass rate (action verification)
+        userHistory: Math.random() > 0.1 // 90% pass rate (user behavior check)
+      };
+
+      const passedChecks = Object.values(verificationChecks).filter(Boolean).length;
+      const success = passedChecks >= 3; // At least 3 out of 4 checks must pass
+
       setTrackingStatus(success ? 'success' : 'failed');
-      
-      if (success) {
+
+      if (success && selectedTask) {
+        // Add money to user balance
+        const currentBalance = parseFloat(localStorage.getItem('userBalance') || '5000');
+        const newBalance = currentBalance + selectedTask.reward;
+        localStorage.setItem('userBalance', newBalance.toString());
+
+        // Save completed task record
+        const completedTask = {
+          id: Date.now(),
+          taskId: selectedTask.id,
+          title: selectedTask.title,
+          reward: selectedTask.reward,
+          completedAt: new Date().toISOString(),
+          verificationMethod: selectedTask.verificationMethod || 'screenshot'
+        };
+
+        const existingCompleted = JSON.parse(localStorage.getItem('completedTasks') || '[]');
+        existingCompleted.push(completedTask);
+        localStorage.setItem('completedTasks', JSON.stringify(existingCompleted));
+
+        // Update task completion count if it's a demo task
+        if (selectedTask.id >= 1001) {
+          setAvailableTasks(prev => prev.map(task =>
+            task.id === selectedTask.id
+              ? { ...task, completed: task.completed + 1 }
+              : task
+          ));
+        }
+
         setTimeout(() => {
           setIsWorking(false);
           setSelectedTask(null);
           setTrackingStatus('idle');
+          loadCompletedTasks();
         }, 2000);
       }
     }, 3000);
+  };
+
+  const pauseTask = (taskId: number) => {
+    const updatedTasks = myTasks.map(task =>
+      task.id === taskId ? { ...task, status: 'paused' as const } : task
+    );
+    setMyTasks(updatedTasks);
+    localStorage.setItem('userTasks', JSON.stringify(updatedTasks));
+  };
+
+  const resumeTask = (taskId: number) => {
+    const updatedTasks = myTasks.map(task =>
+      task.id === taskId ? { ...task, status: 'active' as const } : task
+    );
+    setMyTasks(updatedTasks);
+    localStorage.setItem('userTasks', JSON.stringify(updatedTasks));
+  };
+
+  const deleteTask = (taskId: number) => {
+    if (confirm('আপনি কি এই টাস্ক মুছে ফেলতে চান?')) {
+      const task = myTasks.find(t => t.id === taskId);
+      if (task) {
+        // Refund remaining budget
+        const remainingAmount = (task.maxCompletions - task.completed) * task.reward;
+        const currentBalance = parseFloat(localStorage.getItem('userBalance') || '5000');
+        const newBalance = currentBalance + remainingAmount;
+        localStorage.setItem('userBalance', newBalance.toString());
+      }
+
+      const updatedTasks = myTasks.filter(task => task.id !== taskId);
+      setMyTasks(updatedTasks);
+      localStorage.setItem('userTasks', JSON.stringify(updatedTasks));
+    }
   };
 
   if (isWorking && selectedTask) {
@@ -207,7 +281,7 @@ export default function TaskEarning() {
               <div>
                 <h4 className="font-bold text-blue-900 mb-2">নির্দেশনা:</h4>
                 <ol className="text-sm text-blue-800 space-y-1">
-                  <li>১. নিচের লিংকে ক���লিক করুন</li>
+                  <li>১. নিচের লিংকে ক্লিক করুন</li>
                   <li>২. পেজটি {getTaskTypeText(selectedTask.taskType)}</li>
                   <li>৩. ব্যাক এসে "সম্পন্ন" বাটনে ক্লিক করুন</li>
                   <li>৪. আমরা যাচাই করে টাকা দিয়ে দেব</li>
@@ -271,7 +345,7 @@ export default function TaskEarning() {
                   onClick={() => setTrackingStatus('idle')}
                   className="mt-3 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
                 >
-                  আবার চেষ্টা করুন
+                  আবার চে��্টা করুন
                 </button>
               </div>
             )}
