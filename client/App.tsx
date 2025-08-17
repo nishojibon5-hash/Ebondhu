@@ -4,6 +4,7 @@ import Tasks from "./pages/Tasks";
 import Somiti from "./pages/Somiti";
 import Profile from "./pages/Profile";
 import TaskEarning from "./pages/TaskEarning";
+import TaskCreate from "./pages/TaskCreate";
 import LoanApplication from "./pages/LoanApplication";
 import SomitiManager from "./pages/SomitiManager";
 import SomitiSetup from "./pages/SomitiSetup";
