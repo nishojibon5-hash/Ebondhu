@@ -119,67 +119,6 @@ export default function TaskEarning() {
     setCompletedTasks(completed);
   };
 
-  const availableTasks: Task[] = [
-    {
-      id: 1,
-      title: "আমার ফেসবুক পেজ ফলো করুন",
-      description: "ব্যবসায়িক পেজে ফলো দিন এবং ৫০ টাকা আয় করুন",
-      platform: 'facebook',
-      taskType: 'follow',
-      reward: 50,
-      targetUrl: "https://facebook.com/example-page",
-      createdBy: "রহিম উদ্দিন",
-      timeLimit: "২৪ ঘন্টা",
-      completed: 15,
-      maxCompletions: 100,
-      status: 'active'
-    },
-    {
-      id: 2,
-      title: "ইনস্টাগ্রাম পোস্টে লাইক দিন",
-      description: "নতুন পণ্যের পোস্টে লাইক দিয়ে ৩০ টাকা পান",
-      platform: 'instagram',
-      taskType: 'like',
-      reward: 30,
-      targetUrl: "https://instagram.com/p/example",
-      createdBy: "ফাতেমা খাতুন",
-      timeLimit: "১২ ঘন্টা",
-      completed: 8,
-      maxCompletions: 50,
-      status: 'active'
-    },
-    {
-      id: 3,
-      title: "ইউটিউব চ্যানেল সাবস্ক্রাইব",
-      description: "শিক্ষামূলক চ্যানেল সাবস্ক্রাইব করে ১০০ টাকা আয় করুন",
-      platform: 'youtube',
-      taskType: 'subscribe',
-      reward: 100,
-      targetUrl: "https://youtube.com/c/example",
-      createdBy: "করিম আহমেদ",
-      timeLimit: "৪৮ ঘন্টা",
-      completed: 25,
-      maxCompletions: 200,
-      status: 'active'
-    }
-  ];
-
-  const myTasks: Task[] = [
-    {
-      id: 4,
-      title: "আমার ব্যবসার ফেসবুক পেজ",
-      description: "আমার হস্তশিল্পের ব্যবসার পেজে ফলো চাই",
-      platform: 'facebook',
-      taskType: 'follow',
-      reward: 40,
-      targetUrl: "https://facebook.com/my-business",
-      createdBy: "আপনি",
-      timeLimit: "৭২ ঘন্টা",
-      completed: 12,
-      maxCompletions: 75,
-      status: 'active'
-    }
-  ];
 
   const getPlatformIcon = (platform: string) => {
     switch (platform) {
@@ -198,7 +137,7 @@ export default function TaskEarning() {
       case 'share': return 'শেয়ার করুন';
       case 'comment': return 'কমেন্ট করুন';
       case 'subscribe': return 'সাবস্ক্রাইব করুন';
-      default: return 'দেখুন';
+      default: return '��েখুন';
     }
   };
 
@@ -268,7 +207,7 @@ export default function TaskEarning() {
               <div>
                 <h4 className="font-bold text-blue-900 mb-2">নির্দেশনা:</h4>
                 <ol className="text-sm text-blue-800 space-y-1">
-                  <li>১. নিচের লিংকে ক্লিক করুন</li>
+                  <li>১. নিচের লিংকে ক���লিক করুন</li>
                   <li>২. পেজটি {getTaskTypeText(selectedTask.taskType)}</li>
                   <li>৩. ব্যাক এসে "সম্পন্ন" বাটনে ক্লিক করুন</li>
                   <li>৪. আমরা যাচাই করে টাকা দিয়ে দেব</li>
