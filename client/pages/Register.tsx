@@ -95,15 +95,15 @@ export default function Register() {
 
     // Simulate API call
     setTimeout(() => {
-      setSuccess('রেজিস্ট্রেশন সফল হয়েছে!');
-      
-      // Store user data
-      localStorage.setItem('isLoggedIn', 'true');
-      localStorage.setItem('userPhone', formData.phone);
-      localStorage.setItem('userName', formData.name);
-      
+      setSuccess('রেজিস্ট্রেশন সফল হয়েছে! এখন লগিন করুন।');
+
+      // Store user data for future login (but don't auto-login)
+      localStorage.setItem('registeredPhone', formData.phone);
+      localStorage.setItem('registeredName', formData.name);
+      localStorage.setItem('registeredPin', formData.pin);
+
       setTimeout(() => {
-        navigate('/');
+        navigate('/login');
       }, 2000);
       setIsLoading(false);
     }, 2000);
@@ -117,7 +117,7 @@ export default function Register() {
           <div className="w-20 h-20 bg-gradient-to-r from-bkash-500 to-bkash-600 rounded-full flex items-center justify-center mx-auto mb-4">
             <Smartphone className="h-10 w-10 text-white" />
           </div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">লোন ��ন্ধু</h1>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">লোন বন্ধু</h1>
           <p className="text-gray-600">নতুন অ্যাকাউন্ট তৈরি করুন</p>
         </div>
 
@@ -145,7 +145,7 @@ export default function Register() {
             {currentStep === 1 && (
               <>
                 <div className="text-center mb-4">
-                  <h3 className="text-lg font-bold text-gray-900">ব্��ক্তিগত তথ্য</h3>
+                  <h3 className="text-lg font-bold text-gray-900">ব্যক্তিগত তথ্য</h3>
                   <p className="text-sm text-gray-600">আপনার নাম ও ফোন নম্বর দিন</p>
                 </div>
 
@@ -243,7 +243,7 @@ export default function Register() {
                       value={formData.confirmPin}
                       onChange={(e) => handleInputChange('confirmPin', e.target.value)}
                       className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-bkash-500 focus:border-transparent text-lg"
-                      placeholder="পিন আবার লিখুন"
+                      placeholder="পিন আবা��� লিখুন"
                       maxLength={5}
                     />
                     <button
