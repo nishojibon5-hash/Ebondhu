@@ -225,7 +225,7 @@ export default function TaskEarning() {
   };
 
   const deleteTask = (taskId: number) => {
-    if (confirm('আপনি কি এই টাস্ক মুছে ফেলতে চান?')) {
+    if (confirm('আপন��� কি এই টাস্ক মুছে ফেলতে চান?')) {
       const task = myTasks.find(t => t.id === taskId);
       if (task) {
         // Refund remaining budget
@@ -309,7 +309,7 @@ export default function TaskEarning() {
                 onClick={handleTaskComplete}
                 className="w-full bg-green-600 hover:bg-green-700 text-white py-4 rounded-xl font-bold text-lg transition-colors"
               >
-                কাজ সম্পন্ন হয���েছে
+                কাজ সম্পন্ন হয়েছে
               </button>
             )}
 
@@ -339,7 +339,7 @@ export default function TaskEarning() {
                 <div className="flex items-center space-x-3">
                   <AlertTriangle className="h-5 w-5 text-red-600" />
                   <div>
-                    <p className="text-red-800 font-bold">ক��জটি যাচাই করা যায়নি</p>
+                    <p className="text-red-800 font-bold">কাজটি যাচাই করা যায়নি</p>
                     <p className="text-red-600 text-sm">সম্ভাব্য কারণ: অপর্যাপ্ত সময়, ভুল URL, বা প্রতারণামূলক কার্যকলাপ</p>
                     <p className="text-red-600 text-xs mt-1">আমাদের স্বয়ংক্রিয় সিস্টেম প্রতারণা প্রতিরোধে কাজ করে</p>
                   </div>
@@ -447,42 +447,123 @@ export default function TaskEarning() {
         {/* My Tasks */}
         {activeTab === 'myTasks' && (
           <div className="space-y-4">
+            {/* Task Statistics */}
+            {myTasks.length > 0 && (
+              <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
+                <h3 className="font-bold text-gray-900 mb-3 flex items-center space-x-2">
+                  <TrendingUp className="h-5 w-5 text-bkash-500" />
+                  <span>টাস্ক পরিসংখ্যান</span>
+                </h3>
+                <div className="grid grid-cols-3 gap-4 text-center">
+                  <div>
+                    <p className="text-xl font-bold text-bkash-500">{myTasks.length}</p>
+                    <p className="text-xs text-gray-500">মোট টাস্ক</p>
+                  </div>
+                  <div>
+                    <p className="text-xl font-bold text-green-600">
+                      {myTasks.reduce((sum, task) => sum + task.completed, 0)}
+                    </p>
+                    <p className="text-xs text-gray-500">সম্পন্ন কাজ</p>
+                  </div>
+                  <div>
+                    <p className="text-xl font-bold text-orange-600">
+                      ৳{myTasks.reduce((sum, task) => sum + (task.completed * task.reward), 0)}
+                    </p>
+                    <p className="text-xs text-gray-500">পরিশোধিত</p>
+                  </div>
+                </div>
+              </div>
+            )}
+
             {myTasks.map((task) => (
               <div key={task.id} className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
                 <div className="flex items-center space-x-3 mb-3">
                   {getPlatformIcon(task.platform)}
                   <div className="flex-1">
-                    <h3 className="font-bold text-gray-900">{task.title}</h3>
+                    <div className="flex items-center space-x-2">
+                      <h3 className="font-bold text-gray-900">{task.title}</h3>
+                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                        task.status === 'active' ? 'bg-green-100 text-green-800' :
+                        task.status === 'paused' ? 'bg-yellow-100 text-yellow-800' :
+                        'bg-gray-100 text-gray-800'
+                      }`}>
+                        {task.status === 'active' ? 'সক্রিয়' :
+                         task.status === 'paused' ? 'বিরতি' : 'সম্পন্ন'}
+                      </span>
+                    </div>
                     <p className="text-sm text-gray-600 mb-1">{task.description}</p>
-                    <p className="text-xs text-gray-500">আপনার টাস্ক</p>
+                    <p className="text-xs text-gray-500">
+                      তৈরি: {task.createdAt ? new Date(task.createdAt).toLocaleDateString('bn-BD') : 'আজ'}
+                    </p>
                   </div>
                   <div className="text-right">
                     <p className="text-xl font-bold text-green-600">৳{task.reward}</p>
                     <p className="text-xs text-gray-500">প্রতি কাজে</p>
                   </div>
                 </div>
-                
+
+                {/* Progress Bar */}
+                <div className="mb-3">
+                  <div className="flex justify-between text-sm text-gray-600 mb-1">
+                    <span>অগ্রগতি</span>
+                    <span>{task.completed}/{task.maxCompletions}</span>
+                  </div>
+                  <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div
+                      className="bg-bkash-500 h-2 rounded-full transition-all duration-300"
+                      style={{ width: `${(task.completed / task.maxCompletions) * 100}%` }}
+                    ></div>
+                  </div>
+                </div>
+
                 <div className="flex items-center justify-between">
                   <div className="text-sm text-gray-600">
                     <p>সম্পন্ন: {task.completed}/{task.maxCompletions}</p>
-                    <p>মোট খরচ: ৳{task.completed * task.reward}</p>
+                    <p>খরচ হয়েছে: ৳{task.completed * task.reward}</p>
+                    <p>বাকি বাজেট: ৳{(task.maxCompletions - task.completed) * task.reward}</p>
                   </div>
                   <div className="flex space-x-2">
-                    <button className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-2 rounded-lg text-sm transition-colors">
-                      সম্পাদনা
+                    {task.status === 'active' ? (
+                      <button
+                        onClick={() => pauseTask(task.id)}
+                        className="bg-yellow-100 hover:bg-yellow-200 text-yellow-700 px-3 py-2 rounded-lg text-sm transition-colors flex items-center space-x-1"
+                      >
+                        <Pause className="h-4 w-4" />
+                        <span>বিরতি</span>
+                      </button>
+                    ) : task.status === 'paused' ? (
+                      <button
+                        onClick={() => resumeTask(task.id)}
+                        className="bg-green-100 hover:bg-green-200 text-green-700 px-3 py-2 rounded-lg text-sm transition-colors flex items-center space-x-1"
+                      >
+                        <Play className="h-4 w-4" />
+                        <span>চালু</span>
+                      </button>
+                    ) : null}
+                    <button className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-2 rounded-lg text-sm transition-colors flex items-center space-x-1">
+                      <Edit className="h-4 w-4" />
+                      <span>সম্পাদনা</span>
                     </button>
-                    <button className="bg-red-100 hover:bg-red-200 text-red-700 px-3 py-2 rounded-lg text-sm transition-colors">
-                      বন্ধ করুন
+                    <button
+                      onClick={() => deleteTask(task.id)}
+                      className="bg-red-100 hover:bg-red-200 text-red-700 px-3 py-2 rounded-lg text-sm transition-colors flex items-center space-x-1"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                      <span>মুছুন</span>
                     </button>
                   </div>
                 </div>
               </div>
             ))}
-            
+
             {myTasks.length === 0 && (
               <div className="text-center py-12">
-                <p className="text-gray-500 mb-4">আপনার কোনো টাস্ক নেই</p>
-                <Link 
+                <div className="bg-gray-100 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4">
+                  <Plus className="h-10 w-10 text-gray-400" />
+                </div>
+                <p className="text-gray-500 mb-2 text-lg font-medium">আপনার কোনো টাস্ক নেই</p>
+                <p className="text-gray-400 text-sm mb-6">আয় করতে নতুন টাস্ক তৈরি করুন</p>
+                <Link
                   to="/task-earning/create"
                   className="bg-bkash-500 hover:bg-bkash-600 text-white px-6 py-3 rounded-xl font-medium transition-colors inline-flex items-center space-x-2"
                 >
