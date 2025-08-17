@@ -72,7 +72,7 @@ export default function TaskEarning() {
         taskType: 'follow',
         reward: 50,
         targetUrl: "https://facebook.com/example-page",
-        createdBy: "রহিম উদ্দিন",
+        createdBy: "রহিম ���দ্দিন",
         timeLimit: "২৪ ঘন্টা",
         completed: 15,
         maxCompletions: 100,
@@ -225,7 +225,7 @@ export default function TaskEarning() {
   };
 
   const deleteTask = (taskId: number) => {
-    if (confirm('আপন��� কি এই টাস্ক মুছে ফেলতে চান?')) {
+    if (confirm('আপনি কি এই টাস্ক মুছে ফেলতে চান?')) {
       const task = myTasks.find(t => t.id === taskId);
       if (task) {
         // Refund remaining budget
@@ -406,41 +406,119 @@ export default function TaskEarning() {
         {/* Browse Tasks */}
         {activeTab === 'browse' && (
           <div className="space-y-4">
-            {availableTasks.map((task) => (
-              <div key={task.id} className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
-                <div className="flex items-center space-x-3 mb-3">
-                  {getPlatformIcon(task.platform)}
-                  <div className="flex-1">
-                    <h3 className="font-bold text-gray-900">{task.title}</h3>
-                    <p className="text-sm text-gray-600 mb-1">{task.description}</p>
-                    <p className="text-xs text-gray-500">প্রকাশক: {task.createdBy}</p>
+            {/* Search and Filter */}
+            <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
+              <div className="flex items-center space-x-3">
+                <input
+                  type="text"
+                  placeholder="টাস্ক খুঁজুন..."
+                  className="flex-1 p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-bkash-500 focus:border-transparent"
+                />
+                <select className="p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-bkash-500 focus:border-transparent">
+                  <option value="">সব ক্যাটেগরি</option>
+                  <option value="social-media">সোশ্যাল মিডিয়া</option>
+                  <option value="content-creation">কনটেন্ট তৈরি</option>
+                  <option value="review-rating">রিভিউ ও রেটিং</option>
+                </select>
+              </div>
+            </div>
+
+            {availableTasks.filter(task => task.status === 'active' && task.completed < task.maxCompletions).map((task) => {
+              // Check if user already completed this task
+              const alreadyCompleted = completedTasks.some(completed => completed.taskId === task.id);
+              const progress = (task.completed / task.maxCompletions) * 100;
+
+              return (
+                <div key={task.id} className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
+                  <div className="flex items-center space-x-3 mb-3">
+                    {getPlatformIcon(task.platform)}
+                    <div className="flex-1">
+                      <div className="flex items-center space-x-2">
+                        <h3 className="font-bold text-gray-900">{task.title}</h3>
+                        {task.category && (
+                          <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">
+                            {task.category === 'social-media' ? 'সোশ্যাল' :
+                             task.category === 'content-creation' ? 'কনটেন্ট' :
+                             task.category === 'review-rating' ? 'রিভিউ' : task.category}
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-sm text-gray-600 mb-1">{task.description}</p>
+                      <p className="text-xs text-gray-500">প্রকাশক: {task.createdBy}</p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-xl font-bold text-bkash-500">৳{task.reward}</p>
+                      <p className="text-xs text-gray-500">{task.timeLimit}</p>
+                    </div>
                   </div>
-                  <div className="text-right">
-                    <p className="text-xl font-bold text-bkash-500">৳{task.reward}</p>
-                    <p className="text-xs text-gray-500">{task.timeLimit}</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-4 text-sm text-gray-600">
-                    <div className="flex items-center space-x-1">
-                      <CheckCircle className="h-4 w-4" />
+
+                  {/* Progress Bar */}
+                  <div className="mb-3">
+                    <div className="flex justify-between text-xs text-gray-500 mb-1">
+                      <span>স���্পন্ন</span>
                       <span>{task.completed}/{task.maxCompletions}</span>
                     </div>
-                    <div className="flex items-center space-x-1">
-                      <Clock className="h-4 w-4" />
-                      <span>{task.timeLimit}</span>
+                    <div className="w-full bg-gray-200 rounded-full h-1.5">
+                      <div
+                        className="bg-green-500 h-1.5 rounded-full transition-all duration-300"
+                        style={{ width: `${progress}%` }}
+                      ></div>
                     </div>
                   </div>
-                  <button 
-                    onClick={() => handleStartTask(task)}
-                    className="bg-bkash-500 hover:bg-bkash-600 text-white px-4 py-2 rounded-xl text-sm font-medium transition-colors"
-                  >
-                    শুরু করুন
-                  </button>
+
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-4 text-sm text-gray-600">
+                      <div className="flex items-center space-x-1">
+                        <CheckCircle className="h-4 w-4" />
+                        <span>{task.completed}/{task.maxCompletions} সম্পন্ন</span>
+                      </div>
+                      <div className="flex items-center space-x-1">
+                        <Clock className="h-4 w-4" />
+                        <span>{task.timeLimit}</span>
+                      </div>
+                    </div>
+                    {alreadyCompleted ? (
+                      <div className="text-green-600 text-sm font-medium px-4 py-2 bg-green-50 rounded-xl">
+                        ✓ সম্পন্ন
+                      </div>
+                    ) : (
+                      <button
+                        onClick={() => handleStartTask(task)}
+                        disabled={task.completed >= task.maxCompletions}
+                        className={`px-4 py-2 rounded-xl text-sm font-medium transition-colors ${
+                          task.completed >= task.maxCompletions
+                            ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
+                            : 'bg-bkash-500 hover:bg-bkash-600 text-white'
+                        }`}
+                      >
+                        {task.completed >= task.maxCompletions ? 'শেষ' : 'শুরু করুন'}
+                      </button>
+                    )}
+                  </div>
+
+                  {/* Task Requirements Preview */}
+                  {task.requirements && task.requirements.length > 0 && (
+                    <div className="mt-3 p-3 bg-blue-50 rounded-xl border border-blue-200">
+                      <p className="text-xs font-medium text-blue-800 mb-1">কাজের শর্ত:</p>
+                      <p className="text-xs text-blue-700">{task.requirements[0].description}</p>
+                      {task.requirements.length > 1 && (
+                        <p className="text-xs text-blue-600 mt-1">+{task.requirements.length - 1} আরো শর্ত</p>
+                      )}
+                    </div>
+                  )}
                 </div>
+              );
+            })}
+
+            {availableTasks.filter(task => task.status === 'active' && task.completed < task.maxCompletions).length === 0 && (
+              <div className="text-center py-12">
+                <div className="bg-gray-100 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4">
+                  <Eye className="h-10 w-10 text-gray-400" />
+                </div>
+                <p className="text-gray-500 mb-2 text-lg font-medium">কোনো টাস্ক পাওয়া যায়নি</p>
+                <p className="text-gray-400 text-sm">নতুন টাস্ক খুঁজে আসুন পরে</p>
               </div>
-            ))}
+            )}
           </div>
         )}
 
@@ -457,7 +535,7 @@ export default function TaskEarning() {
                 <div className="grid grid-cols-3 gap-4 text-center">
                   <div>
                     <p className="text-xl font-bold text-bkash-500">{myTasks.length}</p>
-                    <p className="text-xs text-gray-500">মোট টাস্ক</p>
+                    <p className="text-xs text-gray-500">মোট টাস��ক</p>
                   </div>
                   <div>
                     <p className="text-xl font-bold text-green-600">
@@ -529,7 +607,7 @@ export default function TaskEarning() {
                         className="bg-yellow-100 hover:bg-yellow-200 text-yellow-700 px-3 py-2 rounded-lg text-sm transition-colors flex items-center space-x-1"
                       >
                         <Pause className="h-4 w-4" />
-                        <span>বিরতি</span>
+                        <span>বি��তি</span>
                       </button>
                     ) : task.status === 'paused' ? (
                       <button
