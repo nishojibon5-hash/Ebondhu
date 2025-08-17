@@ -56,15 +56,21 @@ export default function Login() {
 
     // Simulate API call
     setTimeout(() => {
-      // For demo, accept any phone number with PIN 12345
-      if (formData.pin === '12345') {
+      // Check if user is registered
+      const registeredPhone = localStorage.getItem('registeredPhone');
+      const registeredPin = localStorage.getItem('registeredPin');
+      const registeredName = localStorage.getItem('registeredName');
+
+      // Allow registered users or demo user (any phone with PIN 12345)
+      if ((formData.phone === registeredPhone && formData.pin === registeredPin) ||
+          formData.pin === '12345') {
         setSuccess('সফলভাবে লগিন হয়েছে!');
-        
+
         // Store user data in localStorage
         localStorage.setItem('isLoggedIn', 'true');
         localStorage.setItem('userPhone', formData.phone);
-        localStorage.setItem('userName', 'মোঃ আব্দুর রহিম'); // Default name
-        
+        localStorage.setItem('userName', registeredName || 'মোঃ আব্দুর রহিম');
+
         setTimeout(() => {
           navigate('/');
         }, 1000);
