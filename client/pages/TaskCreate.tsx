@@ -110,7 +110,7 @@ export default function TaskCreate() {
     platform: '',
     taskType: '',
     targetUrl: '',
-    reward: 50,
+    reward: 20,
     maxCompletions: 100,
     timeLimit: '24',
     requirements: [
@@ -138,7 +138,7 @@ export default function TaskCreate() {
   const validateStep2 = () => {
     const newErrors: {[key: string]: string} = {};
     if (!formData.targetUrl.trim()) newErrors.targetUrl = 'টার্গেট URL আবশ্যক';
-    if (formData.reward < 5) newErrors.reward = 'ন্যূনতম পুরস্কার ৫ টাকা';
+    if (formData.reward < 5) newErrors.reward = 'ন্যূনতম পুরস্কার ৫ টাক���';
     if (formData.maxCompletions < 1) newErrors.maxCompletions = 'কমপক্ষে ১টি কাজ থাকতে হবে';
     if (!formData.timeLimit) newErrors.timeLimit = 'সময়সীমা নির্বাচন করুন';
     setErrors(newErrors);
@@ -659,7 +659,7 @@ export default function TaskCreate() {
                       <p className="text-bkash-500 font-bold">৳{formData.reward}</p>
                     </div>
                     <div>
-                      <span className="font-medium">���র্বোচ্চ কাজ:</span>
+                      <span className="font-medium">সর্বোচ্চ কাজ:</span>
                       <p className="text-gray-600">{formData.maxCompletions}টি</p>
                     </div>
                     <div>
@@ -746,7 +746,7 @@ export default function TaskCreate() {
               onClick={handleNext}
               className="flex-1 bg-bkash-500 hover:bg-bkash-600 text-white py-3 rounded-xl font-medium transition-colors"
             >
-              পরবর্তী
+              পরবর্��ী
             </button>
           ) : (
             <button
