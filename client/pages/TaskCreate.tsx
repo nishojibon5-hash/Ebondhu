@@ -138,7 +138,7 @@ export default function TaskCreate() {
   const validateStep2 = () => {
     const newErrors: {[key: string]: string} = {};
     if (!formData.targetUrl.trim()) newErrors.targetUrl = 'টার্গেট URL আবশ্যক';
-    if (formData.reward < 10) newErrors.reward = 'ন্যূনতম পুরস্কার ১০ টাকা';
+    if (formData.reward < 5) newErrors.reward = 'ন্যূনতম পুরস্কার ৫ টাকা';
     if (formData.maxCompletions < 1) newErrors.maxCompletions = 'কমপক্ষে ১টি কাজ থাকতে হবে';
     if (!formData.timeLimit) newErrors.timeLimit = 'সময়সীমা নির্বাচন করুন';
     setErrors(newErrors);
@@ -483,7 +483,7 @@ export default function TaskCreate() {
                     errors.timeLimit ? 'border-red-500' : 'border-gray-300'
                   }`}
                 >
-                  <option value="">সময়সীমা নির্বাচন করুন</option>
+                  <option value="">সময়সীমা নির���বাচন করুন</option>
                   <option value="12">১২ ঘন্টা</option>
                   <option value="24">২৪ ঘন্টা</option>
                   <option value="48">৪৮ ঘন্টা</option>
@@ -660,7 +660,7 @@ export default function TaskCreate() {
                     </div>
                     <div>
                       <span className="font-medium">সর্বোচ্চ কাজ:</span>
-                      <p className="text-gray-600">{formData.maxCompletions}টি</p>
+                      <p className="text-gray-600">{formData.maxCompletions}���ি</p>
                     </div>
                     <div>
                       <span className="font-medium">সময়সীমা:</span>
