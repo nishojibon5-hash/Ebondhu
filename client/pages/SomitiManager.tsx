@@ -21,7 +21,10 @@ import {
   ChevronDown,
   UserPlus,
   Briefcase,
-  Home
+  Home,
+  Trash2,
+  Camera,
+  Upload
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -33,6 +36,7 @@ interface Worker {
   joinDate: string;
   totalMembers: number;
   todayCollection: number;
+  photo?: string;
 }
 
 interface Member {
@@ -50,6 +54,7 @@ interface Member {
   remainingLoan: number;
   joinDate: string;
   status: 'active' | 'inactive';
+  photo?: string;
 }
 
 interface Collection {
@@ -68,91 +73,71 @@ export default function SomitiManager() {
   const [activeTab, setActiveTab] = useState<'overview' | 'workers' | 'members' | 'collection' | 'reports'>('overview');
   const [showModal, setShowModal] = useState<string | null>(null);
   const [selectedMember, setSelectedMember] = useState<Member | null>(null);
+  const [selectedWorker, setSelectedWorker] = useState<Worker | null>(null);
+  const [editingWorker, setEditingWorker] = useState<Worker | null>(null);
+  const [editingMember, setEditingMember] = useState<Member | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [dateFilter, setDateFilter] = useState({ from: '', to: '' });
-  const [selectedWorker, setSelectedWorker] = useState<number | null>(null);
+  const [selectedWorkerFilter, setSelectedWorkerFilter] = useState<number | null>(null);
 
-  // Sample data
-  const [workers, setWorkers] = useState<Worker[]>([
-    {
-      id: 1,
-      name: "আব্দুল করিম",
-      phone: "01711111111",
-      area: "মিরপুর এলাকা",
-      joinDate: "জানুয়ারি ২০২৩",
-      totalMembers: 15,
-      todayCollection: 8500
-    },
-    {
-      id: 2,
-      name: "রহিমা খাতুন",
-      phone: "01722222222", 
-      area: "ধানমন্ডি এলাকা",
-      joinDate: "ফেব্রুয়ারি ২০২৩",
-      totalMembers: 12,
-      todayCollection: 6500
-    }
-  ]);
+  // Initialize with empty data - no demo data
+  const [workers, setWorkers] = useState<Worker[]>([]);
+  const [members, setMembers] = useState<Member[]>([]);
+  const [collections, setCollections] = useState<Collection[]>([]);
 
-  const [members, setMembers] = useState<Member[]>([
-    {
-      id: 1,
-      code: "M001",
-      name: "ফাতেমা খাতুন",
-      nid: "1234567890123",
-      phone: "01811111111",
-      workerId: 1,
-      workerName: "আব্দুল করিম",
-      savingsAmount: 1000,
-      loanAmount: 15000,
-      totalSavings: 12000,
-      totalInstallments: 3000,
-      remainingLoan: 12000,
-      joinDate: "জানুয়ারি ২০২৩",
-      status: 'active'
-    },
-    {
-      id: 2,
-      code: "M002", 
-      name: "রহিমা বেগম",
-      nid: "9876543210987",
-      phone: "01822222222",
-      workerId: 1,
-      workerName: "আব্দুল করিম",
-      savingsAmount: 1000,
-      loanAmount: 0,
-      totalSavings: 11000,
-      totalInstallments: 0,
-      remainingLoan: 0,
-      joinDate: "ফেব্রুয়ারি ২০২৩",
-      status: 'active'
-    }
-  ]);
+  // Load somiti info from localStorage
+  const [somitiInfo, setSomitiInfo] = useState({
+    name: "নতুন সমিতি",
+    established: "আজ",
+    totalMembers: 0,
+    totalWorkers: 0,
+    totalFund: 0,
+    activeLoans: 0,
+    monthlyCollection: 0,
+    todayCollection: 0
+  });
 
-  const [collections, setCollections] = useState<Collection[]>([
-    {
-      id: 1,
-      date: "২০২৪-১২-০১",
-      memberId: 1,
-      memberName: "ফাতেমা খাতুন",
-      workerId: 1,
-      workerName: "আব্দুল করিম",
-      savingsAmount: 1000,
-      installmentAmount: 1500,
-      type: 'both'
-    },
-    {
-      id: 2,
-      date: "২০২৪-১২-০১",
-      memberId: 2,
-      memberName: "রহিমা বেগম",
-      workerId: 1,
-      workerName: "আব্দুল করিম",
-      savingsAmount: 1000,
-      installmentAmount: 0,
-      type: 'savings'
+  useEffect(() => {
+    // Load somiti data from localStorage
+    const somitiData = localStorage.getItem('somitiManager');
+    if (somitiData) {
+      const parsedData = JSON.parse(somitiData);
+      setSomitiInfo({
+        name: parsedData.somitiName,
+        established: parsedData.establishedDate || 'আজ',
+        totalMembers: members.length,
+        totalWorkers: workers.length,
+        totalFund: members.reduce((sum, m) => sum + m.totalSavings, 0),
+        activeLoans: members.filter(m => m.remainingLoan > 0).length,
+        monthlyCollection: 25000,
+        todayCollection: collections
+          .filter(c => c.date === new Date().toISOString().split('T')[0])
+          .reduce((sum, c) => sum + c.savingsAmount + c.installmentAmount, 0)
+      });
     }
-  ]);
+
+    // Load workers, members, collections from localStorage if available
+    const savedWorkers = localStorage.getItem('somitiWorkers');
+    const savedMembers = localStorage.getItem('somitiMembers');
+    const savedCollections = localStorage.getItem('somitiCollections');
+
+    if (savedWorkers) setWorkers(JSON.parse(savedWorkers));
+    if (savedMembers) setMembers(JSON.parse(savedMembers));
+    if (savedCollections) setCollections(JSON.parse(savedCollections));
+  }, []);
+
+  // Save data to localStorage whenever state changes
+  useEffect(() => {
+    localStorage.setItem('somitiWorkers', JSON.stringify(workers));
+  }, [workers]);
+
+  useEffect(() => {
+    localStorage.setItem('somitiMembers', JSON.stringify(members));
+  }, [members]);
+
+  useEffect(() => {
+    localStorage.setItem('somitiCollections', JSON.stringify(collections));
+  }, [collections]);
 
   const [newWorker, setNewWorker] = useState({ name: '', phone: '', area: '' });
   const [newMember, setNewMember] = useState({
@@ -171,21 +156,8 @@ export default function SomitiManager() {
     installmentAmount: ''
   });
 
-  const somitiInfo = {
-    name: "আশা সমিতি",
-    established: "জানুয়ারি ২০২৩",
-    totalMembers: members.length,
-    totalWorkers: workers.length,
-    totalFund: members.reduce((sum, m) => sum + m.totalSavings, 0),
-    activeLoans: members.filter(m => m.remainingLoan > 0).length,
-    monthlyCollection: 25000,
-    todayCollection: collections
-      .filter(c => c.date === new Date().toISOString().split('T')[0])
-      .reduce((sum, c) => sum + c.savingsAmount + c.installmentAmount, 0)
-  };
-
   const filteredMembers = members.filter(member => {
-    if (selectedWorker && member.workerId !== selectedWorker) return false;
+    if (selectedWorkerFilter && member.workerId !== selectedWorkerFilter) return false;
     if (searchTerm) {
       return member.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
              member.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -216,7 +188,7 @@ export default function SomitiManager() {
   const handleAddWorker = () => {
     if (newWorker.name && newWorker.phone && newWorker.area) {
       const worker: Worker = {
-        id: workers.length + 1,
+        id: Date.now(),
         ...newWorker,
         joinDate: new Date().toLocaleDateString('bn-BD'),
         totalMembers: 0,
@@ -232,7 +204,7 @@ export default function SomitiManager() {
     if (newMember.name && newMember.nid && newMember.workerId) {
       const worker = workers.find(w => w.id === Number(newMember.workerId));
       const member: Member = {
-        id: members.length + 1,
+        id: Date.now(),
         code: newMember.code || `M${String(members.length + 1).padStart(3, '0')}`,
         name: newMember.name,
         nid: newMember.nid,
@@ -267,7 +239,7 @@ export default function SomitiManager() {
       const worker = workers.find(w => w.id === Number(newCollection.workerId));
       
       const collection: Collection = {
-        id: collections.length + 1,
+        id: Date.now(),
         date: new Date().toISOString().split('T')[0],
         memberId: Number(newCollection.memberId),
         memberName: member?.name || '',
@@ -287,6 +259,64 @@ export default function SomitiManager() {
         installmentAmount: ''
       });
       setShowModal(null);
+    }
+  };
+
+  const handleDeleteWorker = (workerId: number) => {
+    if (confirm('এই কর্মীকে মুছে ফেলতে চান?')) {
+      setWorkers(workers.filter(w => w.id !== workerId));
+      // Also remove associated members
+      setMembers(members.filter(m => m.workerId !== workerId));
+    }
+  };
+
+  const handleDeleteMember = (memberId: number) => {
+    if (confirm('এই সদস্যকে মুছে ফেলতে চান?')) {
+      setMembers(members.filter(m => m.id !== memberId));
+      // Also remove associated collections
+      setCollections(collections.filter(c => c.memberId !== memberId));
+    }
+  };
+
+  const handleEditWorker = (worker: Worker) => {
+    setEditingWorker({ ...worker });
+    setShowModal('editWorker');
+  };
+
+  const handleEditMember = (member: Member) => {
+    setEditingMember({ ...member });
+    setShowModal('editMember');
+  };
+
+  const handleSaveWorker = () => {
+    if (editingWorker) {
+      setWorkers(workers.map(w => w.id === editingWorker.id ? editingWorker : w));
+      setEditingWorker(null);
+      setShowModal(null);
+    }
+  };
+
+  const handleSaveMember = () => {
+    if (editingMember) {
+      setMembers(members.map(m => m.id === editingMember.id ? editingMember : m));
+      setEditingMember(null);
+      setShowModal(null);
+    }
+  };
+
+  const handlePhotoUpload = (event: React.ChangeEvent<HTMLInputElement>, type: 'worker' | 'member') => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const result = e.target?.result as string;
+        if (type === 'worker' && editingWorker) {
+          setEditingWorker({ ...editingWorker, photo: result });
+        } else if (type === 'member' && editingMember) {
+          setEditingMember({ ...editingMember, photo: result });
+        }
+      };
+      reader.readAsDataURL(file);
     }
   };
 
@@ -320,19 +350,21 @@ export default function SomitiManager() {
           <div className="grid grid-cols-2 gap-4 text-sm">
             <div>
               <p className="text-pink-200">মোট সদস্য</p>
-              <p className="font-bold text-lg">{somitiInfo.totalMembers}জন</p>
+              <p className="font-bold text-lg">{members.length}জন</p>
             </div>
             <div>
               <p className="text-pink-200">মোট তহবিল</p>
-              <p className="font-bold text-lg">৳{somitiInfo.totalFund.toLocaleString()}</p>
+              <p className="font-bold text-lg">৳{members.reduce((sum, m) => sum + m.totalSavings, 0).toLocaleString()}</p>
             </div>
             <div>
               <p className="text-pink-200">কর্মী</p>
-              <p className="font-bold text-lg">{somitiInfo.totalWorkers}জন</p>
+              <p className="font-bold text-lg">{workers.length}জন</p>
             </div>
             <div>
               <p className="text-pink-200">আজকের সংগ্রহ</p>
-              <p className="font-bold text-lg">৳{somitiInfo.todayCollection.toLocaleString()}</p>
+              <p className="font-bold text-lg">৳{collections
+                .filter(c => c.date === new Date().toISOString().split('T')[0])
+                .reduce((sum, c) => sum + c.savingsAmount + c.installmentAmount, 0).toLocaleString()}</p>
             </div>
           </div>
         </div>
@@ -422,9 +454,26 @@ export default function SomitiManager() {
                   <CreditCard className="h-5 w-5" />
                   <span className="text-sm">সক্রিয় ঋণ</span>
                 </div>
-                <p className="text-2xl font-bold">{somitiInfo.activeLoans}টি</p>
+                <p className="text-2xl font-bold">{members.filter(m => m.remainingLoan > 0).length}টি</p>
               </div>
             </div>
+
+            {/* Empty State Message */}
+            {workers.length === 0 && members.length === 0 && (
+              <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 text-center">
+                <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Users className="h-8 w-8 text-gray-400" />
+                </div>
+                <h3 className="font-bold text-gray-900 mb-2">আপনার সমিতি শুরু করুন</h3>
+                <p className="text-gray-600 mb-4">প্রথমে কর্মী যোগ করুন, তারপর সদস্যদের যোগ করুন</p>
+                <button
+                  onClick={() => setShowModal('addWorker')}
+                  className="bg-bkash-500 hover:bg-bkash-600 text-white px-6 py-3 rounded-xl font-medium transition-colors"
+                >
+                  প্রথম কর্মী যোগ করুন
+                </button>
+              </div>
+            )}
           </div>
         )}
 
@@ -432,7 +481,7 @@ export default function SomitiManager() {
         {activeTab === 'workers' && (
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <h3 className="font-bold text-gray-900">কর্মী তালিকা</h3>
+              <h3 className="font-bold text-gray-900">কর্মী তালিকা ({workers.length})</h3>
               <button
                 onClick={() => setShowModal('addWorker')}
                 className="bg-bkash-500 hover:bg-bkash-600 text-white px-4 py-2 rounded-xl text-sm font-medium transition-colors flex items-center space-x-2"
@@ -442,37 +491,75 @@ export default function SomitiManager() {
               </button>
             </div>
 
-            {workers.map((worker) => (
-              <div key={worker.id} className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
-                <div className="flex items-center justify-between mb-3">
-                  <div className="flex items-center space-x-3">
-                    <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                      <Briefcase className="h-5 w-5 text-blue-600" />
+            {workers.length === 0 ? (
+              <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 text-center">
+                <Briefcase className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                <h3 className="font-bold text-gray-900 mb-2">কোনো কর্মী নেই</h3>
+                <p className="text-gray-600 mb-4">প্রথম কর্মী যোগ করুন</p>
+                <button
+                  onClick={() => setShowModal('addWorker')}
+                  className="bg-bkash-500 hover:bg-bkash-600 text-white px-6 py-3 rounded-xl font-medium transition-colors"
+                >
+                  কর্মী যোগ করুন
+                </button>
+              </div>
+            ) : (
+              workers.map((worker) => (
+                <div key={worker.id} className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="flex items-center space-x-3">
+                      {worker.photo ? (
+                        <img 
+                          src={worker.photo} 
+                          alt={worker.name}
+                          className="w-10 h-10 rounded-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                          <Briefcase className="h-5 w-5 text-blue-600" />
+                        </div>
+                      )}
+                      <div>
+                        <h4 className="font-bold text-gray-900">{worker.name}</h4>
+                        <p className="text-sm text-gray-500">{worker.phone}</p>
+                        <p className="text-xs text-gray-400">{worker.area}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <button
+                        onClick={() => handleEditWorker(worker)}
+                        className="p-2 bg-blue-100 hover:bg-blue-200 rounded-lg transition-colors"
+                      >
+                        <Edit className="h-4 w-4 text-blue-600" />
+                      </button>
+                      <button
+                        onClick={() => handleDeleteWorker(worker.id)}
+                        className="p-2 bg-red-100 hover:bg-red-200 rounded-lg transition-colors"
+                      >
+                        <Trash2 className="h-4 w-4 text-red-600" />
+                      </button>
+                    </div>
+                  </div>
+                  
+                  <div className="grid grid-cols-3 gap-4 text-sm">
+                    <div>
+                      <p className="text-gray-500">মোট সদস্য</p>
+                      <p className="font-bold text-gray-900">{members.filter(m => m.workerId === worker.id).length}জন</p>
                     </div>
                     <div>
-                      <h4 className="font-bold text-gray-900">{worker.name}</h4>
-                      <p className="text-sm text-gray-500">{worker.phone}</p>
-                      <p className="text-xs text-gray-400">{worker.area}</p>
+                      <p className="text-gray-500">আজকের সংগ্��হ</p>
+                      <p className="font-bold text-green-600">৳{collections
+                        .filter(c => c.workerId === worker.id && c.date === new Date().toISOString().split('T')[0])
+                        .reduce((sum, c) => sum + c.savingsAmount + c.installmentAmount, 0)}</p>
+                    </div>
+                    <div>
+                      <p className="text-gray-500">যোগদানের তারিখ</p>
+                      <p className="font-bold text-gray-900">{worker.joinDate}</p>
                     </div>
                   </div>
                 </div>
-                
-                <div className="grid grid-cols-3 gap-4 text-sm">
-                  <div>
-                    <p className="text-gray-500">মোট সদস্য</p>
-                    <p className="font-bold text-gray-900">{worker.totalMembers}জন</p>
-                  </div>
-                  <div>
-                    <p className="text-gray-500">আজকের সংগ্রহ</p>
-                    <p className="font-bold text-green-600">৳{worker.todayCollection}</p>
-                  </div>
-                  <div>
-                    <p className="text-gray-500">যোগদানের তারিখ</p>
-                    <p className="font-bold text-gray-900">{worker.joinDate}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
+              ))
+            )}
           </div>
         )}
 
@@ -480,9 +567,9 @@ export default function SomitiManager() {
         {activeTab === 'members' && (
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <h3 className="font-bold text-gray-900">সদস্য তালিকা</h3>
+              <h3 className="font-bold text-gray-900">সদস্য তালিকা ({members.length})</h3>
               <button
-                onClick={() => setShowModal('addMember')}
+                onClick={() => workers.length > 0 ? setShowModal('addMember') : alert('প্রথমে কর্মী যোগ করুন')}
                 className="bg-bkash-500 hover:bg-bkash-600 text-white px-4 py-2 rounded-xl text-sm font-medium transition-colors flex items-center space-x-2"
               >
                 <UserPlus className="h-4 w-4" />
@@ -503,8 +590,8 @@ export default function SomitiManager() {
                   />
                 </div>
                 <select
-                  value={selectedWorker || ''}
-                  onChange={(e) => setSelectedWorker(e.target.value ? Number(e.target.value) : null)}
+                  value={selectedWorkerFilter || ''}
+                  onChange={(e) => setSelectedWorkerFilter(e.target.value ? Number(e.target.value) : null)}
                   className="p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-bkash-500 focus:border-transparent"
                 >
                   <option value="">সব কর্মী</option>
@@ -515,48 +602,92 @@ export default function SomitiManager() {
               </div>
             </div>
 
-            {filteredMembers.map((member) => (
-              <div
-                key={member.id}
-                onClick={() => setSelectedMember(member)}
-                className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 cursor-pointer hover:shadow-md transition-shadow"
-              >
-                <div className="flex items-center justify-between mb-3">
-                  <div className="flex items-center space-x-3">
-                    <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
-                      <UserCheck className="h-5 w-5 text-green-600" />
+            {members.length === 0 ? (
+              <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 text-center">
+                <UserCheck className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                <h3 className="font-bold text-gray-900 mb-2">কোনো সদস্য নেই</h3>
+                <p className="text-gray-600 mb-4">
+                  {workers.length === 0 ? 'প্রথমে কর্মী যোগ করুন' : 'প্রথম সদস্য যোগ করুন'}
+                </p>
+                <button
+                  onClick={() => workers.length > 0 ? setShowModal('addMember') : setShowModal('addWorker')}
+                  className="bg-bkash-500 hover:bg-bkash-600 text-white px-6 py-3 rounded-xl font-medium transition-colors"
+                >
+                  {workers.length === 0 ? 'কর্মী যোগ করুন' : 'সদস্য যোগ করুন'}
+                </button>
+              </div>
+            ) : (
+              filteredMembers.map((member) => (
+                <div
+                  key={member.id}
+                  onClick={() => setSelectedMember(member)}
+                  className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 cursor-pointer hover:shadow-md transition-shadow"
+                >
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="flex items-center space-x-3">
+                      {member.photo ? (
+                        <img 
+                          src={member.photo} 
+                          alt={member.name}
+                          className="w-10 h-10 rounded-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                          <UserCheck className="h-5 w-5 text-green-600" />
+                        </div>
+                      )}
+                      <div>
+                        <h4 className="font-bold text-gray-900">{member.name}</h4>
+                        <p className="text-sm text-gray-500">কোড: {member.code}</p>
+                        <p className="text-xs text-gray-400">কর্মী: {member.workerName}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleEditMember(member);
+                        }}
+                        className="p-2 bg-blue-100 hover:bg-blue-200 rounded-lg transition-colors"
+                      >
+                        <Edit className="h-4 w-4 text-blue-600" />
+                      </button>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDeleteMember(member.id);
+                        }}
+                        className="p-2 bg-red-100 hover:bg-red-200 rounded-lg transition-colors"
+                      >
+                        <Trash2 className="h-4 w-4 text-red-600" />
+                      </button>
+                      <span className={`px-2 py-1 text-xs rounded-full font-medium ${
+                        member.status === 'active' 
+                          ? 'bg-green-100 text-green-800' 
+                          : 'bg-red-100 text-red-800'
+                      }`}>
+                        {member.status === 'active' ? 'সক্রিয়' : 'নিষ্ক্রিয়'}
+                      </span>
+                    </div>
+                  </div>
+                  
+                  <div className="grid grid-cols-3 gap-4 text-sm">
+                    <div>
+                      <p className="text-gray-500">মোট সঞ্চয়</p>
+                      <p className="font-bold text-green-600">৳{member.totalSavings}</p>
                     </div>
                     <div>
-                      <h4 className="font-bold text-gray-900">{member.name}</h4>
-                      <p className="text-sm text-gray-500">কোড: {member.code}</p>
-                      <p className="text-xs text-gray-400">কর্মী: {member.workerName}</p>
+                      <p className="text-gray-500">বকেয়া ঋণ</p>
+                      <p className="font-bold text-red-600">৳{member.remainingLoan}</p>
+                    </div>
+                    <div>
+                      <p className="text-gray-500">মাসিক সঞ্চয়</p>
+                      <p className="font-bold text-blue-600">৳{member.savingsAmount}</p>
                     </div>
                   </div>
-                  <span className={`px-2 py-1 text-xs rounded-full font-medium ${
-                    member.status === 'active' 
-                      ? 'bg-green-100 text-green-800' 
-                      : 'bg-red-100 text-red-800'
-                  }`}>
-                    {member.status === 'active' ? 'সক্রিয়' : 'নিষ্ক্রিয়'}
-                  </span>
                 </div>
-                
-                <div className="grid grid-cols-3 gap-4 text-sm">
-                  <div>
-                    <p className="text-gray-500">মোট সঞ্চয়</p>
-                    <p className="font-bold text-green-600">৳{member.totalSavings}</p>
-                  </div>
-                  <div>
-                    <p className="text-gray-500">বকেয়া ঋণ</p>
-                    <p className="font-bold text-red-600">৳{member.remainingLoan}</p>
-                  </div>
-                  <div>
-                    <p className="text-gray-500">মাসিক সঞ্চয়</p>
-                    <p className="font-bold text-blue-600">৳{member.savingsAmount}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
+              ))
+            )}
           </div>
         )}
 
@@ -566,7 +697,7 @@ export default function SomitiManager() {
             <div className="flex items-center justify-between">
               <h3 className="font-bold text-gray-900">দৈনিক সংগ্রহ</h3>
               <button
-                onClick={() => setShowModal('dailyCollection')}
+                onClick={() => members.length > 0 ? setShowModal('dailyCollection') : alert('প্রথমে সদস্য যোগ করু���')}
                 className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl text-sm font-medium transition-colors"
               >
                 নতুন সংগ্রহ
@@ -576,39 +707,49 @@ export default function SomitiManager() {
             {/* Collection Summary */}
             <div className="bg-gradient-to-r from-green-500 to-green-600 rounded-2xl p-4 text-white">
               <h3 className="font-bold mb-2">আজকের সংগ্রহ</h3>
-              <p className="text-3xl font-bold">৳{somitiInfo.todayCollection.toLocaleString()}</p>
+              <p className="text-3xl font-bold">৳{collections
+                .filter(c => c.date === new Date().toISOString().split('T')[0])
+                .reduce((sum, c) => sum + c.savingsAmount + c.installmentAmount, 0).toLocaleString()}</p>
               <p className="text-green-100 text-sm">মোট {collections.filter(c => c.date === new Date().toISOString().split('T')[0]).length}টি এন্ট্রি</p>
             </div>
 
             {/* Recent Collections */}
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100">
               <div className="p-4 border-b border-gray-100">
-                <h3 className="font-bold text-gray-900">সাম্প্র��িক সংগ্রহ</h3>
+                <h3 className="font-bold text-gray-900">সাম্প্রতিক সংগ্রহ</h3>
               </div>
-              <div className="divide-y divide-gray-100">
-                {collections.slice(0, 10).map((collection) => (
-                  <div key={collection.id} className="p-4 flex items-center justify-between">
-                    <div className="flex items-center space-x-3">
-                      <div className="p-2 rounded-full bg-green-100">
-                        <DollarSign className="h-4 w-4 text-green-600" />
+              {collections.length === 0 ? (
+                <div className="p-8 text-center">
+                  <DollarSign className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                  <h3 className="font-bold text-gray-900 mb-2">কোনো সংগ্রহ নেই</h3>
+                  <p className="text-gray-600">প্রথম সংগ্রহ যোগ করুন</p>
+                </div>
+              ) : (
+                <div className="divide-y divide-gray-100">
+                  {collections.slice(0, 10).map((collection) => (
+                    <div key={collection.id} className="p-4 flex items-center justify-between">
+                      <div className="flex items-center space-x-3">
+                        <div className="p-2 rounded-full bg-green-100">
+                          <DollarSign className="h-4 w-4 text-green-600" />
+                        </div>
+                        <div>
+                          <p className="font-medium text-gray-900">{collection.memberName}</p>
+                          <p className="text-sm text-gray-500">কর্মী: {collection.workerName}</p>
+                          <p className="text-xs text-gray-400">{collection.date}</p>
+                        </div>
                       </div>
-                      <div>
-                        <p className="font-medium text-gray-900">{collection.memberName}</p>
-                        <p className="text-sm text-gray-500">কর্মী: {collection.workerName}</p>
-                        <p className="text-xs text-gray-400">{collection.date}</p>
+                      <div className="text-right">
+                        {collection.savingsAmount > 0 && (
+                          <p className="text-sm text-green-600">সঞ্চয়: ৳{collection.savingsAmount}</p>
+                        )}
+                        {collection.installmentAmount > 0 && (
+                          <p className="text-sm text-blue-600">কিস্তি: ৳{collection.installmentAmount}</p>
+                        )}
                       </div>
                     </div>
-                    <div className="text-right">
-                      {collection.savingsAmount > 0 && (
-                        <p className="text-sm text-green-600">সঞ্চয়: ৳{collection.savingsAmount}</p>
-                      )}
-                      {collection.installmentAmount > 0 && (
-                        <p className="text-sm text-blue-600">কিস্তি: ৳{collection.installmentAmount}</p>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         )}
@@ -632,7 +773,7 @@ export default function SomitiManager() {
                 <div className="grid grid-cols-2 gap-3">
                   <input
                     type="date"
-                    placeholder="শুরুর তারিখ"
+                    placeholder="শু���ুর তারিখ"
                     value={dateFilter.from}
                     onChange={(e) => setDateFilter({...dateFilter, from: e.target.value})}
                     className="p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-bkash-500 focus:border-transparent"
@@ -653,31 +794,39 @@ export default function SomitiManager() {
               <div className="p-4 border-b border-gray-100">
                 <h3 className="font-bold text-gray-900">ফিল্টার করা সংগ্রহ ({filteredCollections.length})</h3>
               </div>
-              <div className="divide-y divide-gray-100">
-                {filteredCollections.map((collection) => (
-                  <div key={collection.id} className="p-4 flex items-center justify-between">
-                    <div className="flex items-center space-x-3">
-                      <div className="p-2 rounded-full bg-blue-100">
-                        <Calendar className="h-4 w-4 text-blue-600" />
+              {filteredCollections.length === 0 ? (
+                <div className="p-8 text-center">
+                  <Calendar className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                  <h3 className="font-bold text-gray-900 mb-2">কোনো রেকর্ড পাওয়া যায়নি</h3>
+                  <p className="text-gray-600">অন্য ফিল্টার ব্যবহার করে দেখুন</p>
+                </div>
+              ) : (
+                <div className="divide-y divide-gray-100">
+                  {filteredCollections.map((collection) => (
+                    <div key={collection.id} className="p-4 flex items-center justify-between">
+                      <div className="flex items-center space-x-3">
+                        <div className="p-2 rounded-full bg-blue-100">
+                          <Calendar className="h-4 w-4 text-blue-600" />
+                        </div>
+                        <div>
+                          <p className="font-medium text-gray-900">{collection.memberName}</p>
+                          <p className="text-sm text-gray-500">কর্মী: {collection.workerName}</p>
+                          <p className="text-xs text-gray-400">{collection.date}</p>
+                        </div>
                       </div>
-                      <div>
-                        <p className="font-medium text-gray-900">{collection.memberName}</p>
-                        <p className="text-sm text-gray-500">কর্মী: {collection.workerName}</p>
-                        <p className="text-xs text-gray-400">{collection.date}</p>
+                      <div className="text-right">
+                        <p className="font-bold text-green-600">
+                          ৳{(collection.savingsAmount + collection.installmentAmount)}
+                        </p>
+                        <p className="text-xs text-gray-500">
+                          {collection.type === 'both' ? 'সঞ্চয় + কিস্তি' :
+                           collection.type === 'savings' ? 'সঞ্চয়' : 'কিস্তি'}
+                        </p>
                       </div>
                     </div>
-                    <div className="text-right">
-                      <p className="font-bold text-green-600">
-                        ৳{(collection.savingsAmount + collection.installmentAmount)}
-                      </p>
-                      <p className="text-xs text-gray-500">
-                        {collection.type === 'both' ? 'সঞ্চয় + কিস্তি' :
-                         collection.type === 'savings' ? 'সঞ্চয়' : 'কিস্তি'}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         )}
@@ -732,6 +881,82 @@ export default function SomitiManager() {
                     className="flex-1 bg-bkash-500 hover:bg-bkash-600 text-white py-3 rounded-xl font-medium transition-colors"
                   >
                     যোগ করুন
+                  </button>
+                </div>
+              </>
+            )}
+
+            {/* Edit Worker Modal */}
+            {showModal === 'editWorker' && editingWorker && (
+              <>
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="font-bold text-gray-900">কর্মী সম্পাদনা</h3>
+                  <button onClick={() => setShowModal(null)}>
+                    <X className="h-5 w-5 text-gray-500" />
+                  </button>
+                </div>
+                <div className="space-y-4">
+                  {/* Photo Upload */}
+                  <div className="text-center">
+                    <div className="relative inline-block">
+                      {editingWorker.photo ? (
+                        <img 
+                          src={editingWorker.photo} 
+                          alt="Worker"
+                          className="w-20 h-20 rounded-full object-cover mx-auto"
+                        />
+                      ) : (
+                        <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto">
+                          <Briefcase className="h-8 w-8 text-gray-400" />
+                        </div>
+                      )}
+                      <label className="absolute bottom-0 right-0 p-1 bg-bkash-500 rounded-full cursor-pointer hover:bg-bkash-600 transition-colors">
+                        <Camera className="h-3 w-3 text-white" />
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={(e) => handlePhotoUpload(e, 'worker')}
+                          className="hidden"
+                        />
+                      </label>
+                    </div>
+                  </div>
+                  
+                  <input
+                    type="text"
+                    placeholder="কর্মীর নাম"
+                    value={editingWorker.name}
+                    onChange={(e) => setEditingWorker({...editingWorker, name: e.target.value})}
+                    className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-bkash-500 focus:border-transparent"
+                  />
+                  <input
+                    type="tel"
+                    placeholder="মোবাইল নম্বর"
+                    value={editingWorker.phone}
+                    onChange={(e) => setEditingWorker({...editingWorker, phone: e.target.value})}
+                    className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-bkash-500 focus:border-transparent"
+                  />
+                  <input
+                    type="text"
+                    placeholder="এলাকা"
+                    value={editingWorker.area}
+                    onChange={(e) => setEditingWorker({...editingWorker, area: e.target.value})}
+                    className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-bkash-500 focus:border-transparent"
+                  />
+                </div>
+                <div className="flex space-x-3 mt-6">
+                  <button
+                    onClick={() => setShowModal(null)}
+                    className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 py-3 rounded-xl font-medium transition-colors"
+                  >
+                    বাতিল
+                  </button>
+                  <button
+                    onClick={handleSaveWorker}
+                    className="flex-1 bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl font-medium transition-colors flex items-center justify-center space-x-2"
+                  >
+                    <Save className="h-4 w-4" />
+                    <span>সংরক্ষণ</span>
                   </button>
                 </div>
               </>
@@ -812,6 +1037,128 @@ export default function SomitiManager() {
                     className="flex-1 bg-bkash-500 hover:bg-bkash-600 text-white py-3 rounded-xl font-medium transition-colors"
                   >
                     যোগ করুন
+                  </button>
+                </div>
+              </>
+            )}
+
+            {/* Edit Member Modal */}
+            {showModal === 'editMember' && editingMember && (
+              <>
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="font-bold text-gray-900">সদস্য সম্পাদনা</h3>
+                  <button onClick={() => setShowModal(null)}>
+                    <X className="h-5 w-5 text-gray-500" />
+                  </button>
+                </div>
+                <div className="space-y-4">
+                  {/* Photo Upload */}
+                  <div className="text-center">
+                    <div className="relative inline-block">
+                      {editingMember.photo ? (
+                        <img 
+                          src={editingMember.photo} 
+                          alt="Member"
+                          className="w-20 h-20 rounded-full object-cover mx-auto"
+                        />
+                      ) : (
+                        <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto">
+                          <UserCheck className="h-8 w-8 text-gray-400" />
+                        </div>
+                      )}
+                      <label className="absolute bottom-0 right-0 p-1 bg-bkash-500 rounded-full cursor-pointer hover:bg-bkash-600 transition-colors">
+                        <Camera className="h-3 w-3 text-white" />
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={(e) => handlePhotoUpload(e, 'member')}
+                          className="hidden"
+                        />
+                      </label>
+                    </div>
+                  </div>
+
+                  <input
+                    type="text"
+                    placeholder="সদস্যের কোড"
+                    value={editingMember.code}
+                    onChange={(e) => setEditingMember({...editingMember, code: e.target.value})}
+                    className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-bkash-500 focus:border-transparent"
+                  />
+                  <input
+                    type="text"
+                    placeholder="সদস্যের নাম"
+                    value={editingMember.name}
+                    onChange={(e) => setEditingMember({...editingMember, name: e.target.value})}
+                    className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-bkash-500 focus:border-transparent"
+                  />
+                  <input
+                    type="text"
+                    placeholder="জাতীয় পরিচয়পত্র"
+                    value={editingMember.nid}
+                    onChange={(e) => setEditingMember({...editingMember, nid: e.target.value})}
+                    className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-bkash-500 focus:border-transparent"
+                  />
+                  <input
+                    type="tel"
+                    placeholder="মোবাইল নম্বর"
+                    value={editingMember.phone}
+                    onChange={(e) => setEditingMember({...editingMember, phone: e.target.value})}
+                    className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-bkash-500 focus:border-transparent"
+                  />
+                  <select
+                    value={editingMember.workerId}
+                    onChange={(e) => {
+                      const selectedWorker = workers.find(w => w.id === Number(e.target.value));
+                      setEditingMember({
+                        ...editingMember, 
+                        workerId: Number(e.target.value),
+                        workerName: selectedWorker?.name || ''
+                      });
+                    }}
+                    className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-bkash-500 focus:border-transparent"
+                  >
+                    <option value="">কর্মী নির্বাচন করুন</option>
+                    {workers.map((worker) => (
+                      <option key={worker.id} value={worker.id}>{worker.name} - {worker.area}</option>
+                    ))}
+                  </select>
+                  <input
+                    type="number"
+                    placeholder="সঞ্চয়ের পরিমাণ"
+                    value={editingMember.savingsAmount}
+                    onChange={(e) => setEditingMember({...editingMember, savingsAmount: Number(e.target.value)})}
+                    className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-bkash-500 focus:border-transparent"
+                  />
+                  <input
+                    type="number"
+                    placeholder="ঋণের পরিমাণ"
+                    value={editingMember.loanAmount}
+                    onChange={(e) => setEditingMember({...editingMember, loanAmount: Number(e.target.value), remainingLoan: Number(e.target.value)})}
+                    className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-bkash-500 focus:border-transparent"
+                  />
+                  <select
+                    value={editingMember.status}
+                    onChange={(e) => setEditingMember({...editingMember, status: e.target.value as 'active' | 'inactive'})}
+                    className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-bkash-500 focus:border-transparent"
+                  >
+                    <option value="active">সক্রিয়</option>
+                    <option value="inactive">নিষ্ক্রিয়</option>
+                  </select>
+                </div>
+                <div className="flex space-x-3 mt-6">
+                  <button
+                    onClick={() => setShowModal(null)}
+                    className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 py-3 rounded-xl font-medium transition-colors"
+                  >
+                    বাতিল
+                  </button>
+                  <button
+                    onClick={handleSaveMember}
+                    className="flex-1 bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl font-medium transition-colors flex items-center justify-center space-x-2"
+                  >
+                    <Save className="h-4 w-4" />
+                    <span>সংরক্ষণ</span>
                   </button>
                 </div>
               </>
@@ -904,12 +1251,24 @@ export default function SomitiManager() {
             <div className="space-y-4">
               {/* Member Details */}
               <div className="bg-gray-50 rounded-xl p-4">
-                <h4 className="font-bold text-gray-900 mb-2">{selectedMember.name}</h4>
-                <div className="grid grid-cols-2 gap-2 text-sm">
+                <div className="flex items-center space-x-3 mb-2">
+                  {selectedMember.photo ? (
+                    <img 
+                      src={selectedMember.photo} 
+                      alt={selectedMember.name}
+                      className="w-12 h-12 rounded-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                      <UserCheck className="h-6 w-6 text-green-600" />
+                    </div>
+                  )}
                   <div>
-                    <p className="text-gray-500">কোড</p>
-                    <p className="font-medium">{selectedMember.code}</p>
+                    <h4 className="font-bold text-gray-900">{selectedMember.name}</h4>
+                    <p className="text-sm text-gray-500">কোড: {selectedMember.code}</p>
                   </div>
+                </div>
+                <div className="grid grid-cols-2 gap-2 text-sm">
                   <div>
                     <p className="text-gray-500">মোবাইল</p>
                     <p className="font-medium">{selectedMember.phone}</p>
@@ -921,6 +1280,12 @@ export default function SomitiManager() {
                   <div>
                     <p className="text-gray-500">কর্মী</p>
                     <p className="font-medium">{selectedMember.workerName}</p>
+                  </div>
+                  <div>
+                    <p className="text-gray-500">স্ট্যাটাস</p>
+                    <p className={`font-medium ${selectedMember.status === 'active' ? 'text-green-600' : 'text-red-600'}`}>
+                      {selectedMember.status === 'active' ? 'সক্রিয়' : 'নিষ্ক্রিয়'}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -960,6 +1325,9 @@ export default function SomitiManager() {
                         </div>
                       </div>
                     ))}
+                  {collections.filter(c => c.memberId === selectedMember.id).length === 0 && (
+                    <p className="text-gray-500 text-sm text-center py-4">কোনো সংগ্রহ নেই</p>
+                  )}
                 </div>
               </div>
             </div>
