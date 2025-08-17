@@ -87,10 +87,17 @@ export default function Dashboard({ language, setLanguage }: DashboardProps) {
     { icon: Banknote, label: t.addMoney, color: "bg-white shadow-md", textColor: "text-gray-700", iconColor: "text-purple-500" },
   ];
 
+  const isSomitiManager = localStorage.getItem('isSomitiManager') === 'true';
+
   const specialFeatures = [
     { icon: CreditCard, label: t.taskEarning, color: "bg-gradient-to-r from-blue-500 to-blue-600", link: "/task-earning" },
     { icon: PiggyBank, label: t.loanService, color: "bg-gradient-to-r from-green-500 to-green-600", link: "/loan-application" },
-    { icon: Users, label: t.somitiManager, color: "bg-gradient-to-r from-purple-500 to-purple-600", link: "/somiti-manager" },
+    {
+      icon: Users,
+      label: t.somitiManager,
+      color: "bg-gradient-to-r from-purple-500 to-purple-600",
+      link: isSomitiManager ? "/somiti-manager" : "/somiti-setup"
+    },
   ];
 
   const transactions = [
