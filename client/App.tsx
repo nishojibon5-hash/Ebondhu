@@ -86,6 +86,11 @@ function App() {
                 <TaskEarning />
               </ProtectedRoute>
             } />
+            <Route path="/task-earning/create" element={
+              <ProtectedRoute>
+                <TaskCreate />
+              </ProtectedRoute>
+            } />
             <Route path="/loan-application" element={
               <ProtectedRoute>
                 <LoanApplication />
