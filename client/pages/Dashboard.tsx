@@ -71,7 +71,7 @@ const translations = {
     tapToSeeBalance: "ব্যালেন্স দেখতে ট্যাপ করুন",
     taskEarning: "টাস্ক আর্নিং",
     loanService: "লোন সার্ভিস",
-    somitiManager: "সমিতি ম্যানেজার"
+    somitiManager: "��মিতি ম্যানেজার"
   }
 };
 
@@ -90,17 +90,6 @@ export default function Dashboard({ language, setLanguage }: DashboardProps) {
   ];
 
   const isSomitiManager = localStorage.getItem('isSomitiManager') === 'true';
-
-  const specialFeatures = [
-    { icon: CreditCard, label: t.taskEarning, color: "bg-gradient-to-r from-blue-500 to-blue-600", link: "/task-earning" },
-    { icon: PiggyBank, label: t.loanService, color: "bg-gradient-to-r from-green-500 to-green-600", link: "/loan-application" },
-    {
-      icon: Users,
-      label: t.somitiManager,
-      color: "bg-gradient-to-r from-purple-500 to-purple-600",
-      link: isSomitiManager ? "/somiti-manager" : "/somiti-setup"
-    },
-  ];
 
   const transactions = [
     {
