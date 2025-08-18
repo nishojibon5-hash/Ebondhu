@@ -46,7 +46,7 @@ const translations = {
     yesterday: "গতকাল",
     tapToSeeBalance: "ব্যালেন্স দেখতে ট্যাপ করুন",
     taskEarning: "টাস্ক আর্নিং",
-    loanService: "লোন ���ার্ভিস",
+    loanService: "লোন সার্ভিস",
     somitiManager: "সমিতি ম্যানেজার"
   },
   bn: {
@@ -169,7 +169,9 @@ export default function Dashboard({ language, setLanguage }: DashboardProps) {
                 <p className="text-pink-100 text-sm mb-1">{t.yourBalance}</p>
                 <div className="flex items-center space-x-3">
                   {balanceVisible ? (
-                    <span className="text-3xl font-bold">৳ ১২,৪৫০.৫০</span>
+                    <span className="text-3xl font-bold">
+                      ৳ {parseFloat(localStorage.getItem('userBalance') || '5000').toLocaleString()}
+                    </span>
                   ) : (
                     <div className="flex flex-col">
                       <span className="text-lg font-medium">{t.tapToSeeBalance}</span>
