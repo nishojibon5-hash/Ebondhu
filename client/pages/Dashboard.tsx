@@ -79,12 +79,12 @@ export default function Dashboard({ language, setLanguage }: DashboardProps) {
   const t = translations[language];
 
   const quickActions = [
-    { icon: Send, label: t.sendMoney, color: "bg-white shadow-md", textColor: "text-gray-700", iconColor: "text-bkash-500" },
-    { icon: Download, label: t.cashIn, color: "bg-white shadow-md", textColor: "text-gray-700", iconColor: "text-green-500" },
-    { icon: Upload, label: t.cashOut, color: "bg-white shadow-md", textColor: "text-gray-700", iconColor: "text-red-500" },
-    { icon: Smartphone, label: t.recharge, color: "bg-white shadow-md", textColor: "text-gray-700", iconColor: "text-blue-500" },
-    { icon: Receipt, label: t.payBill, color: "bg-white shadow-md", textColor: "text-gray-700", iconColor: "text-orange-500" },
-    { icon: Banknote, label: t.addMoney, color: "bg-white shadow-md", textColor: "text-gray-700", iconColor: "text-purple-500" },
+    { icon: Send, label: t.sendMoney, color: "bg-white shadow-md", textColor: "text-gray-700", iconColor: "text-bkash-500", link: "/send-money" },
+    { icon: Download, label: t.cashIn, color: "bg-white shadow-md", textColor: "text-gray-700", iconColor: "text-green-500", link: "/add-money" },
+    { icon: Upload, label: t.cashOut, color: "bg-white shadow-md", textColor: "text-gray-700", iconColor: "text-red-500", link: "#" },
+    { icon: Smartphone, label: t.recharge, color: "bg-white shadow-md", textColor: "text-gray-700", iconColor: "text-blue-500", link: "/mobile-recharge" },
+    { icon: Receipt, label: t.payBill, color: "bg-white shadow-md", textColor: "text-gray-700", iconColor: "text-orange-500", link: "#" },
+    { icon: Banknote, label: t.addMoney, color: "bg-white shadow-md", textColor: "text-gray-700", iconColor: "text-purple-500", link: "/add-money" },
   ];
 
   const isSomitiManager = localStorage.getItem('isSomitiManager') === 'true';
