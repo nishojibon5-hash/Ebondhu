@@ -42,7 +42,7 @@ const translations = {
     viewAll: "সব দেখুন",
     sent: "পাঠানো",
     received: "পেয়েছেন",
-    recharged: "র���চার্জ",
+    recharged: "রিচার্জ",
     today: "আজ",
     yesterday: "গতকাল",
     tapToSeeBalance: "ব্যালেন্স দেখতে ট্যাপ করুন",
@@ -51,7 +51,7 @@ const translations = {
     somitiManager: "সমিতি ম্যানেজার"
   },
   bn: {
-    goodMorning: "শুভ সকাল",
+    goodMorning: "শুভ ���কাল",
     userName: "মোঃ রহিম",
     appName: "লোন বন্ধু",
     yourBalance: "আপনার ব্যালেন্স", 
@@ -77,6 +77,7 @@ const translations = {
 
 export default function Dashboard({ language, setLanguage }: DashboardProps) {
   const [balanceVisible, setBalanceVisible] = useState(false);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const t = translations[language];
 
   const quickActions = [
