@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Language } from "../App";
+import { DrawerMenu, DrawerMenuButton } from "../components/DrawerMenu";
 
 interface DashboardProps {
   language: Language;
@@ -41,7 +42,7 @@ const translations = {
     viewAll: "সব দেখুন",
     sent: "পাঠানো",
     received: "পেয়েছেন",
-    recharged: "রিচার্জ",
+    recharged: "র���চার্জ",
     today: "আজ",
     yesterday: "গতকাল",
     tapToSeeBalance: "ব্যালেন্স দেখতে ট্যাপ করুন",
