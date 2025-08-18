@@ -46,7 +46,7 @@ const translations = {
     yesterday: "গতকাল",
     tapToSeeBalance: "ব্যালেন্স দেখতে ট্যাপ করুন",
     taskEarning: "টাস্ক আর্নিং",
-    loanService: "লোন সার্ভিস",
+    loanService: "লোন ���ার্ভিস",
     somitiManager: "সমিতি ম্যানেজার"
   },
   bn: {
@@ -210,9 +210,10 @@ export default function Dashboard({ language, setLanguage }: DashboardProps) {
             {quickActions.map((action, index) => {
               const Icon = action.icon;
               return (
-                <button
+                <Link
                   key={index}
-                  className={`${action.color} p-4 rounded-xl hover:scale-105 transition-all duration-200 border border-gray-100`}
+                  to={action.link}
+                  className={`${action.color} p-4 rounded-xl hover:scale-105 transition-all duration-200 border border-gray-100 block`}
                 >
                   <div className="flex flex-col items-center space-y-2">
                     <div className="p-2 rounded-full bg-gray-50">
@@ -222,7 +223,7 @@ export default function Dashboard({ language, setLanguage }: DashboardProps) {
                       {action.label}
                     </span>
                   </div>
-                </button>
+                </Link>
               );
             })}
           </div>
