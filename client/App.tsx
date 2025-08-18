@@ -94,6 +94,21 @@ function App() {
                 <TaskCreate />
               </ProtectedRoute>
             } />
+            <Route path="/send-money" element={
+              <ProtectedRoute>
+                <SendMoney />
+              </ProtectedRoute>
+            } />
+            <Route path="/mobile-recharge" element={
+              <ProtectedRoute>
+                <MobileRecharge />
+              </ProtectedRoute>
+            } />
+            <Route path="/add-money" element={
+              <ProtectedRoute>
+                <AddMoney />
+              </ProtectedRoute>
+            } />
             <Route path="/loan-application" element={
               <ProtectedRoute>
                 <LoanApplication />
