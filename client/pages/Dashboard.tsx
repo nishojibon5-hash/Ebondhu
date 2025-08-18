@@ -51,7 +51,7 @@ const translations = {
     somitiManager: "সমিতি ম্যানেজার"
   },
   bn: {
-    goodMorning: "শুভ ���কাল",
+    goodMorning: "শুভ সকাল",
     userName: "মোঃ রহিম",
     appName: "লোন বন্ধু",
     yourBalance: "আপনার ব্যালেন্স", 
@@ -158,6 +158,7 @@ export default function Dashboard({ language, setLanguage }: DashboardProps) {
               <button className="p-2 rounded-full bg-white/20 hover:bg-white/30 transition-colors">
                 <Settings className="h-5 w-5" />
               </button>
+              <DrawerMenuButton onClick={() => setIsDrawerOpen(true)} />
             </div>
           </div>
 
