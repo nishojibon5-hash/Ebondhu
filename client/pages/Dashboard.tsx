@@ -104,7 +104,7 @@ export default function Dashboard({ language, setLanguage }: DashboardProps) {
       id: 2,
       type: "received", 
       amount: 2500,
-      description: "টাকা পেয়েছেন - চাকরিদাতা থেকে",
+      description: "টাকা পেয়েছেন - চাকর��দাতা থেকে",
       time: "২:১৫ PM",
       date: t.yesterday
     },
@@ -270,6 +270,12 @@ export default function Dashboard({ language, setLanguage }: DashboardProps) {
           </div>
         </div>
       </div>
+
+      {/* Drawer Menu */}
+      <DrawerMenu
+        isOpen={isDrawerOpen}
+        onClose={() => setIsDrawerOpen(false)}
+      />
     </div>
   );
 }
