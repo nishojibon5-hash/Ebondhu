@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { 
-  X, 
-  CreditCard, 
-  PiggyBank, 
-  Users, 
+import { Link, useNavigate } from 'react-router-dom';
+import {
+  X,
+  CreditCard,
+  PiggyBank,
+  Users,
   Menu,
-  ChevronRight
+  ChevronRight,
+  LogOut,
+  Share2
 } from 'lucide-react';
 
 interface DrawerMenuProps {
