@@ -62,6 +62,13 @@ export default function Register() {
       setError('সঠিক মোবাইল নম্বর দিন (১১ সংখ্যা)');
       return false;
     }
+
+    // Check if phone number already exists
+    const existingUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+    if (existingUsers.some((user: any) => user.phone === formData.phone)) {
+      setError('এই নম্বর দিয়ে ইতিমধ্যে অ্যাকাউন্ট আছে');
+      return false;
+    }
     if (!formData.phone.startsWith('01')) {
       setError('মোবাইল নম্বর ০১ দিয়ে শুরু হতে হবে');
       return false;
@@ -278,7 +285,7 @@ export default function Register() {
                   <p className="text-blue-800 text-xs">
                     <strong>পিন নির্দেশিকা:</strong><br/>
                     • ৫ সংখ্যার পিন ব্যবহার করুন<br/>
-                    • সহজ পিন (১২৩৪৫) এড়িয়ে চলুন<br/>
+                    • সহজ পিন (১২৩৪৫) এ��়িয়ে চলুন<br/>
                     • পিনটি গোপন রাখুন
                   </p>
                 </div>
