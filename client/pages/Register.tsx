@@ -1,16 +1,17 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { 
-  Eye, 
-  EyeOff, 
-  Phone, 
-  Lock, 
+import { useState, useEffect } from "react";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import {
+  Eye,
+  EyeOff,
+  Phone,
+  Lock,
   User,
   ArrowRight,
   AlertCircle,
   CheckCircle,
   Smartphone,
-  ArrowLeft
+  ArrowLeft,
+  Gift
 } from "lucide-react";
 
 export default function Register() {
@@ -195,7 +196,7 @@ export default function Register() {
               <>
                 <div className="text-center mb-4">
                   <h3 className="text-lg font-bold text-gray-900">পিন সেটআপ</h3>
-                  <p className="text-sm text-gray-600">আপনার অ্যাকাউন্টের জন্য একটি পিন তৈরি করুন</p>
+                  <p className="text-sm text-gray-600">আপনার অ্��াকাউন্টের জন্য একটি পিন তৈরি করুন</p>
                 </div>
 
                 {/* PIN Input */}
@@ -243,7 +244,7 @@ export default function Register() {
                       value={formData.confirmPin}
                       onChange={(e) => handleInputChange('confirmPin', e.target.value)}
                       className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-bkash-500 focus:border-transparent text-lg"
-                      placeholder="পিন আবা��� লিখুন"
+                      placeholder="পিন আবার লিখুন"
                       maxLength={5}
                     />
                     <button
