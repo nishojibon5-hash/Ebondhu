@@ -86,7 +86,7 @@ export default function Register() {
       return false;
     }
     if (!formData.confirmPin) {
-      setError('পিন নিশ্চিত করুন');
+      setError('পি��� নিশ্চিত করুন');
       return false;
     }
     if (formData.pin !== formData.confirmPin) {
@@ -270,6 +270,33 @@ export default function Register() {
                       maxLength={11}
                     />
                   </div>
+                </div>
+
+                {/* Referral Code Input */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    রেফার কোড (ঐচ্ছিক)
+                  </label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center">
+                      <Gift className="h-5 w-5 text-gray-400" />
+                    </div>
+                    <input
+                      type="text"
+                      value={formData.referralCode}
+                      onChange={(e) => handleInputChange('referralCode', e.target.value.toUpperCase())}
+                      className="w-full pl-10 pr-3 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-bkash-500 focus:border-transparent text-lg"
+                      placeholder="যেমন: LB123456"
+                      maxLength={8}
+                    />
+                  </div>
+                  {formData.referralCode && (
+                    <div className="mt-2 p-2 bg-green-50 border border-green-200 rounded-lg">
+                      <p className="text-sm text-green-700 font-medium">
+                        🎉 রেফার কোড প্রয়োগ করা হয়েছে! আপনি ১৫ টাকা বোনাস পাবেন।
+                      </p>
+                    </div>
+                  )}
                 </div>
               </>
             )}
