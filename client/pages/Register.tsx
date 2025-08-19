@@ -115,18 +115,82 @@ export default function Register() {
 
     // Simulate API call
     setTimeout(() => {
-      setSuccess('রেজিস্ট্রেশন সফল হয়েছে! এখন লগিন করুন।');
+      // Create new user object
+      const newUser = {
+        name: formData.name,
+        phone: formData.phone,
+        pin: formData.pin,
+        joinDate: new Date().toISOString(),
+        referredBy: formData.referralCode || null,
+        balance: referralBonus // Start with referral bonus if any
+      };
+
+      // Add to registered users
+      const existingUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+      existingUsers.push(newUser);
+      localStorage.setItem('registeredUsers', JSON.stringify(existingUsers));
+
+      // Process referral if exists
+      if (formData.referralCode) {
+        processReferralReward(formData.referralCode, newUser);
+      }
 
       // Store user data for future login (but don't auto-login)
       localStorage.setItem('registeredPhone', formData.phone);
       localStorage.setItem('registeredName', formData.name);
       localStorage.setItem('registeredPin', formData.pin);
 
+      const successMessage = referralBonus > 0
+        ? `রেজিস্ট্রেশন সফল! ৳${referralBonus} বোনাস পেয়েছেন। এখন লগিন করুন।`
+        : 'রেজিস্ট্রেশন সফল হয়েছে! এখন লগিন করুন।';
+
+      setSuccess(successMessage);
+
       setTimeout(() => {
         navigate('/login');
-      }, 2000);
+      }, 3000);
       setIsLoading(false);
     }, 2000);
+  };
+
+  const processReferralReward = (referralCode: string, newUser: any) => {
+    // Find the referrer by code
+    const allUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+    const referrer = allUsers.find((user: any) => `LB${user.phone.slice(-6)}` === referralCode);
+
+    if (referrer) {
+      // Update referrer's referral data
+      const referralData = JSON.parse(localStorage.getItem('referralData') || '{}');
+
+      if (!referralData[referrer.phone]) {
+        referralData[referrer.phone] = {
+          referralCode: `LB${referrer.phone.slice(-6)}`,
+          totalReferrals: 0,
+          totalEarnings: 0,
+          referredUsers: []
+        };
+      }
+
+      // Add new referral
+      referralData[referrer.phone].totalReferrals += 1;
+      referralData[referrer.phone].totalEarnings += 15;
+      referralData[referrer.phone].referredUsers.push({
+        id: Date.now(),
+        name: newUser.name,
+        phone: newUser.phone,
+        joinDate: new Date().toLocaleDateString('bn-BD'),
+        status: 'completed',
+        reward: 15
+      });
+
+      localStorage.setItem('referralData', JSON.stringify(referralData));
+
+      // Add ৳15 to referrer's balance if they're currently logged in
+      if (localStorage.getItem('userPhone') === referrer.phone) {
+        const currentBalance = parseFloat(localStorage.getItem('userBalance') || '5000');
+        localStorage.setItem('userBalance', (currentBalance + 15).toString());
+      }
+    }
   };
 
   return (
@@ -284,7 +348,7 @@ export default function Register() {
                 <div className="bg-blue-50 border border-blue-200 rounded-xl p-3">
                   <p className="text-blue-800 text-xs">
                     <strong>পিন নির্দেশিকা:</strong><br/>
-                    • ৫ সংখ্যার পিন ব্যবহার করুন<br/>
+                    ��� ৫ সংখ্যার পিন ব্যবহার করুন<br/>
                     • সহজ পিন (১২৩৪৫) এ��়িয়ে চলুন<br/>
                     • পিনটি গোপন রাখুন
                   </p>
