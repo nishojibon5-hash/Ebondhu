@@ -11,11 +11,8 @@ import {
   Eye,
   EyeOff,
   Globe,
-  CreditCard,
   Home,
-  Banknote,
-  PiggyBank,
-  Users
+  Banknote
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Language } from "../App";
@@ -55,7 +52,7 @@ const translations = {
     userName: "মোঃ রহিম",
     appName: "লোন বন্ধু",
     yourBalance: "আপনার ব্যালেন্স", 
-    sendMoney: "টাকা পাঠান",
+    sendMoney: "টা��া পাঠান",
     cashIn: "ক্যাশ ইন",
     cashOut: "ক্যাশ আউট", 
     recharge: "মোবাইল রিচার্জ",
@@ -104,7 +101,7 @@ export default function Dashboard({ language, setLanguage }: DashboardProps) {
       id: 2,
       type: "received", 
       amount: 2500,
-      description: "টাকা পেয়েছেন - চাকর��দাতা থেকে",
+      description: "টাকা পেয়েছেন - চাকরিদাতা থেকে",
       time: "২:১৫ PM",
       date: t.yesterday
     },
