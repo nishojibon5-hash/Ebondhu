@@ -110,6 +110,11 @@ function App() {
                 <AddMoney />
               </ProtectedRoute>
             } />
+            <Route path="/refer" element={
+              <ProtectedRoute>
+                <Refer />
+              </ProtectedRoute>
+            } />
             <Route path="/loan-application" element={
               <ProtectedRoute>
                 <LoanApplication />
