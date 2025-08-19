@@ -25,6 +25,7 @@ interface MenuItem {
 }
 
 export function DrawerMenu({ isOpen, onClose }: DrawerMenuProps) {
+  const navigate = useNavigate();
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -35,6 +36,18 @@ export function DrawerMenu({ isOpen, onClose }: DrawerMenuProps) {
       return () => clearTimeout(timer);
     }
   }, [isOpen]);
+
+  const handleLogout = () => {
+    if (confirm('আপনি কি লগ আউট করতে চান?')) {
+      localStorage.removeItem('isLoggedIn');
+      localStorage.removeItem('userPin');
+      localStorage.removeItem('userPhone');
+      localStorage.removeItem('userName');
+      localStorage.removeItem('userEmail');
+      onClose();
+      navigate('/login');
+    }
+  };
 
   const isSomitiManager = localStorage.getItem('isSomitiManager') === 'true';
 
