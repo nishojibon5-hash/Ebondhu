@@ -16,18 +16,30 @@ import {
 
 export default function Register() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
     pin: '',
-    confirmPin: ''
+    confirmPin: '',
+    referralCode: ''
   });
   const [showPin, setShowPin] = useState(false);
   const [showConfirmPin, setShowConfirmPin] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [referralBonus, setReferralBonus] = useState(0);
+
+  useEffect(() => {
+    // Check for referral code in URL
+    const refCode = searchParams.get('ref');
+    if (refCode) {
+      setFormData(prev => ({ ...prev, referralCode: refCode }));
+      setReferralBonus(15); // ১৫ টাকা bonus for referral
+    }
+  }, [searchParams]);
 
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({
@@ -196,7 +208,7 @@ export default function Register() {
               <>
                 <div className="text-center mb-4">
                   <h3 className="text-lg font-bold text-gray-900">পিন সেটআপ</h3>
-                  <p className="text-sm text-gray-600">আপনার অ্��াকাউন্টের জন্য একটি পিন তৈরি করুন</p>
+                  <p className="text-sm text-gray-600">আপনার অ্যাকাউন্টের জন্য একটি পিন তৈরি করুন</p>
                 </div>
 
                 {/* PIN Input */}
