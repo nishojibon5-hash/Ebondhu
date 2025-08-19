@@ -8,6 +8,7 @@ import TaskCreate from "./pages/TaskCreate";
 import SendMoney from "./pages/SendMoney";
 import MobileRecharge from "./pages/MobileRecharge";
 import AddMoney from "./pages/AddMoney";
+import Refer from "./pages/Refer";
 import LoanApplication from "./pages/LoanApplication";
 import SomitiManager from "./pages/SomitiManager";
 import SomitiSetup from "./pages/SomitiSetup";
