@@ -187,6 +187,36 @@ export function DrawerMenu({ isOpen, onClose }: DrawerMenuProps) {
               </div>
             </div>
           </div>
+
+          <div className="p-4 bg-orange-50 rounded-xl border border-orange-200">
+            <div className="flex items-start space-x-3">
+              <div className="p-2 bg-orange-100 rounded-full">
+                <Share2 className="h-5 w-5 text-orange-600" />
+              </div>
+              <div>
+                <h4 className="font-medium text-orange-900 mb-1">রেফার সিস্টেম</h4>
+                <p className="text-sm text-orange-700 leading-relaxed">
+                  প্রতি রেফারে ১৫ টাকা পান। বন্ধুদের সাথে শেয়ার করুন।
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Logout Button */}
+          <div className="pt-4 border-t border-gray-200 mt-4">
+            <button
+              onClick={handleLogout}
+              className="w-full p-4 bg-red-50 hover:bg-red-100 border border-red-200 rounded-xl transition-colors flex items-center space-x-3"
+            >
+              <div className="p-2 bg-red-100 rounded-full">
+                <LogOut className="h-5 w-5 text-red-600" />
+              </div>
+              <div className="text-left">
+                <h4 className="font-medium text-red-900">লগ আউট</h4>
+                <p className="text-sm text-red-700">অ্যাকাউন্ট থেকে বের হয়ে যান</p>
+              </div>
+            </button>
+          </div>
         </div>
       </div>
     </>
