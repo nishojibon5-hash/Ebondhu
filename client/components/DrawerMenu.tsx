@@ -72,6 +72,13 @@ export function DrawerMenu({ isOpen, onClose }: DrawerMenuProps) {
       description: 'সমিতির সদস্য ও লেনদেন পরিচালনা করুন',
       color: 'bg-gradient-to-r from-purple-500 to-purple-600',
       link: isSomitiManager ? '/somiti-manager' : '/somiti-setup'
+    },
+    {
+      icon: Share2,
+      label: 'রেফার করুন',
+      description: 'বন্ধুদের রেফার করে ১৫ টাকা আয় করুন',
+      color: 'bg-gradient-to-r from-orange-500 to-orange-600',
+      link: '/refer'
     }
   ];
 
