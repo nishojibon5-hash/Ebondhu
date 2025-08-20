@@ -41,19 +41,24 @@ export default function Refer() {
     const userPhone = localStorage.getItem('userPhone') || '01711123456';
     const referralCode = `LB${userPhone.slice(-6)}`; // LB + last 6 digits
 
-    // Load existing referral data
-    const existingData = localStorage.getItem('referralData');
-    if (existingData) {
-      setReferralData(JSON.parse(existingData));
+    // Load all referral data
+    const allReferralData = JSON.parse(localStorage.getItem('referralData') || '{}');
+
+    // Get user-specific data
+    if (allReferralData[userPhone]) {
+      setReferralData(allReferralData[userPhone]);
     } else {
-      // Initialize referral data
+      // Initialize referral data for this user
       const newData: ReferralData = {
         referralCode,
         totalReferrals: 0,
         totalEarnings: 0,
         referredUsers: []
       };
-      localStorage.setItem('referralData', JSON.stringify(newData));
+
+      // Save to all referral data
+      allReferralData[userPhone] = newData;
+      localStorage.setItem('referralData', JSON.stringify(allReferralData));
       setReferralData(newData);
     }
   };
@@ -143,7 +148,7 @@ export default function Refer() {
             <div className="flex items-start space-x-3">
               <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center text-sm font-bold text-green-600">3</div>
               <div>
-                <p className="font-medium text-gray-900">১৫ টাকা পু��স্কার পান</p>
+                <p className="font-medium text-gray-900">১৫ টাকা পুরস্কার পান</p>
                 <p className="text-sm text-gray-600">প্রতি সফল রেফারে ১৫ টাকা আপনার ব্যালেন্সে যোগ হবে</p>
               </div>
             </div>
@@ -152,7 +157,7 @@ export default function Refer() {
 
         {/* Referral Code Section */}
         <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
-          <h2 className="text-lg font-bold text-gray-900 mb-4">আপনার রেফার কোড</h2>
+          <h2 className="text-lg font-bold text-gray-900 mb-4">���পনার রেফার কোড</h2>
           
           {/* Tab Switch */}
           <div className="flex space-x-1 bg-gray-100 rounded-xl p-1 mb-4">
@@ -272,7 +277,7 @@ export default function Refer() {
             <li>• একটি নম্বর দিয়ে শুধুমাত্র একটি অ্যাকাউন্ট</li>
             <li>• রেফার করা ব্যক্তি অবশ্যই রেজিস্ট্রেশন সম্পন্ন করতে হবে</li>
             <li>• পুরস্কার ২৤ ঘন্টার মধ্যে যোগ হবে</li>
-            <li>• ভু��়া রেফার কঠোরভাবে নিষিদ্ধ</li>
+            <li>• ভুয়া রেফার কঠোরভাবে নিষিদ্ধ</li>
           </ul>
         </div>
       </div>
