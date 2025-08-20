@@ -52,7 +52,7 @@ const translations = {
     userName: "মোঃ রহিম",
     appName: "লোন বন্ধু",
     yourBalance: "আপনার ব্যালেন্স", 
-    sendMoney: "টা��া পাঠান",
+    sendMoney: "টাকা পাঠান",
     cashIn: "ক্যাশ ইন",
     cashOut: "ক্যাশ আউট", 
     recharge: "মোবাইল রিচার্জ",
@@ -129,7 +129,7 @@ export default function Dashboard({ language, setLanguage }: DashboardProps) {
           <div className="flex items-center justify-between mb-6">
             <div>
               <h1 className="text-xl font-bold">{t.appName}</h1>
-              <p className="text-pink-100 text-sm">{t.goodMorning}, {t.userName}</p>
+              <p className="text-pink-100 text-sm">{t.goodMorning}, {localStorage.getItem('userName') || t.userName}</p>
             </div>
             <div className="flex items-center space-x-3">
               <button
