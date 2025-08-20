@@ -56,20 +56,47 @@ export default function Login() {
 
     // Simulate API call
     setTimeout(() => {
-      // Check if user is registered
-      const registeredPhone = localStorage.getItem('registeredPhone');
-      const registeredPin = localStorage.getItem('registeredPin');
-      const registeredName = localStorage.getItem('registeredName');
+      // Check for demo user first (PIN 12345)
+      if (formData.pin === '12345') {
+        setSuccess('সফলভাবে লগিন হয়েছে!');
 
-      // Allow registered users or demo user (any phone with PIN 12345)
-      if ((formData.phone === registeredPhone && formData.pin === registeredPin) ||
-          formData.pin === '12345') {
+        // Store demo user data
+        localStorage.setItem('isLoggedIn', 'true');
+        localStorage.setItem('userPhone', formData.phone);
+        localStorage.setItem('userName', 'মোঃ আব্দুর রহিম');
+        localStorage.setItem('userPin', '12345');
+
+        // Initialize demo balance if not exists
+        if (!localStorage.getItem('userBalance')) {
+          localStorage.setItem('userBalance', '5000');
+        }
+
+        setTimeout(() => {
+          navigate('/');
+        }, 1000);
+        setIsLoading(false);
+        return;
+      }
+
+      // Check registered users
+      const registeredUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+      const user = registeredUsers.find((u: any) => u.phone === formData.phone && u.pin === formData.pin);
+
+      if (user) {
         setSuccess('সফলভাবে লগিন হয়েছে!');
 
         // Store user data in localStorage
         localStorage.setItem('isLoggedIn', 'true');
-        localStorage.setItem('userPhone', formData.phone);
-        localStorage.setItem('userName', registeredName || 'মোঃ আব্দুর রহিম');
+        localStorage.setItem('userPhone', user.phone);
+        localStorage.setItem('userName', user.name);
+        localStorage.setItem('userPin', user.pin);
+        localStorage.setItem('userBalance', user.balance.toString());
+
+        // Load user's referral data
+        const allReferralData = JSON.parse(localStorage.getItem('referralData') || '{}');
+        if (allReferralData[user.phone]) {
+          localStorage.setItem('referralData', JSON.stringify(allReferralData[user.phone]));
+        }
 
         setTimeout(() => {
           navigate('/');
