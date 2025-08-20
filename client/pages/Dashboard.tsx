@@ -75,6 +75,11 @@ const translations = {
 export default function Dashboard({ language, setLanguage }: DashboardProps) {
   const [balanceVisible, setBalanceVisible] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
+  // Initialize user balance if not exists
+  if (!localStorage.getItem('userBalance')) {
+    localStorage.setItem('userBalance', '5000');
+  }
   const t = translations[language];
 
   const quickActions = [
