@@ -56,27 +56,6 @@ export default function Login() {
 
     // Simulate API call
     setTimeout(() => {
-      // Check for demo user first (PIN 12345)
-      if (formData.pin === '12345') {
-        setSuccess('সফলভাবে লগিন হয়েছে!');
-
-        // Store demo user data
-        localStorage.setItem('isLoggedIn', 'true');
-        localStorage.setItem('userPhone', formData.phone);
-        localStorage.setItem('userName', 'মোঃ আব্দুর রহিম');
-        localStorage.setItem('userPin', '12345');
-
-        // Initialize demo balance if not exists
-        if (!localStorage.getItem('userBalance')) {
-          localStorage.setItem('userBalance', '5000');
-        }
-
-        setTimeout(() => {
-          navigate('/');
-        }, 1000);
-        setIsLoading(false);
-        return;
-      }
 
       // Check registered users
       const registeredUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
@@ -229,12 +208,6 @@ export default function Login() {
               </p>
             </div>
 
-            {/* Demo Information */}
-            <div className="bg-blue-50 border border-blue-200 rounded-xl p-3 mt-4">
-              <p className="text-blue-800 text-xs text-center">
-                <strong>ডেমো:</strong> যেকোনো ফোন নম্বর ও পিন <strong>12345</strong> দিয়ে লগিন করুন
-              </p>
-            </div>
           </div>
         </div>
       </div>

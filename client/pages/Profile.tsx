@@ -111,9 +111,9 @@ export default function Profile({ language }: ProfileProps) {
 
   // Load user data from localStorage
   useEffect(() => {
-    const storedName = localStorage.getItem('userName') || 'মোঃ আব্দুর রহিম';
-    const storedPhone = localStorage.getItem('userPhone') || '+৮৮০ ১৭১১ ××××××';
-    const storedEmail = localStorage.getItem('userEmail') || 'rahim@example.com';
+    const storedName = localStorage.getItem('userName') || '';
+    const storedPhone = localStorage.getItem('userPhone') || '';
+    const storedEmail = localStorage.getItem('userEmail') || '';
     const storedPhoto = localStorage.getItem('userPhoto');
 
     setUserInfo(prev => ({
@@ -163,8 +163,8 @@ export default function Profile({ language }: ProfileProps) {
   };
 
   const handlePinChange = () => {
-    // Validate current PIN (demo: accept 12345)
-    if (pinForm.currentPin !== '12345') {
+    const currentStoredPin = localStorage.getItem('userPin') || '';
+    if (pinForm.currentPin !== currentStoredPin) {
       alert('বর্তমান পিন ভুল');
       return;
     }
@@ -177,6 +177,16 @@ export default function Profile({ language }: ProfileProps) {
     if (pinForm.newPin !== pinForm.confirmPin) {
       alert('নতুন পিন মিলছে না');
       return;
+    }
+
+    // Persist new PIN
+    localStorage.setItem('userPin', pinForm.newPin);
+    const userPhone = localStorage.getItem('userPhone');
+    const users = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+    const idx = users.findIndex((u: any) => u.phone === userPhone);
+    if (idx !== -1) {
+      users[idx].pin = pinForm.newPin;
+      localStorage.setItem('registeredUsers', JSON.stringify(users));
     }
 
     alert('পিন সফলভাবে পরিবর্তন হয়েছে');
@@ -520,7 +530,7 @@ export default function Profile({ language }: ProfileProps) {
             </div>
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">বর্তমান পিন</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">বর্ত���ান পিন</label>
                 <div className="relative">
                   <input
                     type={showPin ? "text" : "password"}
@@ -566,11 +576,6 @@ export default function Profile({ language }: ProfileProps) {
                   className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-bkash-500 focus:border-transparent"
                   maxLength={5}
                 />
-              </div>
-              <div className="bg-blue-50 border border-blue-200 rounded-xl p-3">
-                <p className="text-blue-800 text-xs">
-                  <strong>ডেমো:</strong> বর্তমান পিন হিসেবে <strong>12345</strong> ব্যবহার করুন
-                </p>
               </div>
             </div>
             <div className="flex space-x-3 mt-6">

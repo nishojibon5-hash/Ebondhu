@@ -120,13 +120,13 @@ export default function MobileRecharge() {
         { amount: 40, validity: '৭ দিন', data: '১.৮ জিবি', minutes: '৯৫ মিনিট' },
         { amount: 75, validity: '১৫ দিন', data: '৩.২ জিবি', minutes: '১৯০ মিনিট', isPopular: true },
         { amount: 115, validity: '৩০ দিন', data: '৫.২ জিবি', minutes: '৩৪০ মিনিট' },
-        { amount: 180, validity: '৩০ দিন', data: '৯.৫ জিবি', minutes: '৫২০ মিনিট' }
+        { amount: 180, validity: '৩০ দিন', data: '৯.৫ জিব��', minutes: '৫২০ মিনিট' }
       ]
     };
     return offerSets[operatorId] || [];
   };
 
-  const currentBalance = parseFloat(localStorage.getItem('userBalance') || '5000');
+  const currentBalance = parseFloat(localStorage.getItem('userBalance') || '0');
 
   const detectOperator = (phone: string): Operator | null => {
     if (phone.length >= 3) {
@@ -153,7 +153,7 @@ export default function MobileRecharge() {
     const newErrors: {[key: string]: string} = {};
     const rechargeAmount = parseFloat(amount);
     
-    if (!amount || rechargeAmount <= 0) newErrors.amount = 'রিচার্জের পরিমাণ নির্বাচন করুন';
+    if (!amount || rechargeAmount <= 0) newErrors.amount = 'রিচার্জের পরিমাণ নির্ব��চন করুন';
     else if (rechargeAmount < 10) newErrors.amount = 'ন্যূনতম ১০ টাকা রিচার্জ করতে পারবেন';
     else if (rechargeAmount > 5000) newErrors.amount = 'সর্বোচ্চ ৫,০০০ টাকা রিচার্জ করতে পারবেন';
     else if (rechargeAmount > currentBalance) newErrors.amount = 'অপর্যাপ্ত ব্যালেন্স';
@@ -185,12 +185,21 @@ export default function MobileRecharge() {
       
       setTimeout(() => {
         // Verify PIN
-        if (pin === '12345' || pin === localStorage.getItem('userPin')) {
+        if (pin === localStorage.getItem('userPin')) {
           const rechargeAmount = parseFloat(amount);
           
           // Update balance
           const newBalance = currentBalance - rechargeAmount;
           localStorage.setItem('userBalance', newBalance.toString());
+
+          // Persist to registered users store
+          const userPhone = localStorage.getItem('userPhone');
+          const users = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+          const idx = users.findIndex((u: any) => u.phone === userPhone);
+          if (idx !== -1) {
+            users[idx].balance = newBalance;
+            localStorage.setItem('registeredUsers', JSON.stringify(users));
+          }
           
           // Save transaction
           const transaction = {
@@ -210,7 +219,7 @@ export default function MobileRecharge() {
           
           setCurrentStep(4); // Success step
         } else {
-          setErrors({ pin: 'ভুল পিন দিয়েছেন' });
+          setErrors({ pin: 'ভ���ল পিন দিয়েছেন' });
         }
         setIsProcessing(false);
       }, 2000);
@@ -359,7 +368,7 @@ export default function MobileRecharge() {
           <div className="space-y-6">
             {/* Phone Number Input */}
             <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
-              <h2 className="text-lg font-bold text-gray-900 mb-4">মোবাইল নম্বর</h2>
+              <h2 className="text-lg font-bold text-gray-900 mb-4">মোবাইল নম��বর</h2>
               
               <div className="mb-4">
                 <div className="relative">
@@ -575,7 +584,6 @@ export default function MobileRecharge() {
                   </button>
                 </div>
                 {errors.pin && <p className="text-red-500 text-sm mt-1">{errors.pin}</p>}
-                <p className="text-xs text-gray-500 mt-1">ডেমো পিন: 12345</p>
               </div>
 
               {/* Warning */}

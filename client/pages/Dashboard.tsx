@@ -76,10 +76,6 @@ export default function Dashboard({ language, setLanguage }: DashboardProps) {
   const [balanceVisible, setBalanceVisible] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
-  // Initialize user balance if not exists
-  if (!localStorage.getItem('userBalance')) {
-    localStorage.setItem('userBalance', '5000');
-  }
   const t = translations[language];
 
   const quickActions = [
@@ -164,7 +160,7 @@ export default function Dashboard({ language, setLanguage }: DashboardProps) {
                 <div className="flex items-center space-x-3">
                   {balanceVisible ? (
                     <span className="text-3xl font-bold">
-                      ৳ {parseFloat(localStorage.getItem('userBalance') || '5000').toLocaleString()}
+                      ৳ {parseFloat(localStorage.getItem('userBalance') || '0').toLocaleString()}
                     </span>
                   ) : (
                     <div className="flex flex-col">

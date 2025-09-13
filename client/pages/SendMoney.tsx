@@ -37,7 +37,7 @@ export default function SendMoney() {
     { id: 3, name: 'রহিম উদ্দিন', phone: '01913345678', avatar: '👨‍🔧', lastUsed: '১ সপ্তাহ আগে' }
   ];
 
-  const currentBalance = parseFloat(localStorage.getItem('userBalance') || '5000');
+  const currentBalance = parseFloat(localStorage.getItem('userBalance') || '0');
   const transferCharge = 5;
 
   const validateStep1 = () => {
@@ -85,14 +85,23 @@ export default function SendMoney() {
       
       // Simulate processing
       setTimeout(() => {
-        // Verify PIN (demo: 12345)
-        if (pin === '12345' || pin === localStorage.getItem('userPin')) {
+        // Verify PIN
+        if (pin === localStorage.getItem('userPin')) {
           const transferAmount = parseFloat(amount);
           const totalDeduction = transferAmount + transferCharge;
           
           // Update balance
           const newBalance = currentBalance - totalDeduction;
           localStorage.setItem('userBalance', newBalance.toString());
+
+          // Persist to registered users store
+          const userPhone = localStorage.getItem('userPhone');
+          const users = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+          const idx = users.findIndex((u: any) => u.phone === userPhone);
+          if (idx !== -1) {
+            users[idx].balance = newBalance;
+            localStorage.setItem('registeredUsers', JSON.stringify(users));
+          }
           
           // Save transaction
           const transaction = {
@@ -409,7 +418,7 @@ export default function SendMoney() {
                     <span className="font-medium">৳{transferCharge}</span>
                   </div>
                   <div className="flex justify-between font-bold border-t border-gray-200 pt-2">
-                    <span>মোট:</span>
+                    <span>���োট:</span>
                     <span className="text-bkash-500">৳{parseFloat(amount) + transferCharge}</span>
                   </div>
                 </div>
@@ -440,7 +449,6 @@ export default function SendMoney() {
                   </button>
                 </div>
                 {errors.pin && <p className="text-red-500 text-sm mt-1">{errors.pin}</p>}
-                <p className="text-xs text-gray-500 mt-1">ডেমো পিন: 12345</p>
               </div>
 
               {/* Warning */}

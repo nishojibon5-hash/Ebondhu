@@ -38,7 +38,7 @@ export default function Refer() {
 
   const loadReferralData = () => {
     // Generate referral code from user phone
-    const userPhone = localStorage.getItem('userPhone') || '01711123456';
+    const userPhone = localStorage.getItem('userPhone') || '';
     const referralCode = `LB${userPhone.slice(-6)}`; // LB + last 6 digits
 
     // Load all referral data
@@ -140,7 +140,7 @@ export default function Refer() {
             <div className="flex items-start space-x-3">
               <div className="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center text-sm font-bold text-orange-600">2</div>
               <div>
-                <p className="font-medium text-gray-900">বন্ধু রেজিস্ট্রেশন করবে</p>
+                <p className="font-medium text-gray-900">বন্ধু রেজিস্��্রেশন করবে</p>
                 <p className="text-sm text-gray-600">আপনার কোড দিয়ে নতুন অ্যাকাউন্ট তৈরি করবে</p>
               </div>
             </div>

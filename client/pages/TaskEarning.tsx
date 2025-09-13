@@ -54,10 +54,6 @@ export default function TaskEarning() {
   useEffect(() => {
     loadTasks();
     loadCompletedTasks();
-    // Initialize user balance if not exists
-    if (!localStorage.getItem('userBalance')) {
-      localStorage.setItem('userBalance', '5000');
-    }
   }, []);
 
   const loadTasks = () => {
@@ -82,7 +78,7 @@ export default function TaskEarning() {
         maxCompletions: 999999,
         status: 'active',
         requirements: [
-          { id: 1, description: 'অবশ্যই ফেসবুক একাউন্ট থাকতে হবে', isRequired: true },
+          { id: 1, description: 'অবশ্যই ফেসবুক এ��াউন্ট থাকতে হবে', isRequired: true },
           { id: 2, description: 'পেজটি ফলো করতে হবে', isRequired: true }
         ],
         verificationMethod: 'screenshot'
@@ -110,7 +106,7 @@ export default function TaskEarning() {
       {
         id: 1003,
         title: "ফেসবুক পোস্ট কমেন্ট করুন",
-        description: "Flohkaofficiel এর সর্বশেষ পোস্টে অর্থবহ কমেন্ট করুন এবং ৮ টাকা আয় করুন",
+        description: "Flohkaofficiel এ�� সর্বশেষ পোস্টে অর্থবহ কমেন্ট করুন এবং ৮ টাকা আয় করুন",
         category: 'social-media',
         platform: 'facebook',
         taskType: 'comment',
@@ -212,9 +208,17 @@ export default function TaskEarning() {
 
       if (success && selectedTask) {
         // Add money to user balance
-        const currentBalance = parseFloat(localStorage.getItem('userBalance') || '5000');
+        const currentBalance = parseFloat(localStorage.getItem('userBalance') || '0');
         const newBalance = currentBalance + selectedTask.reward;
         localStorage.setItem('userBalance', newBalance.toString());
+        // Persist to registered users store
+        const userPhone = localStorage.getItem('userPhone');
+        const users = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+        const idx = users.findIndex((u: any) => u.phone === userPhone);
+        if (idx !== -1) {
+          users[idx].balance = newBalance;
+          localStorage.setItem('registeredUsers', JSON.stringify(users));
+        }
 
         // Save completed task record
         const completedTask = {
@@ -271,9 +275,17 @@ export default function TaskEarning() {
       if (task) {
         // Refund remaining budget
         const remainingAmount = (task.maxCompletions - task.completed) * task.reward;
-        const currentBalance = parseFloat(localStorage.getItem('userBalance') || '5000');
+        const currentBalance = parseFloat(localStorage.getItem('userBalance') || '0');
         const newBalance = currentBalance + remainingAmount;
         localStorage.setItem('userBalance', newBalance.toString());
+        // Persist to registered users store
+        const userPhone = localStorage.getItem('userPhone');
+        const users = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+        const idx = users.findIndex((u: any) => u.phone === userPhone);
+        if (idx !== -1) {
+          users[idx].balance = newBalance;
+          localStorage.setItem('registeredUsers', JSON.stringify(users));
+        }
       }
 
       const updatedTasks = myTasks.filter(task => task.id !== taskId);
@@ -411,7 +423,7 @@ export default function TaskEarning() {
             <div>
               <h1 className="text-xl font-bold">টাস্ক আর্নিং</h1>
               <p className="text-sm text-white/80">
-                ব্যালেন্স: ৳{parseFloat(localStorage.getItem('userBalance') || '5000').toLocaleString()}
+                ব্যালেন্স: ৳{parseFloat(localStorage.getItem('userBalance') || '0').toLocaleString()}
               </p>
             </div>
           </div>
@@ -525,7 +537,7 @@ export default function TaskEarning() {
                     </div>
                     {alreadyCompleted ? (
                       <div className="text-green-600 text-sm font-medium px-4 py-2 bg-green-50 rounded-xl">
-                        ✓ সম্পন্ন
+                        ✓ স��্পন্ন
                       </div>
                     ) : (
                       <button
@@ -692,7 +704,7 @@ export default function TaskEarning() {
                   className="bg-bkash-500 hover:bg-bkash-600 text-white px-6 py-3 rounded-xl font-medium transition-colors inline-flex items-center space-x-2"
                 >
                   <Plus className="h-5 w-5" />
-                  <span>নতুন টাস্ক তৈরি করুন</span>
+                  <span>নতুন টা���্ক তৈরি করুন</span>
                 </Link>
               </div>
             )}

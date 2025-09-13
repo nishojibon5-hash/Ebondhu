@@ -115,7 +115,7 @@ export default function AddMoney() {
     }
   ];
 
-  const currentBalance = parseFloat(localStorage.getItem('userBalance') || '5000');
+  const currentBalance = parseFloat(localStorage.getItem('userBalance') || '0');
 
   const calculateFee = (method: PaymentMethod, amount: number): number => {
     if (method.feeType === 'fixed') {
@@ -175,7 +175,7 @@ export default function AddMoney() {
       
       setTimeout(() => {
         // Verify PIN
-        if (pin === '12345' || pin === localStorage.getItem('userPin')) {
+        if (pin === localStorage.getItem('userPin')) {
           const addAmount = parseFloat(amount);
           const fee = selectedMethod ? calculateFee(selectedMethod, addAmount) : 0;
           
@@ -202,7 +202,16 @@ export default function AddMoney() {
     // Update balance
     const newBalance = currentBalance + addAmount;
     localStorage.setItem('userBalance', newBalance.toString());
-    
+
+    // Persist to registered users store
+    const userPhone = localStorage.getItem('userPhone');
+    const users = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+    const idx = users.findIndex((u: any) => u.phone === userPhone);
+    if (idx !== -1) {
+      users[idx].balance = newBalance;
+      localStorage.setItem('registeredUsers', JSON.stringify(users));
+    }
+
     // Save transaction
     const transaction = {
       id: Date.now(),
@@ -375,7 +384,7 @@ export default function AddMoney() {
                 onClick={() => simulateSuccessfulPayment(parseFloat(amount))}
                 className="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl font-medium transition-colors"
               >
-                পেমেন্ট সম্পন্ন হয়েছে (ডেমো)
+                পেমেন্ট সম্পন্ন হয়েছে
               </button>
               
               <button
@@ -667,7 +676,6 @@ export default function AddMoney() {
                   </button>
                 </div>
                 {errors.pin && <p className="text-red-500 text-sm mt-1">{errors.pin}</p>}
-                <p className="text-xs text-gray-500 mt-1">ডেমো পিন: 12345</p>
               </div>
 
               {/* Warning */}
@@ -711,7 +719,7 @@ export default function AddMoney() {
                   : 'bg-green-600 hover:bg-green-700 text-white'
               }`}
             >
-              {isProcessing ? 'প্রক্রিয়াধীন...' : 'পেমেন্ট শুরু করুন'}
+              {isProcessing ? 'প্রক্রিয়াধীন...' : 'পেমেন্ট শুরু ���রুন'}
             </button>
           )}
         </div>

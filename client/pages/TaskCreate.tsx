@@ -53,7 +53,7 @@ const categories = [
   { id: 'review-rating', name: 'রিভিউ ও রেটিং', icon: Star },
   { id: 'promotion', name: 'প্রমোশন', icon: Share },
   { id: 'data-entry', name: 'ডেটা এন্ট্রি', icon: Globe },
-  { id: 'survey', name: 'সার্ভে ও গবেষণা', icon: Info },
+  { id: 'survey', name: 'সার্ভে ও ��বেষণা', icon: Info },
   { id: 'design', name: 'ডিজাইন ও গ্রাফিক্স', icon: Eye },
   { id: 'writing', name: 'লেখালেখি', icon: MessageSquare }
 ];
@@ -76,7 +76,7 @@ const taskTypes = {
     { id: 'subscribe', name: 'সাবস্ক্রাইব করুন', icon: UserPlus }
   ],
   'content-creation': [
-    { id: 'video', name: 'ভিডিও তৈরি', icon: Upload },
+    { id: 'video', name: 'ভিডি�� তৈরি', icon: Upload },
     { id: 'photo', name: 'ছবি তৈরি', icon: Upload },
     { id: 'story', name: 'স্টোরি পোস্ট', icon: Upload },
     { id: 'article', name: 'আর্টিকেল লেখা', icon: MessageSquare }
@@ -188,9 +188,17 @@ export default function TaskCreate() {
       localStorage.setItem('userTasks', JSON.stringify(existingTasks));
       
       // Update user balance (deduct task cost)
-      const currentBalance = parseFloat(localStorage.getItem('userBalance') || '5000');
+      const currentBalance = parseFloat(localStorage.getItem('userBalance') || '0');
       const newBalance = currentBalance - totalCost;
       localStorage.setItem('userBalance', newBalance.toString());
+      // Persist to registered users store
+      const userPhone = localStorage.getItem('userPhone');
+      const users = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+      const idx = users.findIndex((u: any) => u.phone === userPhone);
+      if (idx !== -1) {
+        users[idx].balance = newBalance;
+        localStorage.setItem('registeredUsers', JSON.stringify(users));
+      }
       
       navigate('/task-earning');
     }
@@ -245,7 +253,7 @@ export default function TaskCreate() {
   };
 
   const totalCost = formData.reward * formData.maxCompletions;
-  const currentBalance = parseFloat(localStorage.getItem('userBalance') || '5000');
+  const currentBalance = parseFloat(localStorage.getItem('userBalance') || '0');
 
   return (
     <div className="pb-20 min-h-screen bg-gray-50">
@@ -622,7 +630,7 @@ export default function TaskCreate() {
                     <span className="font-medium">অপর্যাপ্ত ব্যালেন্স</span>
                   </div>
                   <p className="text-sm text-red-700 mt-1">
-                    আপনার বর্তমান ব্যালেন্স ৳{currentBalance}। এই টাস্ক তৈরি করতে ৳{formData.budget} প্রয়োজন।
+                    আপন��র বর্তমান ব্যালেন্স ৳{currentBalance}। এই টাস্ক তৈরি করতে ৳{formData.budget} প্রয়োজন।
                   </p>
                 </div>
               )}
