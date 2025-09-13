@@ -267,9 +267,6 @@ export default function ForgotPin() {
                 </div>
 
                 <div className="bg-blue-50 border border-blue-200 rounded-xl p-3">
-                  <p className="text-blue-800 text-xs text-center">
-                    <strong>ডেমো:</strong> OTP হিসেবে <strong>123456</strong> ব্যবহার করুন
-                  </p>
                 </div>
 
                 <button
@@ -310,7 +307,7 @@ export default function ForgotPin() {
                       value={formData.newPin}
                       onChange={(e) => handleInputChange('newPin', e.target.value)}
                       className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-bkash-500 focus:border-transparent text-lg"
-                      placeholder="৫ সংখ্যার নতুন পিন"
+                      placeholder="৫ সংখ���যার নতুন পিন"
                       maxLength={5}
                     />
                     <button
@@ -367,7 +364,7 @@ export default function ForgotPin() {
                   ) : (
                     <>
                       <Lock className="h-5 w-5" />
-                      <span>পিন পরিবর্তন করুন</span>
+                      <span>পিন ���রিবর্তন করুন</span>
                     </>
                   )}
                 </button>
