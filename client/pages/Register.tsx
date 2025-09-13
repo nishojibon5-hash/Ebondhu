@@ -70,7 +70,7 @@ export default function Register() {
       return false;
     }
     if (!formData.phone.startsWith('01')) {
-      setError('মোবাইল নম্বর ০১ দিয়ে শুরু হতে হবে');
+      setError('মোবাইল নম্বর ০১ দি��়ে শুরু হতে হবে');
       return false;
     }
     return true;
@@ -187,8 +187,16 @@ export default function Register() {
 
       // Add ৳15 to referrer's balance if they're currently logged in
       if (localStorage.getItem('userPhone') === referrer.phone) {
-        const currentBalance = parseFloat(localStorage.getItem('userBalance') || '5000');
-        localStorage.setItem('userBalance', (currentBalance + 15).toString());
+        const currentBalance = parseFloat(localStorage.getItem('userBalance') || '0');
+        const newBalance = currentBalance + 15;
+        localStorage.setItem('userBalance', newBalance.toString());
+        // Persist to registered users store
+        const users = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+        const idx = users.findIndex((u: any) => u.phone === referrer.phone);
+        if (idx !== -1) {
+          users[idx].balance = (users[idx].balance || 0) + 15;
+          localStorage.setItem('registeredUsers', JSON.stringify(users));
+        }
       }
     }
   };
