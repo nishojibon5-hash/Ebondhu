@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { 
+import {
   ArrowLeft,
   Users,
   DollarSign,
@@ -7,7 +7,7 @@ import {
   CheckCircle,
   Phone,
   Eye,
-  EyeOff
+  EyeOff,
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -23,48 +23,68 @@ export default function SendMoney() {
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(1);
   const [recipient, setRecipient] = useState<Contact | null>(null);
-  const [amount, setAmount] = useState('');
-  const [pin, setPin] = useState('');
-  const [reference, setReference] = useState('');
+  const [amount, setAmount] = useState("");
+  const [pin, setPin] = useState("");
+  const [reference, setReference] = useState("");
   const [showPin, setShowPin] = useState(false);
-  const [errors, setErrors] = useState<{[key: string]: string}>({});
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [isProcessing, setIsProcessing] = useState(false);
 
   // Demo contacts
   const recentContacts: Contact[] = [
-    { id: 1, name: 'মোঃ করিম', phone: '01711123456', avatar: '👨‍💼', lastUsed: 'গতকাল' },
-    { id: 2, name: 'ফাতেমা বেগম', phone: '01812234567', avatar: '👩‍🎓', lastUsed: '৩ দিন আগে' },
-    { id: 3, name: 'রহিম উদ্দিন', phone: '01913345678', avatar: '👨‍🔧', lastUsed: '১ সপ্তাহ আগে' }
+    {
+      id: 1,
+      name: "মোঃ করিম",
+      phone: "01711123456",
+      avatar: "👨‍💼",
+      lastUsed: "গতকাল",
+    },
+    {
+      id: 2,
+      name: "ফাতেমা বেগম",
+      phone: "01812234567",
+      avatar: "👩‍🎓",
+      lastUsed: "৩ দিন আগে",
+    },
+    {
+      id: 3,
+      name: "রহিম উদ্দিন",
+      phone: "01913345678",
+      avatar: "👨‍🔧",
+      lastUsed: "১ সপ্তাহ আগে",
+    },
   ];
 
-  const currentBalance = parseFloat(localStorage.getItem('userBalance') || '0');
+  const currentBalance = parseFloat(localStorage.getItem("userBalance") || "0");
   const transferCharge = 5;
 
   const validateStep1 = () => {
-    const newErrors: {[key: string]: string} = {};
-    if (!recipient) newErrors.recipient = 'প্রাপক নির্বাচন করুন';
+    const newErrors: { [key: string]: string } = {};
+    if (!recipient) newErrors.recipient = "প্রাপক নির্বাচন করুন";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   const validateStep2 = () => {
-    const newErrors: {[key: string]: string} = {};
+    const newErrors: { [key: string]: string } = {};
     const transferAmount = parseFloat(amount);
-    
-    if (!amount || transferAmount <= 0) newErrors.amount = 'সঠিক পরিমাণ লিখুন';
-    else if (transferAmount < 10) newErrors.amount = 'ন্যূনতম ১০ টাকা পাঠাতে পারবেন';
-    else if (transferAmount > 25000) newErrors.amount = 'সর্বোচ্চ ২৫,০০০ টাকা পাঠাতে পারবেন';
-    else if ((transferAmount + transferCharge) > currentBalance) {
-      newErrors.amount = 'অপর্যাপ্ত ব্যালেন্স (চার্জ সহ)';
+
+    if (!amount || transferAmount <= 0) newErrors.amount = "সঠিক পরিমাণ লিখুন";
+    else if (transferAmount < 10)
+      newErrors.amount = "ন্যূনতম ১০ টাকা পাঠাতে পারবেন";
+    else if (transferAmount > 25000)
+      newErrors.amount = "সর্বোচ্চ ২৫,০০০ টাকা পাঠাতে পারবেন";
+    else if (transferAmount + transferCharge > currentBalance) {
+      newErrors.amount = "অপর্যাপ্ত ব্যালেন্স (চার্জ সহ)";
     }
-    
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   const validateStep3 = () => {
-    const newErrors: {[key: string]: string} = {};
-    if (!pin || pin.length !== 5) newErrors.pin = '৫ সংখ্যার পিন লিখুন';
+    const newErrors: { [key: string]: string } = {};
+    if (!pin || pin.length !== 5) newErrors.pin = "৫ সংখ্যার পিন লিখুন";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -73,7 +93,7 @@ export default function SendMoney() {
     let isValid = false;
     if (currentStep === 1) isValid = validateStep1();
     else if (currentStep === 2) isValid = validateStep2();
-    
+
     if (isValid && currentStep < 3) {
       setCurrentStep(currentStep + 1);
     }
@@ -82,47 +102,51 @@ export default function SendMoney() {
   const handleSendMoney = () => {
     if (validateStep3()) {
       setIsProcessing(true);
-      
+
       // Simulate processing
       setTimeout(() => {
         // Verify PIN
-        if (pin === localStorage.getItem('userPin')) {
+        if (pin === localStorage.getItem("userPin")) {
           const transferAmount = parseFloat(amount);
           const totalDeduction = transferAmount + transferCharge;
-          
+
           // Update balance
           const newBalance = currentBalance - totalDeduction;
-          localStorage.setItem('userBalance', newBalance.toString());
+          localStorage.setItem("userBalance", newBalance.toString());
 
           // Persist to registered users store
-          const userPhone = localStorage.getItem('userPhone');
-          const users = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+          const userPhone = localStorage.getItem("userPhone");
+          const users = JSON.parse(
+            localStorage.getItem("registeredUsers") || "[]",
+          );
           const idx = users.findIndex((u: any) => u.phone === userPhone);
           if (idx !== -1) {
             users[idx].balance = newBalance;
-            localStorage.setItem('registeredUsers', JSON.stringify(users));
+            localStorage.setItem("registeredUsers", JSON.stringify(users));
           }
-          
+
           // Save transaction
           const transaction = {
             id: Date.now(),
-            type: 'send_money',
+            type: "send_money",
             amount: transferAmount,
             charge: transferCharge,
             recipient: recipient?.name,
             recipientPhone: recipient?.phone,
             reference,
             date: new Date().toISOString(),
-            status: 'completed'
+            status: "completed",
           };
-          
-          const transactions = JSON.parse(localStorage.getItem('transactions') || '[]');
+
+          const transactions = JSON.parse(
+            localStorage.getItem("transactions") || "[]",
+          );
           transactions.unshift(transaction);
-          localStorage.setItem('transactions', JSON.stringify(transactions));
-          
+          localStorage.setItem("transactions", JSON.stringify(transactions));
+
           setCurrentStep(4); // Success step
         } else {
-          setErrors({ pin: 'ভুল পিন দিয়েছেন' });
+          setErrors({ pin: "ভুল পিন দিয়েছেন" });
         }
         setIsProcessing(false);
       }, 2000);
@@ -135,18 +159,18 @@ export default function SendMoney() {
   };
 
   const selectRecipientByPhone = () => {
-    const phone = prompt('প্রাপকের মোবাইল নম্বর লিখুন:');
-    if (phone && phone.length === 11 && phone.startsWith('01')) {
+    const phone = prompt("প্রাপকের মোবাইল নম্বর লিখুন:");
+    if (phone && phone.length === 11 && phone.startsWith("01")) {
       const newContact: Contact = {
         id: Date.now(),
-        name: 'নতুন প্রাপক',
+        name: "নতুন প্রাপক",
         phone,
-        avatar: '👤'
+        avatar: "👤",
       };
       setRecipient(newContact);
       setCurrentStep(2);
     } else if (phone) {
-      alert('সঠিক মোবাইল নম্বর দিন (১১ সংখ্যা)');
+      alert("সঠিক মোবাইল নম্বর দিন (১১ সংখ্যা)");
     }
   };
 
@@ -164,10 +188,14 @@ export default function SendMoney() {
             <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <CheckCircle className="h-10 w-10 text-green-600" />
             </div>
-            
-            <h2 className="text-xl font-bold text-gray-900 mb-2">সফলভাবে পাঠানো হয়েছে!</h2>
-            <p className="text-gray-600 mb-6">আপনার টাকা পাঠানো সম্পন্ন হয়েছে</p>
-            
+
+            <h2 className="text-xl font-bold text-gray-900 mb-2">
+              সফলভাবে পাঠানো হয়েছে!
+            </h2>
+            <p className="text-gray-600 mb-6">
+              আপনার টাকা পাঠানো সম্পন্ন হয়েছে
+            </p>
+
             <div className="bg-gray-50 rounded-xl p-4 mb-6 text-left">
               <div className="space-y-3">
                 <div className="flex justify-between">
@@ -188,7 +216,9 @@ export default function SendMoney() {
                 </div>
                 <div className="flex justify-between border-t border-gray-200 pt-2">
                   <span className="font-medium">মোট</span>
-                  <span className="font-bold text-bkash-500">��{parseFloat(amount) + transferCharge}</span>
+                  <span className="font-bold text-bkash-500">
+                    ��{parseFloat(amount) + transferCharge}
+                  </span>
                 </div>
                 {reference && (
                   <div className="flex justify-between">
@@ -198,21 +228,21 @@ export default function SendMoney() {
                 )}
               </div>
             </div>
-            
+
             <div className="space-y-3">
-              <button 
-                onClick={() => navigate('/')}
+              <button
+                onClick={() => navigate("/")}
                 className="w-full bg-bkash-500 hover:bg-bkash-600 text-white py-3 rounded-xl font-medium transition-colors"
               >
                 হোমে ফিরুন
               </button>
-              <button 
+              <button
                 onClick={() => {
                   setCurrentStep(1);
                   setRecipient(null);
-                  setAmount('');
-                  setPin('');
-                  setReference('');
+                  setAmount("");
+                  setPin("");
+                  setReference("");
                   setErrors({});
                 }}
                 className="w-full bg-gray-200 hover:bg-gray-300 text-gray-700 py-3 rounded-xl font-medium transition-colors"
@@ -231,12 +261,17 @@ export default function SendMoney() {
       {/* Header */}
       <div className="bg-gradient-to-r from-bkash-500 to-bkash-600 p-4 text-white">
         <div className="flex items-center space-x-3 mb-4">
-          <Link to="/" className="p-2 bg-white/20 rounded-full hover:bg-white/30 transition-colors">
+          <Link
+            to="/"
+            className="p-2 bg-white/20 rounded-full hover:bg-white/30 transition-colors"
+          >
             <ArrowLeft className="h-5 w-5" />
           </Link>
           <div>
             <h1 className="text-xl font-bold">টাকা পাঠান</h1>
-            <p className="text-sm text-white/80">ব্যালেন্স: ৳{currentBalance.toLocaleString()}</p>
+            <p className="text-sm text-white/80">
+              ব্যালেন্স: ৳{currentBalance.toLocaleString()}
+            </p>
           </div>
         </div>
 
@@ -244,14 +279,24 @@ export default function SendMoney() {
         <div className="flex items-center space-x-2">
           {[1, 2, 3].map((step) => (
             <div key={step} className="flex items-center">
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
-                step <= currentStep 
-                  ? 'bg-white text-bkash-500' 
-                  : 'bg-white/20 text-white/60'
-              }`}>
-                {step < currentStep ? <CheckCircle className="h-4 w-4" /> : step}
+              <div
+                className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
+                  step <= currentStep
+                    ? "bg-white text-bkash-500"
+                    : "bg-white/20 text-white/60"
+                }`}
+              >
+                {step < currentStep ? (
+                  <CheckCircle className="h-4 w-4" />
+                ) : (
+                  step
+                )}
               </div>
-              {step < 3 && <div className={`w-8 h-1 ${step < currentStep ? 'bg-white' : 'bg-white/20'}`} />}
+              {step < 3 && (
+                <div
+                  className={`w-8 h-1 ${step < currentStep ? "bg-white" : "bg-white/20"}`}
+                />
+              )}
             </div>
           ))}
         </div>
@@ -262,8 +307,10 @@ export default function SendMoney() {
         {currentStep === 1 && (
           <div className="space-y-6">
             <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
-              <h2 className="text-lg font-bold text-gray-900 mb-4">কার কাছে পাঠাবেন?</h2>
-              
+              <h2 className="text-lg font-bold text-gray-900 mb-4">
+                কার কাছে পাঠাবেন?
+              </h2>
+
               {/* Add New Recipient */}
               <button
                 onClick={selectRecipientByPhone}
@@ -277,7 +324,9 @@ export default function SendMoney() {
 
               {/* Recent Contacts */}
               <div className="space-y-3">
-                <h3 className="font-medium text-gray-700 text-sm">সাম্প্রতিক</h3>
+                <h3 className="font-medium text-gray-700 text-sm">
+                  সাম্প্রতিক
+                </h3>
                 {recentContacts.map((contact) => (
                   <button
                     key={contact.id}
@@ -289,11 +338,15 @@ export default function SendMoney() {
                         {contact.avatar}
                       </div>
                       <div className="flex-1">
-                        <p className="font-medium text-gray-900">{contact.name}</p>
+                        <p className="font-medium text-gray-900">
+                          {contact.name}
+                        </p>
                         <p className="text-sm text-gray-600">{contact.phone}</p>
                       </div>
                       {contact.lastUsed && (
-                        <p className="text-xs text-gray-500">{contact.lastUsed}</p>
+                        <p className="text-xs text-gray-500">
+                          {contact.lastUsed}
+                        </p>
                       )}
                     </div>
                   </button>
@@ -307,8 +360,10 @@ export default function SendMoney() {
         {currentStep === 2 && recipient && (
           <div className="space-y-6">
             <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
-              <h2 className="text-lg font-bold text-gray-900 mb-4">কত ��াকা পাঠাবেন?</h2>
-              
+              <h2 className="text-lg font-bold text-gray-900 mb-4">
+                কত ��াকা পাঠাবেন?
+              </h2>
+
               {/* Recipient Info */}
               <div className="bg-blue-50 rounded-xl p-3 mb-4 border border-blue-200">
                 <div className="flex items-center space-x-3">
@@ -316,7 +371,9 @@ export default function SendMoney() {
                     {recipient.avatar}
                   </div>
                   <div>
-                    <p className="font-medium text-blue-900">{recipient.name}</p>
+                    <p className="font-medium text-blue-900">
+                      {recipient.name}
+                    </p>
                     <p className="text-sm text-blue-700">{recipient.phone}</p>
                   </div>
                 </div>
@@ -335,11 +392,13 @@ export default function SendMoney() {
                     onChange={(e) => setAmount(e.target.value)}
                     placeholder="পরিমাণ লিখুন"
                     className={`w-full pl-10 pr-3 py-3 border rounded-xl focus:ring-2 focus:ring-bkash-500 focus:border-transparent ${
-                      errors.amount ? 'border-red-500' : 'border-gray-300'
+                      errors.amount ? "border-red-500" : "border-gray-300"
                     }`}
                   />
                 </div>
-                {errors.amount && <p className="text-red-500 text-sm mt-1">{errors.amount}</p>}
+                {errors.amount && (
+                  <p className="text-red-500 text-sm mt-1">{errors.amount}</p>
+                )}
               </div>
 
               {/* Quick Amount Buttons */}
@@ -396,8 +455,10 @@ export default function SendMoney() {
         {currentStep === 3 && (
           <div className="space-y-6">
             <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
-              <h2 className="text-lg font-bold text-gray-900 mb-4">পিন দিয়ে নিশ্চিত করুন</h2>
-              
+              <h2 className="text-lg font-bold text-gray-900 mb-4">
+                পিন দিয়ে নিশ্চিত করুন
+              </h2>
+
               {/* Transaction Summary */}
               <div className="bg-gray-50 rounded-xl p-4 mb-6">
                 <div className="space-y-2 text-sm">
@@ -419,7 +480,9 @@ export default function SendMoney() {
                   </div>
                   <div className="flex justify-between font-bold border-t border-gray-200 pt-2">
                     <span>���োট:</span>
-                    <span className="text-bkash-500">৳{parseFloat(amount) + transferCharge}</span>
+                    <span className="text-bkash-500">
+                      ৳{parseFloat(amount) + transferCharge}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -437,7 +500,7 @@ export default function SendMoney() {
                     placeholder="৫ সংখ্যার পিন"
                     maxLength={5}
                     className={`w-full pr-10 pl-3 py-3 border rounded-xl focus:ring-2 focus:ring-bkash-500 focus:border-transparent ${
-                      errors.pin ? 'border-red-500' : 'border-gray-300'
+                      errors.pin ? "border-red-500" : "border-gray-300"
                     }`}
                   />
                   <button
@@ -445,10 +508,16 @@ export default function SendMoney() {
                     onClick={() => setShowPin(!showPin)}
                     className="absolute right-3 top-3.5 text-gray-400 hover:text-gray-600"
                   >
-                    {showPin ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                    {showPin ? (
+                      <EyeOff className="h-5 w-5" />
+                    ) : (
+                      <Eye className="h-5 w-5" />
+                    )}
                   </button>
                 </div>
-                {errors.pin && <p className="text-red-500 text-sm mt-1">{errors.pin}</p>}
+                {errors.pin && (
+                  <p className="text-red-500 text-sm mt-1">{errors.pin}</p>
+                )}
               </div>
 
               {/* Warning */}
@@ -456,7 +525,8 @@ export default function SendMoney() {
                 <div className="flex items-start space-x-2">
                   <AlertCircle className="h-4 w-4 text-red-600 mt-0.5" />
                   <p className="text-sm text-red-800">
-                    নিশ্চিত করার পর টাকা ফেরত পাওয়া যাবে না। সঠিক নম্বর ও পরিমাণ যাচাই করুন।
+                    নিশ্চিত করার পর টাকা ফেরত পাওয়া যাবে না। সঠিক নম্বর ও
+                    পরিমাণ যাচাই করুন।
                   </p>
                 </div>
               </div>
@@ -474,7 +544,7 @@ export default function SendMoney() {
               পূর্ববর্তী
             </button>
           )}
-          
+
           {currentStep < 3 ? (
             <button
               onClick={handleNext}
@@ -488,11 +558,11 @@ export default function SendMoney() {
               disabled={isProcessing}
               className={`flex-1 py-3 rounded-xl font-medium transition-colors ${
                 isProcessing
-                  ? 'bg-gray-400 text-gray-200 cursor-not-allowed'
-                  : 'bg-green-600 hover:bg-green-700 text-white'
+                  ? "bg-gray-400 text-gray-200 cursor-not-allowed"
+                  : "bg-green-600 hover:bg-green-700 text-white"
               }`}
             >
-              {isProcessing ? 'প্রক্রিয়াধীন...' : 'টাকা পাঠান'}
+              {isProcessing ? "প্রক্রিয়াধীন..." : "টাকা পাঠান"}
             </button>
           )}
         </div>

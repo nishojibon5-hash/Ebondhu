@@ -1,87 +1,95 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { 
-  Eye, 
-  EyeOff, 
-  Phone, 
-  Lock, 
+import {
+  Eye,
+  EyeOff,
+  Phone,
+  Lock,
   ArrowRight,
   AlertCircle,
   CheckCircle,
-  Smartphone
+  Smartphone,
 } from "lucide-react";
 
 export default function Login() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    phone: '',
-    pin: ''
+    phone: "",
+    pin: "",
   });
   const [showPin, setShowPin] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   const handleInputChange = (field: string, value: string) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [field]: value
+      [field]: value,
     }));
-    setError(''); // Clear error when user types
+    setError(""); // Clear error when user types
   };
 
   const handleLogin = async () => {
     setIsLoading(true);
-    setError('');
-    setSuccess('');
+    setError("");
+    setSuccess("");
 
     // Validation
     if (!formData.phone || !formData.pin) {
-      setError('সব ফিল্ড পূরণ করুন');
+      setError("সব ফিল্ড পূরণ করুন");
       setIsLoading(false);
       return;
     }
 
     if (formData.phone.length !== 11) {
-      setError('সঠিক মোবাইল নম্বর দিন');
+      setError("সঠিক মোবাইল নম্বর দিন");
       setIsLoading(false);
       return;
     }
 
     if (formData.pin.length !== 5) {
-      setError('পিন ৫ সংখ্যার হতে হবে');
+      setError("পিন ৫ সংখ্যার হতে হবে");
       setIsLoading(false);
       return;
     }
 
     // Simulate API call
     setTimeout(() => {
-
       // Check registered users
-      const registeredUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
-      const user = registeredUsers.find((u: any) => u.phone === formData.phone && u.pin === formData.pin);
+      const registeredUsers = JSON.parse(
+        localStorage.getItem("registeredUsers") || "[]",
+      );
+      const user = registeredUsers.find(
+        (u: any) => u.phone === formData.phone && u.pin === formData.pin,
+      );
 
       if (user) {
-        setSuccess('সফলভাবে লগিন হয়েছে!');
+        setSuccess("সফলভাবে লগিন হয়েছে!");
 
         // Store user data in localStorage
-        localStorage.setItem('isLoggedIn', 'true');
-        localStorage.setItem('userPhone', user.phone);
-        localStorage.setItem('userName', user.name);
-        localStorage.setItem('userPin', user.pin);
-        localStorage.setItem('userBalance', user.balance.toString());
+        localStorage.setItem("isLoggedIn", "true");
+        localStorage.setItem("userPhone", user.phone);
+        localStorage.setItem("userName", user.name);
+        localStorage.setItem("userPin", user.pin);
+        localStorage.setItem("userBalance", user.balance.toString());
 
         // Load user's referral data
-        const allReferralData = JSON.parse(localStorage.getItem('referralData') || '{}');
+        const allReferralData = JSON.parse(
+          localStorage.getItem("referralData") || "{}",
+        );
         if (allReferralData[user.phone]) {
-          localStorage.setItem('referralData', JSON.stringify(allReferralData[user.phone]));
+          localStorage.setItem(
+            "referralData",
+            JSON.stringify(allReferralData[user.phone]),
+          );
         }
 
         setTimeout(() => {
-          navigate('/');
+          navigate("/");
         }, 1000);
       } else {
-        setError('ভুল ফোন নম্বর বা পিন');
+        setError("ভুল ফোন নম্বর বা পিন");
       }
       setIsLoading(false);
     }, 2000);
@@ -114,7 +122,7 @@ export default function Login() {
                 <input
                   type="tel"
                   value={formData.phone}
-                  onChange={(e) => handleInputChange('phone', e.target.value)}
+                  onChange={(e) => handleInputChange("phone", e.target.value)}
                   className="w-full pl-10 pr-3 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-bkash-500 focus:border-transparent text-lg"
                   placeholder="01XXXXXXXXX"
                   maxLength={11}
@@ -134,7 +142,7 @@ export default function Login() {
                 <input
                   type={showPin ? "text" : "password"}
                   value={formData.pin}
-                  onChange={(e) => handleInputChange('pin', e.target.value)}
+                  onChange={(e) => handleInputChange("pin", e.target.value)}
                   className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-bkash-500 focus:border-transparent text-lg"
                   placeholder="৫ সংখ্যার পিন"
                   maxLength={5}
@@ -171,8 +179,8 @@ export default function Login() {
 
             {/* Forgot PIN Link */}
             <div className="text-center">
-              <Link 
-                to="/forgot-pin" 
+              <Link
+                to="/forgot-pin"
                 className="text-bkash-500 hover:text-bkash-600 text-sm font-medium transition-colors"
               >
                 পিন ভুলে গেছেন?
@@ -198,16 +206,15 @@ export default function Login() {
             {/* Register Link */}
             <div className="text-center pt-4 border-t border-gray-200">
               <p className="text-gray-600 text-sm">
-                নতুন ব্যবহারকারী?{' '}
-                <Link 
-                  to="/register" 
+                নতুন ব্যবহারকারী?{" "}
+                <Link
+                  to="/register"
                   className="text-bkash-500 hover:text-bkash-600 font-medium transition-colors"
                 >
                   রেজিস্ট্রেশন করুন
                 </Link>
               </p>
             </div>
-
           </div>
         </div>
       </div>

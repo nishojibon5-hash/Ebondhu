@@ -12,7 +12,7 @@ import {
   EyeOff,
   Globe,
   Home,
-  Banknote
+  Banknote,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Language } from "../App";
@@ -30,7 +30,7 @@ const translations = {
     appName: "লোন বন্ধু",
     yourBalance: "আপনার ব্যালেন্স",
     sendMoney: "Send Money",
-    cashIn: "Cash In", 
+    cashIn: "Cash In",
     cashOut: "Cash Out",
     recharge: "Mobile Recharge",
     payBill: "Pay Bill",
@@ -45,31 +45,31 @@ const translations = {
     tapToSeeBalance: "ব্যালেন্স দেখতে ট্যাপ করুন",
     taskEarning: "টাস্ক আর্নিং",
     loanService: "লোন সার্ভিস",
-    somitiManager: "সমিতি ম্যানেজার"
+    somitiManager: "সমিতি ম্যানেজার",
   },
   bn: {
     goodMorning: "শুভ সকাল",
     userName: "মোঃ রহিম",
     appName: "লোন বন্ধু",
-    yourBalance: "আপনার ব্যালেন্স", 
+    yourBalance: "আপনার ব্যালেন্স",
     sendMoney: "টাকা পাঠান",
     cashIn: "ক্যাশ ইন",
-    cashOut: "ক্যাশ আউট", 
+    cashOut: "ক্যাশ আউট",
     recharge: "মোবাইল রিচার্জ",
     payBill: "বিল পেমেন্ট",
     addMoney: "টাকা যোগ করুন",
     recentTransactions: "সাম্প্রতিক লেনদেন",
     viewAll: "সব দেখুন",
     sent: "পাঠানো",
-    received: "পেয়েছেন", 
+    received: "পেয়েছেন",
     recharged: "রিচার্জ",
     today: "আজ",
     yesterday: "গতকাল",
     tapToSeeBalance: "ব্যালেন্স দেখতে ট্যাপ করুন",
     taskEarning: "টাস্ক আর্নিং",
     loanService: "লোন সার্ভিস",
-    somitiManager: "সমিতি ম্যানেজার"
-  }
+    somitiManager: "সমিতি ম্যানেজার",
+  },
 };
 
 export default function Dashboard({ language, setLanguage }: DashboardProps) {
@@ -79,15 +79,57 @@ export default function Dashboard({ language, setLanguage }: DashboardProps) {
   const t = translations[language];
 
   const quickActions = [
-    { icon: Send, label: t.sendMoney, color: "bg-white shadow-md", textColor: "text-gray-700", iconColor: "text-bkash-500", link: "/send-money" },
-    { icon: Download, label: t.cashIn, color: "bg-white shadow-md", textColor: "text-gray-700", iconColor: "text-green-500", link: "/add-money" },
-    { icon: Upload, label: t.cashOut, color: "bg-white shadow-md", textColor: "text-gray-700", iconColor: "text-red-500", link: "#" },
-    { icon: Smartphone, label: t.recharge, color: "bg-white shadow-md", textColor: "text-gray-700", iconColor: "text-blue-500", link: "/mobile-recharge" },
-    { icon: Receipt, label: t.payBill, color: "bg-white shadow-md", textColor: "text-gray-700", iconColor: "text-orange-500", link: "#" },
-    { icon: Banknote, label: t.addMoney, color: "bg-white shadow-md", textColor: "text-gray-700", iconColor: "text-purple-500", link: "/add-money" },
+    {
+      icon: Send,
+      label: t.sendMoney,
+      color: "bg-white shadow-md",
+      textColor: "text-gray-700",
+      iconColor: "text-bkash-500",
+      link: "/send-money",
+    },
+    {
+      icon: Download,
+      label: t.cashIn,
+      color: "bg-white shadow-md",
+      textColor: "text-gray-700",
+      iconColor: "text-green-500",
+      link: "/add-money",
+    },
+    {
+      icon: Upload,
+      label: t.cashOut,
+      color: "bg-white shadow-md",
+      textColor: "text-gray-700",
+      iconColor: "text-red-500",
+      link: "#",
+    },
+    {
+      icon: Smartphone,
+      label: t.recharge,
+      color: "bg-white shadow-md",
+      textColor: "text-gray-700",
+      iconColor: "text-blue-500",
+      link: "/mobile-recharge",
+    },
+    {
+      icon: Receipt,
+      label: t.payBill,
+      color: "bg-white shadow-md",
+      textColor: "text-gray-700",
+      iconColor: "text-orange-500",
+      link: "#",
+    },
+    {
+      icon: Banknote,
+      label: t.addMoney,
+      color: "bg-white shadow-md",
+      textColor: "text-gray-700",
+      iconColor: "text-purple-500",
+      link: "/add-money",
+    },
   ];
 
-  const isSomitiManager = localStorage.getItem('isSomitiManager') === 'true';
+  const isSomitiManager = localStorage.getItem("isSomitiManager") === "true";
 
   const transactions = [
     {
@@ -96,24 +138,24 @@ export default function Dashboard({ language, setLanguage }: DashboardProps) {
       amount: -1500,
       description: "টাকা পাঠানো - ০১৭১১××××××",
       time: "১০:৩০ AM",
-      date: t.today
+      date: t.today,
     },
     {
       id: 2,
-      type: "received", 
+      type: "received",
       amount: 2500,
       description: "টাকা পেয়েছেন - চাকরিদাতা থেকে",
       time: "২:১৫ PM",
-      date: t.yesterday
+      date: t.yesterday,
     },
     {
       id: 3,
       type: "recharge",
       amount: -100,
       description: "মোবাইল রিচার্জ - ০১৭১১××××××",
-      time: "৬:৪৫ PM", 
-      date: t.yesterday
-    }
+      time: "৬:৪৫ PM",
+      date: t.yesterday,
+    },
   ];
 
   return (
@@ -125,16 +167,19 @@ export default function Dashboard({ language, setLanguage }: DashboardProps) {
           <div className="absolute top-0 right-0 w-32 h-32 bg-white rounded-full -translate-y-16 translate-x-16"></div>
           <div className="absolute bottom-0 left-0 w-24 h-24 bg-white rounded-full translate-y-12 -translate-x-12"></div>
         </div>
-        
+
         <div className="relative z-10">
           <div className="flex items-center justify-between mb-6">
             <div>
               <h1 className="text-xl font-bold">{t.appName}</h1>
-              <p className="text-pink-100 text-sm">{t.goodMorning}, {localStorage.getItem('userName') || t.userName}</p>
+              <p className="text-pink-100 text-sm">
+                {t.goodMorning},{" "}
+                {localStorage.getItem("userName") || t.userName}
+              </p>
             </div>
             <div className="flex items-center space-x-3">
               <button
-                onClick={() => setLanguage(language === 'en' ? 'bn' : 'en')}
+                onClick={() => setLanguage(language === "en" ? "bn" : "en")}
                 className="p-2 rounded-full bg-white/20 hover:bg-white/30 transition-colors"
               >
                 <Globe className="h-5 w-5" />
@@ -150,7 +195,7 @@ export default function Dashboard({ language, setLanguage }: DashboardProps) {
           </div>
 
           {/* Balance Card - bKash Style */}
-          <div 
+          <div
             className="bg-white/15 backdrop-blur-sm rounded-2xl p-5 border border-white/20 cursor-pointer hover:bg-white/20 transition-all"
             onClick={() => setBalanceVisible(!balanceVisible)}
           >
@@ -160,14 +205,22 @@ export default function Dashboard({ language, setLanguage }: DashboardProps) {
                 <div className="flex items-center space-x-3">
                   {balanceVisible ? (
                     <span className="text-3xl font-bold">
-                      ৳ {parseFloat(localStorage.getItem('userBalance') || '0').toLocaleString()}
+                      ৳{" "}
+                      {parseFloat(
+                        localStorage.getItem("userBalance") || "0",
+                      ).toLocaleString()}
                     </span>
                   ) : (
                     <div className="flex flex-col">
-                      <span className="text-lg font-medium">{t.tapToSeeBalance}</span>
+                      <span className="text-lg font-medium">
+                        {t.tapToSeeBalance}
+                      </span>
                       <div className="flex space-x-1 mt-1">
                         {[...Array(8)].map((_, i) => (
-                          <div key={i} className="w-2 h-2 bg-white/50 rounded-full"></div>
+                          <div
+                            key={i}
+                            className="w-2 h-2 bg-white/50 rounded-full"
+                          ></div>
                         ))}
                       </div>
                     </div>
@@ -211,7 +264,9 @@ export default function Dashboard({ language, setLanguage }: DashboardProps) {
                     <div className="p-2 rounded-full bg-gray-50">
                       <Icon className={`h-6 w-6 ${action.iconColor}`} />
                     </div>
-                    <span className={`text-xs font-medium ${action.textColor} text-center leading-tight`}>
+                    <span
+                      className={`text-xs font-medium ${action.textColor} text-center leading-tight`}
+                    >
                       {action.label}
                     </span>
                   </div>
@@ -221,45 +276,58 @@ export default function Dashboard({ language, setLanguage }: DashboardProps) {
           </div>
         </div>
 
-
         {/* Recent Transactions */}
         <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
           <div className="flex items-center justify-between p-4 bg-gray-50 border-b">
             <h2 className="font-bold text-gray-800">{t.recentTransactions}</h2>
-            <button className="text-bkash-500 text-sm font-medium">{t.viewAll}</button>
+            <button className="text-bkash-500 text-sm font-medium">
+              {t.viewAll}
+            </button>
           </div>
           <div className="divide-y divide-gray-100">
             {transactions.map((transaction) => (
-              <div key={transaction.id} className="p-4 hover:bg-gray-50 transition-colors">
+              <div
+                key={transaction.id}
+                className="p-4 hover:bg-gray-50 transition-colors"
+              >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
-                    <div className={`p-2 rounded-full ${
-                      transaction.type === 'sent' ? 'bg-red-100' :
-                      transaction.type === 'received' ? 'bg-green-100' :
-                      'bg-blue-100'
-                    }`}>
-                      {transaction.type === 'sent' ? (
+                    <div
+                      className={`p-2 rounded-full ${
+                        transaction.type === "sent"
+                          ? "bg-red-100"
+                          : transaction.type === "received"
+                            ? "bg-green-100"
+                            : "bg-blue-100"
+                      }`}
+                    >
+                      {transaction.type === "sent" ? (
                         <Send className="h-4 w-4 text-red-600" />
-                      ) : transaction.type === 'received' ? (
+                      ) : transaction.type === "received" ? (
                         <Download className="h-4 w-4 text-green-600" />
                       ) : (
                         <Smartphone className="h-4 w-4 text-blue-600" />
                       )}
                     </div>
                     <div>
-                      <p className="font-medium text-gray-900 text-sm">{transaction.description}</p>
+                      <p className="font-medium text-gray-900 text-sm">
+                        {transaction.description}
+                      </p>
                       <p className="text-xs text-gray-500">
                         {transaction.date} • {transaction.time}
                       </p>
                     </div>
                   </div>
                   <div className="text-right">
-                    <p className={`font-bold text-sm ${
-                      transaction.amount > 0 
-                        ? 'text-green-600' 
-                        : 'text-red-600'
-                    }`}>
-                      {transaction.amount > 0 ? '+' : ''}৳ {Math.abs(transaction.amount)}
+                    <p
+                      className={`font-bold text-sm ${
+                        transaction.amount > 0
+                          ? "text-green-600"
+                          : "text-red-600"
+                      }`}
+                    >
+                      {transaction.amount > 0 ? "+" : ""}৳{" "}
+                      {Math.abs(transaction.amount)}
                     </p>
                   </div>
                 </div>

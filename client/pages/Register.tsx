@@ -11,7 +11,7 @@ import {
   CheckCircle,
   Smartphone,
   ArrowLeft,
-  Gift
+  Gift,
 } from "lucide-react";
 
 export default function Register() {
@@ -19,58 +19,60 @@ export default function Register() {
   const [searchParams] = useSearchParams();
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({
-    name: '',
-    phone: '',
-    pin: '',
-    confirmPin: '',
-    referralCode: ''
+    name: "",
+    phone: "",
+    pin: "",
+    confirmPin: "",
+    referralCode: "",
   });
   const [showPin, setShowPin] = useState(false);
   const [showConfirmPin, setShowConfirmPin] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
   const [referralBonus, setReferralBonus] = useState(0);
 
   useEffect(() => {
     // Check for referral code in URL
-    const refCode = searchParams.get('ref');
+    const refCode = searchParams.get("ref");
     if (refCode) {
-      setFormData(prev => ({ ...prev, referralCode: refCode }));
+      setFormData((prev) => ({ ...prev, referralCode: refCode }));
       setReferralBonus(15); // ১৫ টাকা bonus for referral
     }
   }, [searchParams]);
 
   const handleInputChange = (field: string, value: string) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [field]: value
+      [field]: value,
     }));
-    setError(''); // Clear error when user types
+    setError(""); // Clear error when user types
   };
 
   const validateStep1 = () => {
     if (!formData.name.trim()) {
-      setError('নাম লিখুন');
+      setError("নাম লিখুন");
       return false;
     }
     if (!formData.phone) {
-      setError('মোবাইল নম্বর দিন');
+      setError("মোবাইল নম্বর দিন");
       return false;
     }
     if (formData.phone.length !== 11) {
-      setError('সঠিক মোবাইল নম্বর দিন (১১ সংখ্যা)');
+      setError("সঠিক মোবাইল নম্বর দিন (১১ সংখ্যা)");
       return false;
     }
 
     // Check if phone number already exists
-    const existingUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+    const existingUsers = JSON.parse(
+      localStorage.getItem("registeredUsers") || "[]",
+    );
     if (existingUsers.some((user: any) => user.phone === formData.phone)) {
-      setError('এই নম্বর দিয়ে ইতিমধ্যে অ্যাকাউন্ট আছে');
+      setError("এই নম্বর দিয়ে ইতিমধ্যে অ্যাকাউন্ট আছে");
       return false;
     }
-    if (!formData.phone.startsWith('01')) {
-      setError('মোবাইল নম্বর ০১ দি��়ে শুরু হতে হবে');
+    if (!formData.phone.startsWith("01")) {
+      setError("মোবাইল নম্বর ০১ দি��়ে শুরু হতে হবে");
       return false;
     }
     return true;
@@ -78,26 +80,26 @@ export default function Register() {
 
   const validateStep2 = () => {
     if (!formData.pin) {
-      setError('পিন নম্বর দিন');
+      setError("পিন নম্বর দিন");
       return false;
     }
     if (formData.pin.length !== 5) {
-      setError('পিন ৫ সংখ্যার হতে হবে');
+      setError("পিন ৫ সংখ্যার হতে হবে");
       return false;
     }
     if (!formData.confirmPin) {
-      setError('পি��� নিশ্চিত করুন');
+      setError("পি��� নিশ্চিত করুন");
       return false;
     }
     if (formData.pin !== formData.confirmPin) {
-      setError('পিন মিলছে না');
+      setError("পিন মিলছে না");
       return false;
     }
     return true;
   };
 
   const handleNext = () => {
-    setError('');
+    setError("");
     if (currentStep === 1 && validateStep1()) {
       setCurrentStep(2);
     }
@@ -105,8 +107,8 @@ export default function Register() {
 
   const handleRegister = async () => {
     setIsLoading(true);
-    setError('');
-    setSuccess('');
+    setError("");
+    setSuccess("");
 
     if (!validateStep2()) {
       setIsLoading(false);
@@ -122,13 +124,15 @@ export default function Register() {
         pin: formData.pin,
         joinDate: new Date().toISOString(),
         referredBy: formData.referralCode || null,
-        balance: referralBonus // Start with referral bonus if any
+        balance: referralBonus, // Start with referral bonus if any
       };
 
       // Add to registered users
-      const existingUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+      const existingUsers = JSON.parse(
+        localStorage.getItem("registeredUsers") || "[]",
+      );
       existingUsers.push(newUser);
-      localStorage.setItem('registeredUsers', JSON.stringify(existingUsers));
+      localStorage.setItem("registeredUsers", JSON.stringify(existingUsers));
 
       // Process referral if exists
       if (formData.referralCode) {
@@ -136,18 +140,19 @@ export default function Register() {
       }
 
       // Store user data for future login (but don't auto-login)
-      localStorage.setItem('registeredPhone', formData.phone);
-      localStorage.setItem('registeredName', formData.name);
-      localStorage.setItem('registeredPin', formData.pin);
+      localStorage.setItem("registeredPhone", formData.phone);
+      localStorage.setItem("registeredName", formData.name);
+      localStorage.setItem("registeredPin", formData.pin);
 
-      const successMessage = referralBonus > 0
-        ? `রেজিস্ট্রেশন সফল! ৳${referralBonus} বোনাস পেয়েছেন। এখন লগিন করুন।`
-        : 'রেজিস্ট্রেশন সফল হয়েছে! এখন লগিন করুন।';
+      const successMessage =
+        referralBonus > 0
+          ? `রেজিস্ট্রেশন সফল! ৳${referralBonus} বোনাস পেয়েছেন। এখন লগিন করুন।`
+          : "রেজিস্ট্রেশন সফল হয়েছে! এখন লগিন করুন।";
 
       setSuccess(successMessage);
 
       setTimeout(() => {
-        navigate('/login');
+        navigate("/login");
       }, 3000);
       setIsLoading(false);
     }, 2000);
@@ -155,19 +160,25 @@ export default function Register() {
 
   const processReferralReward = (referralCode: string, newUser: any) => {
     // Find the referrer by code
-    const allUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
-    const referrer = allUsers.find((user: any) => `LB${user.phone.slice(-6)}` === referralCode);
+    const allUsers = JSON.parse(
+      localStorage.getItem("registeredUsers") || "[]",
+    );
+    const referrer = allUsers.find(
+      (user: any) => `LB${user.phone.slice(-6)}` === referralCode,
+    );
 
     if (referrer) {
       // Update referrer's referral data
-      const referralData = JSON.parse(localStorage.getItem('referralData') || '{}');
+      const referralData = JSON.parse(
+        localStorage.getItem("referralData") || "{}",
+      );
 
       if (!referralData[referrer.phone]) {
         referralData[referrer.phone] = {
           referralCode: `LB${referrer.phone.slice(-6)}`,
           totalReferrals: 0,
           totalEarnings: 0,
-          referredUsers: []
+          referredUsers: [],
         };
       }
 
@@ -178,24 +189,28 @@ export default function Register() {
         id: Date.now(),
         name: newUser.name,
         phone: newUser.phone,
-        joinDate: new Date().toLocaleDateString('bn-BD'),
-        status: 'completed',
-        reward: 15
+        joinDate: new Date().toLocaleDateString("bn-BD"),
+        status: "completed",
+        reward: 15,
       });
 
-      localStorage.setItem('referralData', JSON.stringify(referralData));
+      localStorage.setItem("referralData", JSON.stringify(referralData));
 
       // Add ৳15 to referrer's balance if they're currently logged in
-      if (localStorage.getItem('userPhone') === referrer.phone) {
-        const currentBalance = parseFloat(localStorage.getItem('userBalance') || '0');
+      if (localStorage.getItem("userPhone") === referrer.phone) {
+        const currentBalance = parseFloat(
+          localStorage.getItem("userBalance") || "0",
+        );
         const newBalance = currentBalance + 15;
-        localStorage.setItem('userBalance', newBalance.toString());
+        localStorage.setItem("userBalance", newBalance.toString());
         // Persist to registered users store
-        const users = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+        const users = JSON.parse(
+          localStorage.getItem("registeredUsers") || "[]",
+        );
         const idx = users.findIndex((u: any) => u.phone === referrer.phone);
         if (idx !== -1) {
           users[idx].balance = (users[idx].balance || 0) + 15;
-          localStorage.setItem('registeredUsers', JSON.stringify(users));
+          localStorage.setItem("registeredUsers", JSON.stringify(users));
         }
       }
     }
@@ -216,15 +231,25 @@ export default function Register() {
         {/* Progress Steps */}
         <div className="flex items-center justify-center mb-6">
           <div className="flex items-center space-x-4">
-            <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
-              currentStep >= 1 ? 'bg-bkash-500 text-white' : 'bg-gray-200 text-gray-500'
-            }`}>
+            <div
+              className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
+                currentStep >= 1
+                  ? "bg-bkash-500 text-white"
+                  : "bg-gray-200 text-gray-500"
+              }`}
+            >
               1
             </div>
-            <div className={`h-1 w-8 ${currentStep >= 2 ? 'bg-bkash-500' : 'bg-gray-200'}`}></div>
-            <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
-              currentStep >= 2 ? 'bg-bkash-500 text-white' : 'bg-gray-200 text-gray-500'
-            }`}>
+            <div
+              className={`h-1 w-8 ${currentStep >= 2 ? "bg-bkash-500" : "bg-gray-200"}`}
+            ></div>
+            <div
+              className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
+                currentStep >= 2
+                  ? "bg-bkash-500 text-white"
+                  : "bg-gray-200 text-gray-500"
+              }`}
+            >
               2
             </div>
           </div>
@@ -237,8 +262,12 @@ export default function Register() {
             {currentStep === 1 && (
               <>
                 <div className="text-center mb-4">
-                  <h3 className="text-lg font-bold text-gray-900">ব্যক্তিগত তথ্য</h3>
-                  <p className="text-sm text-gray-600">আপনার নাম ও ফোন নম্বর দিন</p>
+                  <h3 className="text-lg font-bold text-gray-900">
+                    ব্যক্তিগত তথ্য
+                  </h3>
+                  <p className="text-sm text-gray-600">
+                    আপনার নাম ও ফোন নম্বর দিন
+                  </p>
                 </div>
 
                 {/* Name Input */}
@@ -253,7 +282,9 @@ export default function Register() {
                     <input
                       type="text"
                       value={formData.name}
-                      onChange={(e) => handleInputChange('name', e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("name", e.target.value)
+                      }
                       className="w-full pl-10 pr-3 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-bkash-500 focus:border-transparent text-lg"
                       placeholder="আপনার পূর্ণ নাম"
                     />
@@ -272,7 +303,9 @@ export default function Register() {
                     <input
                       type="tel"
                       value={formData.phone}
-                      onChange={(e) => handleInputChange('phone', e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("phone", e.target.value)
+                      }
                       className="w-full pl-10 pr-3 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-bkash-500 focus:border-transparent text-lg"
                       placeholder="01XXXXXXXXX"
                       maxLength={11}
@@ -292,7 +325,12 @@ export default function Register() {
                     <input
                       type="text"
                       value={formData.referralCode}
-                      onChange={(e) => handleInputChange('referralCode', e.target.value.toUpperCase())}
+                      onChange={(e) =>
+                        handleInputChange(
+                          "referralCode",
+                          e.target.value.toUpperCase(),
+                        )
+                      }
                       className="w-full pl-10 pr-3 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-bkash-500 focus:border-transparent text-lg"
                       placeholder="যেমন: LB123456"
                       maxLength={8}
@@ -301,7 +339,8 @@ export default function Register() {
                   {formData.referralCode && (
                     <div className="mt-2 p-2 bg-green-50 border border-green-200 rounded-lg">
                       <p className="text-sm text-green-700 font-medium">
-                        🎉 রেফার কোড প্রয়োগ করা হয়েছে! আপনি ১৫ টাকা বোনাস পাবেন।
+                        🎉 রেফার কোড প্রয়োগ করা হয়েছে! আপনি ১৫ টাকা বোনাস
+                        পাবেন।
                       </p>
                     </div>
                   )}
@@ -314,7 +353,9 @@ export default function Register() {
               <>
                 <div className="text-center mb-4">
                   <h3 className="text-lg font-bold text-gray-900">পিন সেটআপ</h3>
-                  <p className="text-sm text-gray-600">আপনার অ্যাকাউন্টের জন্য একটি পিন তৈরি করুন</p>
+                  <p className="text-sm text-gray-600">
+                    আপনার অ্যাকাউন্টের জন্য একটি পিন তৈরি করুন
+                  </p>
                 </div>
 
                 {/* PIN Input */}
@@ -329,7 +370,7 @@ export default function Register() {
                     <input
                       type={showPin ? "text" : "password"}
                       value={formData.pin}
-                      onChange={(e) => handleInputChange('pin', e.target.value)}
+                      onChange={(e) => handleInputChange("pin", e.target.value)}
                       className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-bkash-500 focus:border-transparent text-lg"
                       placeholder="৫ সংখ্যার পিন"
                       maxLength={5}
@@ -360,7 +401,9 @@ export default function Register() {
                     <input
                       type={showConfirmPin ? "text" : "password"}
                       value={formData.confirmPin}
-                      onChange={(e) => handleInputChange('confirmPin', e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("confirmPin", e.target.value)
+                      }
                       className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-bkash-500 focus:border-transparent text-lg"
                       placeholder="পিন আবার লিখুন"
                       maxLength={5}
@@ -382,10 +425,12 @@ export default function Register() {
                 {/* PIN Guidelines */}
                 <div className="bg-blue-50 border border-blue-200 rounded-xl p-3">
                   <p className="text-blue-800 text-xs">
-                    <strong>পিন নির্দেশিকা:</strong><br/>
-                    ��� ৫ সংখ্যার পিন ব্যবহার করুন<br/>
-                    • সহজ পিন (১২৩৪৫) এ��়িয়ে চলুন<br/>
-                    • পিনটি গোপন রাখুন
+                    <strong>পিন নির্দেশিকা:</strong>
+                    <br />
+                    ��� ৫ সংখ্যার পিন ব্যবহার করুন
+                    <br />
+                    • সহজ পিন (১২৩৪৫) এ��়িয়ে চলুন
+                    <br />• পিনটি গোপন রাখুন
                   </p>
                 </div>
               </>
@@ -418,7 +463,7 @@ export default function Register() {
                   <span>পূর্ববর্তী</span>
                 </button>
               )}
-              
+
               {currentStep === 1 ? (
                 <button
                   onClick={handleNext}
@@ -448,9 +493,9 @@ export default function Register() {
             {/* Login Link */}
             <div className="text-center pt-4 border-t border-gray-200">
               <p className="text-gray-600 text-sm">
-                ইতিমধ্যে অ্যাকাউন্ট আছে?{' '}
-                <Link 
-                  to="/login" 
+                ইতিমধ্যে অ্যাকাউন্ট আছে?{" "}
+                <Link
+                  to="/login"
                   className="text-bkash-500 hover:text-bkash-600 font-medium transition-colors"
                 >
                   লগিন করুন

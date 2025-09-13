@@ -16,7 +16,7 @@ import {
   Pause,
   Play,
   Trash2,
-  TrendingUp
+  TrendingUp,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -25,7 +25,13 @@ interface Task {
   title: string;
   description: string;
   category: string;
-  platform: 'facebook' | 'instagram' | 'youtube' | 'whatsapp' | 'website' | 'other';
+  platform:
+    | "facebook"
+    | "instagram"
+    | "youtube"
+    | "whatsapp"
+    | "website"
+    | "other";
   taskType: string;
   reward: number;
   targetUrl: string;
@@ -33,19 +39,25 @@ interface Task {
   timeLimit: string;
   completed: number;
   maxCompletions: number;
-  status: 'active' | 'paused' | 'completed';
+  status: "active" | "paused" | "completed";
   createdAt?: string;
-  requirements?: Array<{id: number; description: string; isRequired: boolean}>;
+  requirements?: Array<{
+    id: number;
+    description: string;
+    isRequired: boolean;
+  }>;
   verificationMethod?: string;
   budget?: number;
   totalCost?: number;
 }
 
 export default function TaskEarning() {
-  const [activeTab, setActiveTab] = useState<'browse' | 'myTasks'>('browse');
+  const [activeTab, setActiveTab] = useState<"browse" | "myTasks">("browse");
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [isWorking, setIsWorking] = useState(false);
-  const [trackingStatus, setTrackingStatus] = useState<'idle' | 'checking' | 'success' | 'failed'>('idle');
+  const [trackingStatus, setTrackingStatus] = useState<
+    "idle" | "checking" | "success" | "failed"
+  >("idle");
   const [availableTasks, setAvailableTasks] = useState<Task[]>([]);
   const [myTasks, setMyTasks] = useState<Task[]>([]);
   const [completedTasks, setCompletedTasks] = useState<any[]>([]);
@@ -58,7 +70,7 @@ export default function TaskEarning() {
 
   const loadTasks = () => {
     // Load user's created tasks
-    const userTasks = JSON.parse(localStorage.getItem('userTasks') || '[]');
+    const userTasks = JSON.parse(localStorage.getItem("userTasks") || "[]");
     setMyTasks(userTasks);
 
     // Load available tasks (demo tasks + other users' tasks)
@@ -67,84 +79,111 @@ export default function TaskEarning() {
         id: 1001,
         title: "ফেসবুক পেজ ফলো করুন",
         description: "Flohkaofficiel ফেসবুক পেজ ফলো করুন এবং ১০ টাকা আয় করুন",
-        category: 'social-media',
-        platform: 'facebook',
-        taskType: 'follow',
+        category: "social-media",
+        platform: "facebook",
+        taskType: "follow",
         reward: 10,
         targetUrl: "https://www.facebook.com/Flohkaofficiel",
         createdBy: "এডমিন",
         timeLimit: "সীমাহীন",
         completed: 147,
         maxCompletions: 999999,
-        status: 'active',
+        status: "active",
         requirements: [
-          { id: 1, description: 'অবশ্যই ফেসবুক এ��াউন্ট থাকতে হবে', isRequired: true },
-          { id: 2, description: 'পেজটি ফলো করতে হবে', isRequired: true }
+          {
+            id: 1,
+            description: "অবশ্যই ফেসবুক এ��াউন্ট থাকতে হবে",
+            isRequired: true,
+          },
+          { id: 2, description: "পেজটি ফলো করতে হবে", isRequired: true },
         ],
-        verificationMethod: 'screenshot'
+        verificationMethod: "screenshot",
       },
       {
         id: 1002,
         title: "ফেসবুক পোস্টে লাইক দিন",
-        description: "Flohkaofficiel পেজের সর্বশেষ পোস্টে লাইক দিন এবং ৫ টাকা পান",
-        category: 'social-media',
-        platform: 'facebook',
-        taskType: 'like',
+        description:
+          "Flohkaofficiel পেজের সর্বশেষ পোস্টে লাইক দিন এবং ৫ টাকা পান",
+        category: "social-media",
+        platform: "facebook",
+        taskType: "like",
         reward: 5,
         targetUrl: "https://www.facebook.com/Flohkaofficiel",
         createdBy: "এডমিন",
         timeLimit: "সীমাহীন",
         completed: 324,
         maxCompletions: 999999,
-        status: 'active',
+        status: "active",
         requirements: [
-          { id: 1, description: 'সর্বশেষ পোস্টে লাইক দিতে হবে', isRequired: true },
-          { id: 2, description: 'পেজ ফলো করা থাকতে হবে', isRequired: true }
+          {
+            id: 1,
+            description: "সর্বশেষ পোস্টে লাইক দিতে হবে",
+            isRequired: true,
+          },
+          { id: 2, description: "পেজ ফলো করা থাকতে হবে", isRequired: true },
         ],
-        verificationMethod: 'screenshot'
+        verificationMethod: "screenshot",
       },
       {
         id: 1003,
         title: "ফেসবুক পোস্ট কমেন্ট করুন",
-        description: "Flohkaofficiel এ�� সর্বশেষ পোস্টে অর্থবহ কমেন্ট করুন এবং ৮ টাকা আয় করুন",
-        category: 'social-media',
-        platform: 'facebook',
-        taskType: 'comment',
+        description:
+          "Flohkaofficiel এ�� সর্বশেষ পোস্টে অর্থবহ কমেন্ট করুন এবং ৮ টাকা আয় করুন",
+        category: "social-media",
+        platform: "facebook",
+        taskType: "comment",
         reward: 8,
         targetUrl: "https://www.facebook.com/Flohkaofficiel",
         createdBy: "এডমিন",
         timeLimit: "সীমাহীন",
         completed: 189,
         maxCompletions: 999999,
-        status: 'active',
+        status: "active",
         requirements: [
-          { id: 1, description: 'কমপক্ষে ৫ শব্দের অর্থবহ কমেন্ট করতে হবে', isRequired: true },
-          { id: 2, description: 'স্প্যাম বা অর্থহীন কমেন্ট গ্রহণযোগ্য নয়', isRequired: true },
-          { id: 3, description: 'পেজ ফলো করা থাকতে হবে', isRequired: true }
+          {
+            id: 1,
+            description: "কমপক্ষে ৫ শব্দের অর্থবহ কমেন্ট করতে হবে",
+            isRequired: true,
+          },
+          {
+            id: 2,
+            description: "স্প্যাম বা অর্থহীন কমেন্ট গ্রহণযোগ্য নয়",
+            isRequired: true,
+          },
+          { id: 3, description: "পেজ ফলো করা থাকতে হবে", isRequired: true },
         ],
-        verificationMethod: 'screenshot'
+        verificationMethod: "screenshot",
       },
       {
         id: 1004,
         title: "ফেসবুক পোস্ট শেয়ার করুন",
-        description: "Flohkaofficiel এর সর্বশেষ পোস্ট আপনার টাইমলাইনে শেয়ার করুন এবং ১৫ টাকা পান",
-        category: 'social-media',
-        platform: 'facebook',
-        taskType: 'share',
+        description:
+          "Flohkaofficiel এর সর্বশেষ পোস্ট আপনার টাইমলাইনে শেয়ার করুন এবং ১৫ টাকা পান",
+        category: "social-media",
+        platform: "facebook",
+        taskType: "share",
         reward: 15,
         targetUrl: "https://www.facebook.com/Flohkaofficiel",
         createdBy: "এডমিন",
         timeLimit: "সীমাহীন",
         completed: 95,
         maxCompletions: 999999,
-        status: 'active',
+        status: "active",
         requirements: [
-          { id: 1, description: 'পোস্ট পাবলিক মোডে শেয়ার করতে হবে', isRequired: true },
-          { id: 2, description: 'শেয়ারের সাথে ভাল কিছু লিখতে হবে', isRequired: true },
-          { id: 3, description: 'পেজ ফলো করা থাকতে ��বে', isRequired: true }
+          {
+            id: 1,
+            description: "পোস্ট পাবলিক মোডে শেয়ার করতে হবে",
+            isRequired: true,
+          },
+          {
+            id: 2,
+            description: "শেয়ারের সাথে ভাল কিছু লিখতে হবে",
+            isRequired: true,
+          },
+          { id: 3, description: "পেজ ফলো করা থাকতে ��বে", isRequired: true },
         ],
-        verificationMethod: 'screenshot'
-      }
+        verificationMethod: "screenshot",
+      },
     ];
 
     // Combine demo tasks with other users' tasks (excluding current user's tasks)
@@ -152,44 +191,58 @@ export default function TaskEarning() {
   };
 
   const loadCompletedTasks = () => {
-    const completed = JSON.parse(localStorage.getItem('completedTasks') || '[]');
+    const completed = JSON.parse(
+      localStorage.getItem("completedTasks") || "[]",
+    );
     setCompletedTasks(completed);
   };
 
-
   const getPlatformIcon = (platform: string) => {
     switch (platform) {
-      case 'facebook': return <Facebook className="h-5 w-5 text-blue-600" />;
-      case 'instagram': return <Instagram className="h-5 w-5 text-pink-600" />;
-      case 'youtube': return <Youtube className="h-5 w-5 text-red-600" />;
-      case 'whatsapp': return <MessageCircle className="h-5 w-5 text-green-600" />;
-      case 'website': return <Eye className="h-5 w-5 text-gray-600" />;
-      case 'other': return <DollarSign className="h-5 w-5 text-purple-600" />;
-      default: return <Eye className="h-5 w-5 text-gray-600" />;
+      case "facebook":
+        return <Facebook className="h-5 w-5 text-blue-600" />;
+      case "instagram":
+        return <Instagram className="h-5 w-5 text-pink-600" />;
+      case "youtube":
+        return <Youtube className="h-5 w-5 text-red-600" />;
+      case "whatsapp":
+        return <MessageCircle className="h-5 w-5 text-green-600" />;
+      case "website":
+        return <Eye className="h-5 w-5 text-gray-600" />;
+      case "other":
+        return <DollarSign className="h-5 w-5 text-purple-600" />;
+      default:
+        return <Eye className="h-5 w-5 text-gray-600" />;
     }
   };
 
   const getTaskTypeText = (taskType: string) => {
     switch (taskType) {
-      case 'follow': return 'ফলো করুন';
-      case 'like': return 'লাইক দিন';
-      case 'share': return 'শেয়ার করুন';
-      case 'comment': return 'কমেন্ট করুন';
-      case 'subscribe': return 'সাবস্ক্রাইব করুন';
-      default: return 'দেখুন';
+      case "follow":
+        return "ফলো করুন";
+      case "like":
+        return "লাইক দিন";
+      case "share":
+        return "শেয়ার করুন";
+      case "comment":
+        return "কমেন্ট করুন";
+      case "subscribe":
+        return "সাবস্ক্রাইব করুন";
+      default:
+        return "দেখুন";
     }
   };
 
   const handleStartTask = (task: Task) => {
     setSelectedTask(task);
     setIsWorking(true);
-    setTrackingStatus('idle');
+    setTrackingStatus("idle");
   };
 
   const handleTaskComplete = () => {
     if (!selectedTask) return;
 
-    setTrackingStatus('checking');
+    setTrackingStatus("checking");
 
     // Enhanced fraud detection simulation
     setTimeout(() => {
@@ -198,26 +251,31 @@ export default function TaskEarning() {
         urlVisited: Math.random() > 0.2, // 80% pass rate
         timeSpent: Math.random() > 0.3, // 70% pass rate (minimum time check)
         genuineAction: Math.random() > 0.25, // 75% pass rate (action verification)
-        userHistory: Math.random() > 0.1 // 90% pass rate (user behavior check)
+        userHistory: Math.random() > 0.1, // 90% pass rate (user behavior check)
       };
 
-      const passedChecks = Object.values(verificationChecks).filter(Boolean).length;
+      const passedChecks =
+        Object.values(verificationChecks).filter(Boolean).length;
       const success = passedChecks >= 3; // At least 3 out of 4 checks must pass
 
-      setTrackingStatus(success ? 'success' : 'failed');
+      setTrackingStatus(success ? "success" : "failed");
 
       if (success && selectedTask) {
         // Add money to user balance
-        const currentBalance = parseFloat(localStorage.getItem('userBalance') || '0');
+        const currentBalance = parseFloat(
+          localStorage.getItem("userBalance") || "0",
+        );
         const newBalance = currentBalance + selectedTask.reward;
-        localStorage.setItem('userBalance', newBalance.toString());
+        localStorage.setItem("userBalance", newBalance.toString());
         // Persist to registered users store
-        const userPhone = localStorage.getItem('userPhone');
-        const users = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+        const userPhone = localStorage.getItem("userPhone");
+        const users = JSON.parse(
+          localStorage.getItem("registeredUsers") || "[]",
+        );
         const idx = users.findIndex((u: any) => u.phone === userPhone);
         if (idx !== -1) {
           users[idx].balance = newBalance;
-          localStorage.setItem('registeredUsers', JSON.stringify(users));
+          localStorage.setItem("registeredUsers", JSON.stringify(users));
         }
 
         // Save completed task record
@@ -227,26 +285,33 @@ export default function TaskEarning() {
           title: selectedTask.title,
           reward: selectedTask.reward,
           completedAt: new Date().toISOString(),
-          verificationMethod: selectedTask.verificationMethod || 'screenshot'
+          verificationMethod: selectedTask.verificationMethod || "screenshot",
         };
 
-        const existingCompleted = JSON.parse(localStorage.getItem('completedTasks') || '[]');
+        const existingCompleted = JSON.parse(
+          localStorage.getItem("completedTasks") || "[]",
+        );
         existingCompleted.push(completedTask);
-        localStorage.setItem('completedTasks', JSON.stringify(existingCompleted));
+        localStorage.setItem(
+          "completedTasks",
+          JSON.stringify(existingCompleted),
+        );
 
         // Update task completion count if it's a demo task
         if (selectedTask.id >= 1001) {
-          setAvailableTasks(prev => prev.map(task =>
-            task.id === selectedTask.id
-              ? { ...task, completed: task.completed + 1 }
-              : task
-          ));
+          setAvailableTasks((prev) =>
+            prev.map((task) =>
+              task.id === selectedTask.id
+                ? { ...task, completed: task.completed + 1 }
+                : task,
+            ),
+          );
         }
 
         setTimeout(() => {
           setIsWorking(false);
           setSelectedTask(null);
-          setTrackingStatus('idle');
+          setTrackingStatus("idle");
           loadCompletedTasks();
         }, 2000);
       }
@@ -254,43 +319,48 @@ export default function TaskEarning() {
   };
 
   const pauseTask = (taskId: number) => {
-    const updatedTasks = myTasks.map(task =>
-      task.id === taskId ? { ...task, status: 'paused' as const } : task
+    const updatedTasks = myTasks.map((task) =>
+      task.id === taskId ? { ...task, status: "paused" as const } : task,
     );
     setMyTasks(updatedTasks);
-    localStorage.setItem('userTasks', JSON.stringify(updatedTasks));
+    localStorage.setItem("userTasks", JSON.stringify(updatedTasks));
   };
 
   const resumeTask = (taskId: number) => {
-    const updatedTasks = myTasks.map(task =>
-      task.id === taskId ? { ...task, status: 'active' as const } : task
+    const updatedTasks = myTasks.map((task) =>
+      task.id === taskId ? { ...task, status: "active" as const } : task,
     );
     setMyTasks(updatedTasks);
-    localStorage.setItem('userTasks', JSON.stringify(updatedTasks));
+    localStorage.setItem("userTasks", JSON.stringify(updatedTasks));
   };
 
   const deleteTask = (taskId: number) => {
-    if (confirm('আপনি কি এই টাস্ক মুছে ফেলতে চান?')) {
-      const task = myTasks.find(t => t.id === taskId);
+    if (confirm("আপনি কি এই টাস্ক মুছে ফেলতে চান?")) {
+      const task = myTasks.find((t) => t.id === taskId);
       if (task) {
         // Refund remaining budget
-        const remainingAmount = (task.maxCompletions - task.completed) * task.reward;
-        const currentBalance = parseFloat(localStorage.getItem('userBalance') || '0');
+        const remainingAmount =
+          (task.maxCompletions - task.completed) * task.reward;
+        const currentBalance = parseFloat(
+          localStorage.getItem("userBalance") || "0",
+        );
         const newBalance = currentBalance + remainingAmount;
-        localStorage.setItem('userBalance', newBalance.toString());
+        localStorage.setItem("userBalance", newBalance.toString());
         // Persist to registered users store
-        const userPhone = localStorage.getItem('userPhone');
-        const users = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+        const userPhone = localStorage.getItem("userPhone");
+        const users = JSON.parse(
+          localStorage.getItem("registeredUsers") || "[]",
+        );
         const idx = users.findIndex((u: any) => u.phone === userPhone);
         if (idx !== -1) {
           users[idx].balance = newBalance;
-          localStorage.setItem('registeredUsers', JSON.stringify(users));
+          localStorage.setItem("registeredUsers", JSON.stringify(users));
         }
       }
 
-      const updatedTasks = myTasks.filter(task => task.id !== taskId);
+      const updatedTasks = myTasks.filter((task) => task.id !== taskId);
       setMyTasks(updatedTasks);
-      localStorage.setItem('userTasks', JSON.stringify(updatedTasks));
+      localStorage.setItem("userTasks", JSON.stringify(updatedTasks));
     }
   };
 
@@ -300,11 +370,11 @@ export default function TaskEarning() {
         {/* Header */}
         <div className="bg-gradient-to-r from-bkash-500 to-bkash-600 p-4 text-white">
           <div className="flex items-center space-x-3">
-            <button 
+            <button
               onClick={() => {
                 setIsWorking(false);
                 setSelectedTask(null);
-                setTrackingStatus('idle');
+                setTrackingStatus("idle");
               }}
               className="p-2 bg-white/20 rounded-full hover:bg-white/30 transition-colors"
             >
@@ -320,11 +390,17 @@ export default function TaskEarning() {
             <div className="flex items-center space-x-3 mb-4">
               {getPlatformIcon(selectedTask.platform)}
               <div className="flex-1">
-                <h3 className="font-bold text-gray-900">{selectedTask.title}</h3>
-                <p className="text-sm text-gray-600">{selectedTask.description}</p>
+                <h3 className="font-bold text-gray-900">
+                  {selectedTask.title}
+                </h3>
+                <p className="text-sm text-gray-600">
+                  {selectedTask.description}
+                </p>
               </div>
               <div className="text-right">
-                <p className="text-xl font-bold text-bkash-500">৳{selectedTask.reward}</p>
+                <p className="text-xl font-bold text-bkash-500">
+                  ৳{selectedTask.reward}
+                </p>
               </div>
             </div>
           </div>
@@ -357,7 +433,7 @@ export default function TaskEarning() {
               <span>লিংকে যান</span>
             </a>
 
-            {trackingStatus === 'idle' && (
+            {trackingStatus === "idle" && (
               <button
                 onClick={handleTaskComplete}
                 className="w-full bg-green-600 hover:bg-green-700 text-white py-4 rounded-xl font-bold text-lg transition-colors"
@@ -366,39 +442,50 @@ export default function TaskEarning() {
               </button>
             )}
 
-            {trackingStatus === 'checking' && (
+            {trackingStatus === "checking" && (
               <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4">
                 <div className="flex items-center space-x-3">
                   <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-yellow-600"></div>
-                  <p className="text-yellow-800 font-medium">যাচাই করা হচ্ছে...</p>
+                  <p className="text-yellow-800 font-medium">
+                    যাচাই করা হচ্ছে...
+                  </p>
                 </div>
               </div>
             )}
 
-            {trackingStatus === 'success' && (
+            {trackingStatus === "success" && (
               <div className="bg-green-50 border border-green-200 rounded-xl p-4">
                 <div className="flex items-center space-x-3">
                   <CheckCircle className="h-5 w-5 text-green-600" />
                   <div>
-                    <p className="text-green-800 font-bold">সফল! ৳{selectedTask.reward} আপনার অ্যাকাউন্টে যোগ হয়েছে</p>
+                    <p className="text-green-800 font-bold">
+                      সফল! ৳{selectedTask.reward} আপনার অ্যাকাউন্টে যোগ হয়েছে
+                    </p>
                     <p className="text-green-600 text-sm">ধন্যবাদ!</p>
                   </div>
                 </div>
               </div>
             )}
 
-            {trackingStatus === 'failed' && (
+            {trackingStatus === "failed" && (
               <div className="bg-red-50 border border-red-200 rounded-xl p-4">
                 <div className="flex items-center space-x-3">
                   <AlertTriangle className="h-5 w-5 text-red-600" />
                   <div>
-                    <p className="text-red-800 font-bold">কাজটি যাচাই করা যায়নি</p>
-                    <p className="text-red-600 text-sm">সম্ভাব্য কারণ: অপর্যাপ্ত সময়, ভুল URL, বা প্রতারণামূলক কার্যকলাপ</p>
-                    <p className="text-red-600 text-xs mt-1">আমাদের স্বয়ংক্রিয় সিস্টেম প্রতারণা প্রতিরোধে কাজ করে</p>
+                    <p className="text-red-800 font-bold">
+                      কাজটি যাচাই করা যায়নি
+                    </p>
+                    <p className="text-red-600 text-sm">
+                      সম্ভাব্য কারণ: অপর্যাপ্ত সময়, ভুল URL, বা প্রতারণামূলক
+                      কার্যকলাপ
+                    </p>
+                    <p className="text-red-600 text-xs mt-1">
+                      আমাদের স্বয়ংক্রিয় সিস্টেম প্রতারণা প্রতিরোধে কাজ করে
+                    </p>
                   </div>
                 </div>
                 <button
-                  onClick={() => setTrackingStatus('idle')}
+                  onClick={() => setTrackingStatus("idle")}
                   className="mt-3 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
                 >
                   আবার চেষ্টা করুন
@@ -417,13 +504,19 @@ export default function TaskEarning() {
       <div className="bg-gradient-to-r from-bkash-500 to-bkash-600 p-4 text-white">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center space-x-3">
-            <Link to="/" className="p-2 bg-white/20 rounded-full hover:bg-white/30 transition-colors">
+            <Link
+              to="/"
+              className="p-2 bg-white/20 rounded-full hover:bg-white/30 transition-colors"
+            >
               <ArrowLeft className="h-5 w-5" />
             </Link>
             <div>
               <h1 className="text-xl font-bold">টাস্ক আর্নিং</h1>
               <p className="text-sm text-white/80">
-                ব্যালেন্স: ৳{parseFloat(localStorage.getItem('userBalance') || '0').toLocaleString()}
+                ব্যালেন্স: ৳
+                {parseFloat(
+                  localStorage.getItem("userBalance") || "0",
+                ).toLocaleString()}
               </p>
             </div>
           </div>
@@ -438,21 +531,21 @@ export default function TaskEarning() {
         {/* Tab Navigation */}
         <div className="flex space-x-1 bg-white/20 rounded-xl p-1">
           <button
-            onClick={() => setActiveTab('browse')}
+            onClick={() => setActiveTab("browse")}
             className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-colors ${
-              activeTab === 'browse'
-                ? 'bg-white text-bkash-500 shadow-sm'
-                : 'text-white/80 hover:text-white'
+              activeTab === "browse"
+                ? "bg-white text-bkash-500 shadow-sm"
+                : "text-white/80 hover:text-white"
             }`}
           >
             কাজ খুঁজুন ({availableTasks.length})
           </button>
           <button
-            onClick={() => setActiveTab('myTasks')}
+            onClick={() => setActiveTab("myTasks")}
             className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-colors ${
-              activeTab === 'myTasks'
-                ? 'bg-white text-bkash-500 shadow-sm'
-                : 'text-white/80 hover:text-white'
+              activeTab === "myTasks"
+                ? "bg-white text-bkash-500 shadow-sm"
+                : "text-white/80 hover:text-white"
             }`}
           >
             আমার টাস্ক ({myTasks.length})
@@ -462,7 +555,7 @@ export default function TaskEarning() {
 
       <div className="p-4">
         {/* Browse Tasks */}
-        {activeTab === 'browse' && (
+        {activeTab === "browse" && (
           <div className="space-y-4">
             {/* Search and Filter */}
             <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
@@ -481,107 +574,152 @@ export default function TaskEarning() {
               </div>
             </div>
 
-            {availableTasks.filter(task => task.status === 'active' && task.completed < task.maxCompletions).map((task) => {
-              // Check if user already completed this task
-              const alreadyCompleted = completedTasks.some(completed => completed.taskId === task.id);
-              const progress = (task.completed / task.maxCompletions) * 100;
+            {availableTasks
+              .filter(
+                (task) =>
+                  task.status === "active" &&
+                  task.completed < task.maxCompletions,
+              )
+              .map((task) => {
+                // Check if user already completed this task
+                const alreadyCompleted = completedTasks.some(
+                  (completed) => completed.taskId === task.id,
+                );
+                const progress = (task.completed / task.maxCompletions) * 100;
 
-              return (
-                <div key={task.id} className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
-                  <div className="flex items-center space-x-3 mb-3">
-                    {getPlatformIcon(task.platform)}
-                    <div className="flex-1">
-                      <div className="flex items-center space-x-2">
-                        <h3 className="font-bold text-gray-900">{task.title}</h3>
-                        {task.category && (
-                          <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">
-                            {task.category === 'social-media' ? 'সোশ্যাল' :
-                             task.category === 'content-creation' ? 'কনটেন্ট' :
-                             task.category === 'review-rating' ? 'রিভিউ' : task.category}
+                return (
+                  <div
+                    key={task.id}
+                    className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100"
+                  >
+                    <div className="flex items-center space-x-3 mb-3">
+                      {getPlatformIcon(task.platform)}
+                      <div className="flex-1">
+                        <div className="flex items-center space-x-2">
+                          <h3 className="font-bold text-gray-900">
+                            {task.title}
+                          </h3>
+                          {task.category && (
+                            <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">
+                              {task.category === "social-media"
+                                ? "সোশ্যাল"
+                                : task.category === "content-creation"
+                                  ? "কনটেন্ট"
+                                  : task.category === "review-rating"
+                                    ? "রিভিউ"
+                                    : task.category}
+                            </span>
+                          )}
+                        </div>
+                        <p className="text-sm text-gray-600 mb-1">
+                          {task.description}
+                        </p>
+                        <p className="text-xs text-gray-500">
+                          প্রকাশক: {task.createdBy}
+                        </p>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-xl font-bold text-bkash-500">
+                          ৳{task.reward}
+                        </p>
+                        <p className="text-xs text-gray-500">
+                          {task.timeLimit}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Progress Bar */}
+                    <div className="mb-3">
+                      <div className="flex justify-between text-xs text-gray-500 mb-1">
+                        <span>সম্পন্ন</span>
+                        <span>
+                          {task.completed}/{task.maxCompletions}
+                        </span>
+                      </div>
+                      <div className="w-full bg-gray-200 rounded-full h-1.5">
+                        <div
+                          className="bg-green-500 h-1.5 rounded-full transition-all duration-300"
+                          style={{ width: `${progress}%` }}
+                        ></div>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-4 text-sm text-gray-600">
+                        <div className="flex items-center space-x-1">
+                          <CheckCircle className="h-4 w-4" />
+                          <span>
+                            {task.completed}/{task.maxCompletions} সম্পন্ন
                           </span>
-                        )}
+                        </div>
+                        <div className="flex items-center space-x-1">
+                          <Clock className="h-4 w-4" />
+                          <span>{task.timeLimit}</span>
+                        </div>
                       </div>
-                      <p className="text-sm text-gray-600 mb-1">{task.description}</p>
-                      <p className="text-xs text-gray-500">প্রকাশক: {task.createdBy}</p>
-                    </div>
-                    <div className="text-right">
-                      <p className="text-xl font-bold text-bkash-500">৳{task.reward}</p>
-                      <p className="text-xs text-gray-500">{task.timeLimit}</p>
-                    </div>
-                  </div>
-
-                  {/* Progress Bar */}
-                  <div className="mb-3">
-                    <div className="flex justify-between text-xs text-gray-500 mb-1">
-                      <span>সম্পন্ন</span>
-                      <span>{task.completed}/{task.maxCompletions}</span>
-                    </div>
-                    <div className="w-full bg-gray-200 rounded-full h-1.5">
-                      <div
-                        className="bg-green-500 h-1.5 rounded-full transition-all duration-300"
-                        style={{ width: `${progress}%` }}
-                      ></div>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-4 text-sm text-gray-600">
-                      <div className="flex items-center space-x-1">
-                        <CheckCircle className="h-4 w-4" />
-                        <span>{task.completed}/{task.maxCompletions} সম্পন্ন</span>
-                      </div>
-                      <div className="flex items-center space-x-1">
-                        <Clock className="h-4 w-4" />
-                        <span>{task.timeLimit}</span>
-                      </div>
-                    </div>
-                    {alreadyCompleted ? (
-                      <div className="text-green-600 text-sm font-medium px-4 py-2 bg-green-50 rounded-xl">
-                        ✓ স��্পন্ন
-                      </div>
-                    ) : (
-                      <button
-                        onClick={() => handleStartTask(task)}
-                        disabled={task.completed >= task.maxCompletions}
-                        className={`px-4 py-2 rounded-xl text-sm font-medium transition-colors ${
-                          task.completed >= task.maxCompletions
-                            ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
-                            : 'bg-bkash-500 hover:bg-bkash-600 text-white'
-                        }`}
-                      >
-                        {task.completed >= task.maxCompletions ? 'শেষ' : 'শুরু করুন'}
-                      </button>
-                    )}
-                  </div>
-
-                  {/* Task Requirements Preview */}
-                  {task.requirements && task.requirements.length > 0 && (
-                    <div className="mt-3 p-3 bg-blue-50 rounded-xl border border-blue-200">
-                      <p className="text-xs font-medium text-blue-800 mb-1">কাজের শর্ত:</p>
-                      <p className="text-xs text-blue-700">{task.requirements[0].description}</p>
-                      {task.requirements.length > 1 && (
-                        <p className="text-xs text-blue-600 mt-1">+{task.requirements.length - 1} আরো শর্ত</p>
+                      {alreadyCompleted ? (
+                        <div className="text-green-600 text-sm font-medium px-4 py-2 bg-green-50 rounded-xl">
+                          ✓ স��্পন্ন
+                        </div>
+                      ) : (
+                        <button
+                          onClick={() => handleStartTask(task)}
+                          disabled={task.completed >= task.maxCompletions}
+                          className={`px-4 py-2 rounded-xl text-sm font-medium transition-colors ${
+                            task.completed >= task.maxCompletions
+                              ? "bg-gray-200 text-gray-500 cursor-not-allowed"
+                              : "bg-bkash-500 hover:bg-bkash-600 text-white"
+                          }`}
+                        >
+                          {task.completed >= task.maxCompletions
+                            ? "শেষ"
+                            : "শুরু করুন"}
+                        </button>
                       )}
                     </div>
-                  )}
-                </div>
-              );
-            })}
 
-            {availableTasks.filter(task => task.status === 'active' && task.completed < task.maxCompletions).length === 0 && (
+                    {/* Task Requirements Preview */}
+                    {task.requirements && task.requirements.length > 0 && (
+                      <div className="mt-3 p-3 bg-blue-50 rounded-xl border border-blue-200">
+                        <p className="text-xs font-medium text-blue-800 mb-1">
+                          কাজের শর্ত:
+                        </p>
+                        <p className="text-xs text-blue-700">
+                          {task.requirements[0].description}
+                        </p>
+                        {task.requirements.length > 1 && (
+                          <p className="text-xs text-blue-600 mt-1">
+                            +{task.requirements.length - 1} আরো শর্ত
+                          </p>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+
+            {availableTasks.filter(
+              (task) =>
+                task.status === "active" &&
+                task.completed < task.maxCompletions,
+            ).length === 0 && (
               <div className="text-center py-12">
                 <div className="bg-gray-100 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4">
                   <Eye className="h-10 w-10 text-gray-400" />
                 </div>
-                <p className="text-gray-500 mb-2 text-lg font-medium">কোনো টাস্ক পাওয়া যায়নি</p>
-                <p className="text-gray-400 text-sm">নতুন টাস্ক খুঁজে আসুন পরে</p>
+                <p className="text-gray-500 mb-2 text-lg font-medium">
+                  কোনো টাস্ক পাওয়া যায়নি
+                </p>
+                <p className="text-gray-400 text-sm">
+                  নতুন টাস্ক খুঁজে আসুন পরে
+                </p>
               </div>
             )}
           </div>
         )}
 
         {/* My Tasks */}
-        {activeTab === 'myTasks' && (
+        {activeTab === "myTasks" && (
           <div className="space-y-4">
             {/* Task Statistics */}
             {myTasks.length > 0 && (
@@ -592,7 +730,9 @@ export default function TaskEarning() {
                 </h3>
                 <div className="grid grid-cols-3 gap-4 text-center">
                   <div>
-                    <p className="text-xl font-bold text-bkash-500">{myTasks.length}</p>
+                    <p className="text-xl font-bold text-bkash-500">
+                      {myTasks.length}
+                    </p>
                     <p className="text-xs text-gray-500">মোট টাস্ক</p>
                   </div>
                   <div>
@@ -603,7 +743,11 @@ export default function TaskEarning() {
                   </div>
                   <div>
                     <p className="text-xl font-bold text-orange-600">
-                      ৳{myTasks.reduce((sum, task) => sum + (task.completed * task.reward), 0)}
+                      ৳
+                      {myTasks.reduce(
+                        (sum, task) => sum + task.completed * task.reward,
+                        0,
+                      )}
                     </p>
                     <p className="text-xs text-gray-500">পরিশোধিত</p>
                   </div>
@@ -612,28 +756,45 @@ export default function TaskEarning() {
             )}
 
             {myTasks.map((task) => (
-              <div key={task.id} className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
+              <div
+                key={task.id}
+                className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100"
+              >
                 <div className="flex items-center space-x-3 mb-3">
                   {getPlatformIcon(task.platform)}
                   <div className="flex-1">
                     <div className="flex items-center space-x-2">
                       <h3 className="font-bold text-gray-900">{task.title}</h3>
-                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                        task.status === 'active' ? 'bg-green-100 text-green-800' :
-                        task.status === 'paused' ? 'bg-yellow-100 text-yellow-800' :
-                        'bg-gray-100 text-gray-800'
-                      }`}>
-                        {task.status === 'active' ? 'সক্রিয়' :
-                         task.status === 'paused' ? 'বিরতি' : 'সম্পন্ন'}
+                      <span
+                        className={`px-2 py-1 rounded-full text-xs font-medium ${
+                          task.status === "active"
+                            ? "bg-green-100 text-green-800"
+                            : task.status === "paused"
+                              ? "bg-yellow-100 text-yellow-800"
+                              : "bg-gray-100 text-gray-800"
+                        }`}
+                      >
+                        {task.status === "active"
+                          ? "সক্রিয়"
+                          : task.status === "paused"
+                            ? "বিরতি"
+                            : "সম্পন্ন"}
                       </span>
                     </div>
-                    <p className="text-sm text-gray-600 mb-1">{task.description}</p>
+                    <p className="text-sm text-gray-600 mb-1">
+                      {task.description}
+                    </p>
                     <p className="text-xs text-gray-500">
-                      তৈরি: {task.createdAt ? new Date(task.createdAt).toLocaleDateString('bn-BD') : 'আজ'}
+                      তৈরি:{" "}
+                      {task.createdAt
+                        ? new Date(task.createdAt).toLocaleDateString("bn-BD")
+                        : "আজ"}
                     </p>
                   </div>
                   <div className="text-right">
-                    <p className="text-xl font-bold text-green-600">৳{task.reward}</p>
+                    <p className="text-xl font-bold text-green-600">
+                      ৳{task.reward}
+                    </p>
                     <p className="text-xs text-gray-500">প্রতি কাজে</p>
                   </div>
                 </div>
@@ -642,24 +803,33 @@ export default function TaskEarning() {
                 <div className="mb-3">
                   <div className="flex justify-between text-sm text-gray-600 mb-1">
                     <span>অগ্রগতি</span>
-                    <span>{task.completed}/{task.maxCompletions}</span>
+                    <span>
+                      {task.completed}/{task.maxCompletions}
+                    </span>
                   </div>
                   <div className="w-full bg-gray-200 rounded-full h-2">
                     <div
                       className="bg-bkash-500 h-2 rounded-full transition-all duration-300"
-                      style={{ width: `${(task.completed / task.maxCompletions) * 100}%` }}
+                      style={{
+                        width: `${(task.completed / task.maxCompletions) * 100}%`,
+                      }}
                     ></div>
                   </div>
                 </div>
 
                 <div className="flex items-center justify-between">
                   <div className="text-sm text-gray-600">
-                    <p>সম্পন্ন: {task.completed}/{task.maxCompletions}</p>
+                    <p>
+                      সম্পন্ন: {task.completed}/{task.maxCompletions}
+                    </p>
                     <p>খরচ হয়েছে: ৳{task.completed * task.reward}</p>
-                    <p>বাকি বাজেট: ৳{(task.maxCompletions - task.completed) * task.reward}</p>
+                    <p>
+                      বাকি বাজেট: ৳
+                      {(task.maxCompletions - task.completed) * task.reward}
+                    </p>
                   </div>
                   <div className="flex space-x-2">
-                    {task.status === 'active' ? (
+                    {task.status === "active" ? (
                       <button
                         onClick={() => pauseTask(task.id)}
                         className="bg-yellow-100 hover:bg-yellow-200 text-yellow-700 px-3 py-2 rounded-lg text-sm transition-colors flex items-center space-x-1"
@@ -667,7 +837,7 @@ export default function TaskEarning() {
                         <Pause className="h-4 w-4" />
                         <span>বিরতি</span>
                       </button>
-                    ) : task.status === 'paused' ? (
+                    ) : task.status === "paused" ? (
                       <button
                         onClick={() => resumeTask(task.id)}
                         className="bg-green-100 hover:bg-green-200 text-green-700 px-3 py-2 rounded-lg text-sm transition-colors flex items-center space-x-1"
@@ -697,8 +867,12 @@ export default function TaskEarning() {
                 <div className="bg-gray-100 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4">
                   <Plus className="h-10 w-10 text-gray-400" />
                 </div>
-                <p className="text-gray-500 mb-2 text-lg font-medium">আপনার কোনো টাস্ক নেই</p>
-                <p className="text-gray-400 text-sm mb-6">আয় করতে নতুন টাস্ক তৈরি করুন</p>
+                <p className="text-gray-500 mb-2 text-lg font-medium">
+                  আপনার কোনো টাস্ক নেই
+                </p>
+                <p className="text-gray-400 text-sm mb-6">
+                  আয় করতে নতুন টাস্ক তৈরি করুন
+                </p>
                 <Link
                   to="/task-earning/create"
                   className="bg-bkash-500 hover:bg-bkash-600 text-white px-6 py-3 rounded-xl font-medium transition-colors inline-flex items-center space-x-2"

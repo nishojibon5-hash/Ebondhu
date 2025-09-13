@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { 
+import {
   ArrowLeft,
   Share2,
   Copy,
@@ -10,7 +10,7 @@ import {
   WhatsApp,
   Facebook,
   MessageCircle,
-  CheckCircle
+  CheckCircle,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -23,14 +23,14 @@ interface ReferralData {
     name: string;
     phone: string;
     joinDate: string;
-    status: 'completed' | 'pending';
+    status: "completed" | "pending";
     reward: number;
   }>;
 }
 
 export default function Refer() {
   const [referralData, setReferralData] = useState<ReferralData | null>(null);
-  const [shareMethod, setShareMethod] = useState<'link' | 'code'>('link');
+  const [shareMethod, setShareMethod] = useState<"link" | "code">("link");
 
   useEffect(() => {
     loadReferralData();
@@ -38,11 +38,13 @@ export default function Refer() {
 
   const loadReferralData = () => {
     // Generate referral code from user phone
-    const userPhone = localStorage.getItem('userPhone') || '';
+    const userPhone = localStorage.getItem("userPhone") || "";
     const referralCode = `LB${userPhone.slice(-6)}`; // LB + last 6 digits
 
     // Load all referral data
-    const allReferralData = JSON.parse(localStorage.getItem('referralData') || '{}');
+    const allReferralData = JSON.parse(
+      localStorage.getItem("referralData") || "{}",
+    );
 
     // Get user-specific data
     if (allReferralData[userPhone]) {
@@ -53,12 +55,12 @@ export default function Refer() {
         referralCode,
         totalReferrals: 0,
         totalEarnings: 0,
-        referredUsers: []
+        referredUsers: [],
       };
 
       // Save to all referral data
       allReferralData[userPhone] = newData;
-      localStorage.setItem('referralData', JSON.stringify(allReferralData));
+      localStorage.setItem("referralData", JSON.stringify(allReferralData));
       setReferralData(newData);
     }
   };
@@ -68,17 +70,17 @@ export default function Refer() {
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
-    alert('কপি করা হয়েছে!');
+    alert("কপি করা হয়েছে!");
   };
 
   const shareViaWhatsApp = () => {
     const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
-    window.open(whatsappUrl, '_blank');
+    window.open(whatsappUrl, "_blank");
   };
 
   const shareViaFacebook = () => {
     const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareLink)}`;
-    window.open(facebookUrl, '_blank');
+    window.open(facebookUrl, "_blank");
   };
 
   const shareViaSMS = () => {
@@ -91,12 +93,17 @@ export default function Refer() {
       {/* Header */}
       <div className="bg-gradient-to-r from-orange-500 to-orange-600 p-4 text-white">
         <div className="flex items-center space-x-3 mb-4">
-          <Link to="/" className="p-2 bg-white/20 rounded-full hover:bg-white/30 transition-colors">
+          <Link
+            to="/"
+            className="p-2 bg-white/20 rounded-full hover:bg-white/30 transition-colors"
+          >
             <ArrowLeft className="h-5 w-5" />
           </Link>
           <div>
             <h1 className="text-xl font-bold">রেফার করুন</h1>
-            <p className="text-sm text-orange-100">বন্ধুদের রেফার করে আয় করুন</p>
+            <p className="text-sm text-orange-100">
+              বন্ধুদের রেফার করে আয় করুন
+            </p>
           </div>
         </div>
       </div>
@@ -108,7 +115,9 @@ export default function Refer() {
             <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-2">
               <Users className="h-6 w-6 text-blue-600" />
             </div>
-            <p className="text-2xl font-bold text-gray-900">{referralData?.totalReferrals || 0}</p>
+            <p className="text-2xl font-bold text-gray-900">
+              {referralData?.totalReferrals || 0}
+            </p>
             <p className="text-sm text-gray-600">মোট রেফার</p>
           </div>
 
@@ -116,7 +125,9 @@ export default function Refer() {
             <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-2">
               <DollarSign className="h-6 w-6 text-green-600" />
             </div>
-            <p className="text-2xl font-bold text-green-600">৳{referralData?.totalEarnings || 0}</p>
+            <p className="text-2xl font-bold text-green-600">
+              ৳{referralData?.totalEarnings || 0}
+            </p>
             <p className="text-sm text-gray-600">মোট আয়</p>
           </div>
         </div>
@@ -127,29 +138,47 @@ export default function Refer() {
             <Gift className="h-5 w-5 text-orange-500" />
             <span>কিভাবে কাজ করে</span>
           </h2>
-          
+
           <div className="space-y-4">
             <div className="flex items-start space-x-3">
-              <div className="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center text-sm font-bold text-orange-600">1</div>
+              <div className="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center text-sm font-bold text-orange-600">
+                1
+              </div>
               <div>
-                <p className="font-medium text-gray-900">আপনার রেফার কোড শেয়ার করুন</p>
-                <p className="text-sm text-gray-600">বন্ধুদের কাছে আপনার রেফার কোড পাঠান</p>
+                <p className="font-medium text-gray-900">
+                  আপনার রেফার কোড শেয়ার করুন
+                </p>
+                <p className="text-sm text-gray-600">
+                  বন্ধুদের কাছে আপনার রেফার কোড পাঠান
+                </p>
               </div>
             </div>
-            
+
             <div className="flex items-start space-x-3">
-              <div className="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center text-sm font-bold text-orange-600">2</div>
+              <div className="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center text-sm font-bold text-orange-600">
+                2
+              </div>
               <div>
-                <p className="font-medium text-gray-900">বন্ধু রেজিস্��্রেশন করবে</p>
-                <p className="text-sm text-gray-600">আপনার কোড দিয়ে নতুন অ্যাকাউন্ট তৈরি করবে</p>
+                <p className="font-medium text-gray-900">
+                  বন্ধু রেজিস্��্রেশন করবে
+                </p>
+                <p className="text-sm text-gray-600">
+                  আপনার কোড দিয়ে নতুন অ্যাকাউন্ট তৈরি করবে
+                </p>
               </div>
             </div>
-            
+
             <div className="flex items-start space-x-3">
-              <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center text-sm font-bold text-green-600">3</div>
+              <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center text-sm font-bold text-green-600">
+                3
+              </div>
               <div>
-                <p className="font-medium text-gray-900">১৫ টাকা পুরস্কার পান</p>
-                <p className="text-sm text-gray-600">প্রতি সফল রেফারে ১৫ টাকা আপনার ব্যালেন্সে যোগ হবে</p>
+                <p className="font-medium text-gray-900">
+                  ১৫ টাকা পুরস্কার পান
+                </p>
+                <p className="text-sm text-gray-600">
+                  প্রতি সফল রেফারে ১৫ টাকা আপনার ব্যালেন্সে যোগ হবে
+                </p>
               </div>
             </div>
           </div>
@@ -157,26 +186,28 @@ export default function Refer() {
 
         {/* Referral Code Section */}
         <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
-          <h2 className="text-lg font-bold text-gray-900 mb-4">���পনার রেফার কোড</h2>
-          
+          <h2 className="text-lg font-bold text-gray-900 mb-4">
+            ���পনার রেফার কোড
+          </h2>
+
           {/* Tab Switch */}
           <div className="flex space-x-1 bg-gray-100 rounded-xl p-1 mb-4">
             <button
-              onClick={() => setShareMethod('code')}
+              onClick={() => setShareMethod("code")}
               className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-colors ${
-                shareMethod === 'code'
-                  ? 'bg-white text-orange-600 shadow-sm'
-                  : 'text-gray-600 hover:text-gray-900'
+                shareMethod === "code"
+                  ? "bg-white text-orange-600 shadow-sm"
+                  : "text-gray-600 hover:text-gray-900"
               }`}
             >
               রেফার কোড
             </button>
             <button
-              onClick={() => setShareMethod('link')}
+              onClick={() => setShareMethod("link")}
               className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-colors ${
-                shareMethod === 'link'
-                  ? 'bg-white text-orange-600 shadow-sm'
-                  : 'text-gray-600 hover:text-gray-900'
+                shareMethod === "link"
+                  ? "bg-white text-orange-600 shadow-sm"
+                  : "text-gray-600 hover:text-gray-900"
               }`}
             >
               লিংক
@@ -187,10 +218,18 @@ export default function Refer() {
           <div className="bg-gray-50 rounded-xl p-3 mb-4">
             <div className="flex items-center justify-between">
               <p className="font-mono text-lg font-bold text-gray-900">
-                {shareMethod === 'code' ? referralData?.referralCode : shareLink}
+                {shareMethod === "code"
+                  ? referralData?.referralCode
+                  : shareLink}
               </p>
               <button
-                onClick={() => copyToClipboard(shareMethod === 'code' ? referralData?.referralCode || '' : shareLink)}
+                onClick={() =>
+                  copyToClipboard(
+                    shareMethod === "code"
+                      ? referralData?.referralCode || ""
+                      : shareLink,
+                  )
+                }
                 className="p-2 bg-orange-100 hover:bg-orange-200 rounded-lg transition-colors"
               >
                 <Copy className="h-4 w-4 text-orange-600" />
@@ -228,12 +267,18 @@ export default function Refer() {
 
         {/* Referred Users */}
         <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
-          <h2 className="text-lg font-bold text-gray-900 mb-4">আপনার রেফার তালিকা</h2>
-          
-          {referralData?.referredUsers && referralData.referredUsers.length > 0 ? (
+          <h2 className="text-lg font-bold text-gray-900 mb-4">
+            আপনার রেফার তালিকা
+          </h2>
+
+          {referralData?.referredUsers &&
+          referralData.referredUsers.length > 0 ? (
             <div className="space-y-3">
               {referralData.referredUsers.map((user) => (
-                <div key={user.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-xl">
+                <div
+                  key={user.id}
+                  className="flex items-center justify-between p-3 bg-gray-50 rounded-xl"
+                >
                   <div className="flex items-center space-x-3">
                     <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center">
                       <Users className="h-5 w-5 text-gray-600" />
@@ -245,15 +290,21 @@ export default function Refer() {
                     </div>
                   </div>
                   <div className="text-right">
-                    <div className={`flex items-center space-x-1 ${
-                      user.status === 'completed' ? 'text-green-600' : 'text-yellow-600'
-                    }`}>
+                    <div
+                      className={`flex items-center space-x-1 ${
+                        user.status === "completed"
+                          ? "text-green-600"
+                          : "text-yellow-600"
+                      }`}
+                    >
                       <CheckCircle className="h-4 w-4" />
                       <span className="text-sm font-medium">
-                        {user.status === 'completed' ? 'সম্পন্ন' : 'অপেক্ষমাণ'}
+                        {user.status === "completed" ? "সম্পন্ন" : "অপেক্ষমাণ"}
                       </span>
                     </div>
-                    <p className="text-sm font-bold text-gray-900">৳{user.reward}</p>
+                    <p className="text-sm font-bold text-gray-900">
+                      ৳{user.reward}
+                    </p>
                   </div>
                 </div>
               ))}
@@ -264,7 +315,9 @@ export default function Refer() {
                 <Users className="h-8 w-8 text-gray-400" />
               </div>
               <p className="text-gray-500 mb-2">এখনও কোনো রেফার নেই</p>
-              <p className="text-sm text-gray-400">বন্ধুদের রেফার করে আয় শুরু করুন</p>
+              <p className="text-sm text-gray-400">
+                বন্ধুদের রেফার করে আয় শুরু করুন
+              </p>
             </div>
           )}
         </div>

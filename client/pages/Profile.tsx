@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
-import { 
-  User, 
-  Shield, 
-  CreditCard, 
-  Bell, 
-  HelpCircle, 
-  LogOut, 
+import {
+  User,
+  Shield,
+  CreditCard,
+  Bell,
+  HelpCircle,
+  LogOut,
   ChevronRight,
   Camera,
   Edit,
@@ -17,7 +17,7 @@ import {
   Upload,
   Eye,
   EyeOff,
-  Lock
+  Lock,
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { Language } from "../App";
@@ -50,13 +50,13 @@ const translations = {
     save: "সংরক্ষণ",
     cancel: "বাতিল",
     changePhoto: "ছবি পরিবর্তন",
-    uploadPhoto: "ছবি আপলোড"
+    uploadPhoto: "ছবি আপলোড",
   },
   bn: {
     profile: "প্রোফাইল",
     editProfile: "প্রোফাইল সম্পাদনা",
     personalInfo: "ব্যক্তিগত তথ্য",
-    accountSettings: "অ্যাকাউন্ট সেটিংস", 
+    accountSettings: "অ্যাকাউন্ট সেটিংস",
     security: "নিরাপত্তা ও গোপনীয়তা",
     notifications: "বিজ্ঞপ্তি",
     helpSupport: "সহায়তা ও সাপোর্ট",
@@ -75,8 +75,8 @@ const translations = {
     save: "সংরক্ষণ",
     cancel: "বাতিল",
     changePhoto: "ছবি পরিবর্তন",
-    uploadPhoto: "ছবি আপলোড"
-  }
+    uploadPhoto: "ছবি আপলোড",
+  },
 };
 
 export default function Profile({ language }: ProfileProps) {
@@ -87,7 +87,7 @@ export default function Profile({ language }: ProfileProps) {
   const [showPhotoUpload, setShowPhotoUpload] = useState(false);
   const [showPin, setShowPin] = useState(false);
   const [showNewPin, setShowNewPin] = useState(false);
-  
+
   const [userInfo, setUserInfo] = useState({
     name: "",
     phone: "",
@@ -95,53 +95,53 @@ export default function Profile({ language }: ProfileProps) {
     profilePhoto: null as string | null,
     kycStatus: "verified",
     accountType: "ব্যক্তিগত অ্যাকাউন্ট",
-    joinDate: "জানুয়ারি ২০২৪"
+    joinDate: "জানুয়ারি ২০২৪",
   });
 
   const [editForm, setEditForm] = useState({
     name: "",
-    email: ""
+    email: "",
   });
 
   const [pinForm, setPinForm] = useState({
     currentPin: "",
     newPin: "",
-    confirmPin: ""
+    confirmPin: "",
   });
 
   // Load user data from localStorage
   useEffect(() => {
-    const storedName = localStorage.getItem('userName') || '';
-    const storedPhone = localStorage.getItem('userPhone') || '';
-    const storedEmail = localStorage.getItem('userEmail') || '';
-    const storedPhoto = localStorage.getItem('userPhoto');
+    const storedName = localStorage.getItem("userName") || "";
+    const storedPhone = localStorage.getItem("userPhone") || "";
+    const storedEmail = localStorage.getItem("userEmail") || "";
+    const storedPhoto = localStorage.getItem("userPhoto");
 
-    setUserInfo(prev => ({
+    setUserInfo((prev) => ({
       ...prev,
       name: storedName,
       phone: storedPhone,
       email: storedEmail,
-      profilePhoto: storedPhoto
+      profilePhoto: storedPhoto,
     }));
 
     setEditForm({
       name: storedName,
-      email: storedEmail
+      email: storedEmail,
     });
   }, []);
 
   const handleEditSave = () => {
     // Update localStorage
-    localStorage.setItem('userName', editForm.name);
-    localStorage.setItem('userEmail', editForm.email);
-    
+    localStorage.setItem("userName", editForm.name);
+    localStorage.setItem("userEmail", editForm.email);
+
     // Update state
-    setUserInfo(prev => ({
+    setUserInfo((prev) => ({
       ...prev,
       name: editForm.name,
-      email: editForm.email
+      email: editForm.email,
     }));
-    
+
     setIsEditing(false);
   };
 
@@ -151,10 +151,10 @@ export default function Profile({ language }: ProfileProps) {
       const reader = new FileReader();
       reader.onload = (e) => {
         const result = e.target?.result as string;
-        localStorage.setItem('userPhoto', result);
-        setUserInfo(prev => ({
+        localStorage.setItem("userPhoto", result);
+        setUserInfo((prev) => ({
           ...prev,
-          profilePhoto: result
+          profilePhoto: result,
         }));
         setShowPhotoUpload(false);
       };
@@ -163,50 +163,50 @@ export default function Profile({ language }: ProfileProps) {
   };
 
   const handlePinChange = () => {
-    const currentStoredPin = localStorage.getItem('userPin') || '';
+    const currentStoredPin = localStorage.getItem("userPin") || "";
     if (pinForm.currentPin !== currentStoredPin) {
-      alert('বর্তমান পিন ভুল');
+      alert("বর্তমান পিন ভুল");
       return;
     }
 
     if (pinForm.newPin.length !== 5) {
-      alert('নতুন পিন ৫ সংখ্যার হতে হবে');
+      alert("নতুন পিন ৫ সংখ্যার হতে হবে");
       return;
     }
 
     if (pinForm.newPin !== pinForm.confirmPin) {
-      alert('নতুন পিন মিলছে না');
+      alert("নতুন পিন মিলছে না");
       return;
     }
 
     // Persist new PIN
-    localStorage.setItem('userPin', pinForm.newPin);
-    const userPhone = localStorage.getItem('userPhone');
-    const users = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+    localStorage.setItem("userPin", pinForm.newPin);
+    const userPhone = localStorage.getItem("userPhone");
+    const users = JSON.parse(localStorage.getItem("registeredUsers") || "[]");
     const idx = users.findIndex((u: any) => u.phone === userPhone);
     if (idx !== -1) {
       users[idx].pin = pinForm.newPin;
-      localStorage.setItem('registeredUsers', JSON.stringify(users));
+      localStorage.setItem("registeredUsers", JSON.stringify(users));
     }
 
-    alert('পিন সফলভাবে পরিবর্তন হয়েছে');
-    setPinForm({ currentPin: '', newPin: '', confirmPin: '' });
+    alert("পিন সফলভাবে পরিবর্তন হয়েছে");
+    setPinForm({ currentPin: "", newPin: "", confirmPin: "" });
     setShowPinChange(false);
   };
 
   const handleSignOut = () => {
-    localStorage.removeItem('isLoggedIn');
-    localStorage.removeItem('userName');
-    localStorage.removeItem('userPhone');
-    localStorage.removeItem('userEmail');
-    localStorage.removeItem('userPhoto');
-    navigate('/login');
+    localStorage.removeItem("isLoggedIn");
+    localStorage.removeItem("userName");
+    localStorage.removeItem("userPhone");
+    localStorage.removeItem("userEmail");
+    localStorage.removeItem("userPhoto");
+    navigate("/login");
   };
 
   // Check if user is logged in
-  const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+  const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
   if (!isLoggedIn) {
-    navigate('/login');
+    navigate("/login");
     return null;
   }
 
@@ -214,115 +214,115 @@ export default function Profile({ language }: ProfileProps) {
     {
       title: t.personalInfo,
       items: [
-        { 
-          icon: User, 
-          label: t.editProfile, 
-          value: null, 
+        {
+          icon: User,
+          label: t.editProfile,
+          value: null,
           color: "text-blue-600",
-          action: () => setIsEditing(true)
+          action: () => setIsEditing(true),
         },
-        { 
-          icon: Shield, 
-          label: t.kycStatus, 
-          value: t.verified, 
-          verified: true, 
+        {
+          icon: Shield,
+          label: t.kycStatus,
+          value: t.verified,
+          verified: true,
           color: "text-green-600",
-          action: null
+          action: null,
         },
-        { 
-          icon: Phone, 
-          label: "ফোন নম্বর", 
-          value: userInfo.phone, 
+        {
+          icon: Phone,
+          label: "ফোন নম্বর",
+          value: userInfo.phone,
           color: "text-purple-600",
-          action: null
+          action: null,
         },
-        { 
-          icon: Mail, 
-          label: "ইমেইল", 
-          value: userInfo.email, 
+        {
+          icon: Mail,
+          label: "ইমেইল",
+          value: userInfo.email,
           color: "text-orange-600",
-          action: null
-        }
-      ]
+          action: null,
+        },
+      ],
     },
     {
       title: t.accountSettings,
       items: [
-        { 
-          icon: CreditCard, 
-          label: t.paymentMethods, 
-          value: "২টি কার্ড", 
+        {
+          icon: CreditCard,
+          label: t.paymentMethods,
+          value: "২টি কার্ড",
           color: "text-indigo-600",
-          action: null
+          action: null,
         },
-        { 
-          icon: Lock, 
-          label: t.changePIN, 
-          value: null, 
+        {
+          icon: Lock,
+          label: t.changePIN,
+          value: null,
           color: "text-red-600",
-          action: () => setShowPinChange(true)
+          action: () => setShowPinChange(true),
         },
-        { 
-          icon: SettingsIcon, 
-          label: t.settings, 
-          value: null, 
+        {
+          icon: SettingsIcon,
+          label: t.settings,
+          value: null,
           color: "text-gray-600",
-          action: null
-        }
-      ]
+          action: null,
+        },
+      ],
     },
     {
       title: t.security,
       items: [
-        { 
-          icon: Shield, 
-          label: t.privacySettings, 
-          value: null, 
+        {
+          icon: Shield,
+          label: t.privacySettings,
+          value: null,
           color: "text-green-600",
-          action: null
+          action: null,
         },
-        { 
-          icon: Bell, 
-          label: t.notifications, 
-          value: "চালু", 
+        {
+          icon: Bell,
+          label: t.notifications,
+          value: "চালু",
           color: "text-yellow-600",
-          action: null
-        }
-      ]
+          action: null,
+        },
+      ],
     },
     {
       title: t.helpSupport,
       items: [
-        { 
-          icon: HelpCircle, 
-          label: t.contactSupport, 
-          value: null, 
+        {
+          icon: HelpCircle,
+          label: t.contactSupport,
+          value: null,
           color: "text-blue-600",
-          action: null
+          action: null,
         },
-        { 
-          icon: HelpCircle, 
-          label: t.faq, 
-          value: null, 
+        {
+          icon: HelpCircle,
+          label: t.faq,
+          value: null,
           color: "text-purple-600",
-          action: null
+          action: null,
         },
-        { 
-          icon: HelpCircle, 
-          label: t.termsOfService, 
-          value: null, 
+        {
+          icon: HelpCircle,
+          label: t.termsOfService,
+          value: null,
           color: "text-gray-600",
-          action: null
+          action: null,
         },
-        { 
-          icon: HelpCircle, 
-          label: t.privacyPolicy, 
-          value: null, 
+        {
+          icon: HelpCircle,
+          label: t.privacyPolicy,
+          value: null,
           color: "text-gray-600",
-          action: null
-        }
-      ]
-    }
+          action: null,
+        },
+      ],
+    },
   ];
 
   return (
@@ -330,15 +330,15 @@ export default function Profile({ language }: ProfileProps) {
       {/* Header */}
       <div className="bg-gradient-to-r from-bkash-500 to-bkash-600 p-4 text-white">
         <h1 className="text-xl font-bold mb-4">{t.profile}</h1>
-        
+
         {/* User Info Card */}
         <div className="bg-white/15 backdrop-blur-sm rounded-2xl p-4 border border-white/20">
           <div className="flex items-center space-x-4">
             <div className="relative">
               {userInfo.profilePhoto ? (
-                <img 
-                  src={userInfo.profilePhoto} 
-                  alt="Profile" 
+                <img
+                  src={userInfo.profilePhoto}
+                  alt="Profile"
                   className="w-16 h-16 rounded-full object-cover border-2 border-white/30"
                 />
               ) : (
@@ -346,7 +346,7 @@ export default function Profile({ language }: ProfileProps) {
                   <User className="h-8 w-8 text-white" />
                 </div>
               )}
-              <button 
+              <button
                 onClick={() => setShowPhotoUpload(true)}
                 className="absolute -bottom-1 -right-1 p-1 bg-white rounded-full shadow-sm hover:scale-110 transition-transform"
               >
@@ -364,7 +364,7 @@ export default function Profile({ language }: ProfileProps) {
                 </span>
               </div>
             </div>
-            <button 
+            <button
               onClick={() => setIsEditing(true)}
               className="p-2 rounded-full bg-white/20 hover:bg-white/30 transition-colors"
             >
@@ -377,7 +377,10 @@ export default function Profile({ language }: ProfileProps) {
       {/* Menu Sections */}
       <div className="p-4 space-y-4">
         {menuSections.map((section, sectionIndex) => (
-          <div key={sectionIndex} className="bg-white rounded-2xl shadow-sm border border-gray-100">
+          <div
+            key={sectionIndex}
+            className="bg-white rounded-2xl shadow-sm border border-gray-100"
+          >
             <div className="p-4 border-b border-gray-100">
               <h3 className="font-bold text-gray-900">{section.title}</h3>
             </div>
@@ -394,19 +397,25 @@ export default function Profile({ language }: ProfileProps) {
                       <div className="p-2 bg-gray-50 rounded-full">
                         <Icon className={`h-5 w-5 ${item.color}`} />
                       </div>
-                      <span className="font-medium text-gray-900">{item.label}</span>
+                      <span className="font-medium text-gray-900">
+                        {item.label}
+                      </span>
                     </div>
                     <div className="flex items-center space-x-2">
                       {item.value && (
-                        <span className={`text-sm ${
-                          item.verified 
-                            ? 'text-green-600 font-medium bg-green-50 px-2 py-1 rounded-full' 
-                            : 'text-gray-500'
-                        }`}>
+                        <span
+                          className={`text-sm ${
+                            item.verified
+                              ? "text-green-600 font-medium bg-green-50 px-2 py-1 rounded-full"
+                              : "text-gray-500"
+                          }`}
+                        >
                           {item.value}
                         </span>
                       )}
-                      {item.action && <ChevronRight className="h-4 w-4 text-gray-400" />}
+                      {item.action && (
+                        <ChevronRight className="h-4 w-4 text-gray-400" />
+                      )}
                     </div>
                   </button>
                 );
@@ -416,7 +425,7 @@ export default function Profile({ language }: ProfileProps) {
         ))}
 
         {/* Sign Out Button */}
-        <button 
+        <button
           onClick={handleSignOut}
           className="w-full bg-white rounded-2xl p-4 shadow-sm border border-gray-100 hover:bg-red-50 transition-colors"
         >
@@ -431,7 +440,9 @@ export default function Profile({ language }: ProfileProps) {
         {/* App Version */}
         <div className="text-center py-4">
           <p className="text-xs text-gray-500">লোন বন্ধু সংস্করণ ১.০.০</p>
-          <p className="text-xs text-gray-400">© ২০২৪ লোন বন্ধু। সর্বস্বত্ব সংরক্ষিত।</p>
+          <p className="text-xs text-gray-400">
+            © ২০২৪ লোন বন্ধু। সর্বস্বত্ব সংরক্ষিত।
+          </p>
         </div>
       </div>
 
@@ -447,20 +458,28 @@ export default function Profile({ language }: ProfileProps) {
             </div>
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">নাম</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  নাম
+                </label>
                 <input
                   type="text"
                   value={editForm.name}
-                  onChange={(e) => setEditForm({...editForm, name: e.target.value})}
+                  onChange={(e) =>
+                    setEditForm({ ...editForm, name: e.target.value })
+                  }
                   className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-bkash-500 focus:border-transparent"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">ইমেইল</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  ইমেইল
+                </label>
                 <input
                   type="email"
                   value={editForm.email}
-                  onChange={(e) => setEditForm({...editForm, email: e.target.value})}
+                  onChange={(e) =>
+                    setEditForm({ ...editForm, email: e.target.value })
+                  }
                   className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-bkash-500 focus:border-transparent"
                 />
               </div>
@@ -494,7 +513,7 @@ export default function Profile({ language }: ProfileProps) {
                 <X className="h-5 w-5 text-gray-500" />
               </button>
             </div>
-            
+
             <div className="text-center">
               <div className="border-2 border-dashed border-gray-300 rounded-xl p-8 hover:border-bkash-500 transition-colors">
                 <Upload className="h-12 w-12 text-gray-400 mx-auto mb-4" />
@@ -530,12 +549,16 @@ export default function Profile({ language }: ProfileProps) {
             </div>
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">বর্ত���ান পিন</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  বর্ত���ান পিন
+                </label>
                 <div className="relative">
                   <input
                     type={showPin ? "text" : "password"}
                     value={pinForm.currentPin}
-                    onChange={(e) => setPinForm({...pinForm, currentPin: e.target.value})}
+                    onChange={(e) =>
+                      setPinForm({ ...pinForm, currentPin: e.target.value })
+                    }
                     className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-bkash-500 focus:border-transparent"
                     maxLength={5}
                   />
@@ -544,17 +567,25 @@ export default function Profile({ language }: ProfileProps) {
                     onClick={() => setShowPin(!showPin)}
                     className="absolute inset-y-0 right-0 pr-3 flex items-center"
                   >
-                    {showPin ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                    {showPin ? (
+                      <EyeOff className="h-5 w-5" />
+                    ) : (
+                      <Eye className="h-5 w-5" />
+                    )}
                   </button>
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">নতুন পিন</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  নতুন পিন
+                </label>
                 <div className="relative">
                   <input
                     type={showNewPin ? "text" : "password"}
                     value={pinForm.newPin}
-                    onChange={(e) => setPinForm({...pinForm, newPin: e.target.value})}
+                    onChange={(e) =>
+                      setPinForm({ ...pinForm, newPin: e.target.value })
+                    }
                     className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-bkash-500 focus:border-transparent"
                     maxLength={5}
                   />
@@ -563,16 +594,24 @@ export default function Profile({ language }: ProfileProps) {
                     onClick={() => setShowNewPin(!showNewPin)}
                     className="absolute inset-y-0 right-0 pr-3 flex items-center"
                   >
-                    {showNewPin ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                    {showNewPin ? (
+                      <EyeOff className="h-5 w-5" />
+                    ) : (
+                      <Eye className="h-5 w-5" />
+                    )}
                   </button>
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">নতুন পিন নিশ্চিত করুন</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  নতুন পিন নিশ্চিত করুন
+                </label>
                 <input
                   type="password"
                   value={pinForm.confirmPin}
-                  onChange={(e) => setPinForm({...pinForm, confirmPin: e.target.value})}
+                  onChange={(e) =>
+                    setPinForm({ ...pinForm, confirmPin: e.target.value })
+                  }
                   className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-bkash-500 focus:border-transparent"
                   maxLength={5}
                 />
