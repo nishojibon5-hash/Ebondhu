@@ -1,4 +1,3 @@
-# Logs
 logs
 *.log
 npm-debug.log*
@@ -23,5 +22,9 @@ dist-ssr
 *.sln
 *.sw?
 
+# Project config/cache
 .config/
-!.env
+
+# Environment files (do not commit secrets)
+.env
+.env.*
