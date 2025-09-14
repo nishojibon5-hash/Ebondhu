@@ -372,7 +372,7 @@ export default function AddMoney() {
                 </div>
                 <div className="flex justify-between">
                   <span>মার্চেন্ট:</span>
-                  <span className="font-medium">লোন বন্ধু ওয়ালেট</span>
+                  <span className="font-medium">amarcash ওয়ালেট</span>
                 </div>
               </div>
             </div>
