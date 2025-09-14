@@ -36,12 +36,20 @@ export async function verifyAdmin(): Promise<boolean> {
 }
 
 export async function loginAdmin(password: string): Promise<AdminLoginResponse> {
-  const res = await fetch("/api/admin/login", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ password }),
-  });
-  const data = (await res.json()) as AdminLoginResponse;
-  if (data.ok && data.token) setAdminSession(data.token);
-  return data;
+  try {
+    const res = await fetch("/api/admin/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ password }),
+    });
+    const data = (await res.json()) as AdminLoginResponse;
+    if (data.ok && data.token) setAdminSession(data.token);
+    return data;
+  } catch {
+    return {
+      ok: false,
+      error:
+        "সার্ভার API পাওয়া যায়নি। Netlify ডিপ্লয়মেন্টে /api সক্রিয় করুন বা সার্ভারের environment variables সেট করুন।",
+    };
+  }
 }
