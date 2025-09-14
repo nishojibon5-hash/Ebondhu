@@ -146,7 +146,7 @@ export default function Register() {
 
       const successMessage =
         referralBonus > 0
-          ? `রেজিস্ট্রেশন সফল! ৳${referralBonus} বোনাস পেয়েছেন। এখন লগিন করুন।`
+          ? `রেজ��স্ট্রেশন সফল! ৳${referralBonus} বোনাস পেয়েছেন। এখন লগিন করুন।`
           : "রেজিস্ট্রেশন সফল হয়েছে! এখন লগিন করুন।";
 
       setSuccess(successMessage);
@@ -224,7 +224,7 @@ export default function Register() {
           <div className="w-20 h-20 bg-gradient-to-r from-bkash-500 to-bkash-600 rounded-full flex items-center justify-center mx-auto mb-4">
             <Smartphone className="h-10 w-10 text-white" />
           </div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">লোন বন্ধু</h1>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">amarcash</h1>
           <p className="text-gray-600">নতুন অ্যাকাউন্ট তৈরি করুন</p>
         </div>
 
