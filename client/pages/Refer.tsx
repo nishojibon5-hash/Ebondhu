@@ -65,8 +65,8 @@ export default function Refer() {
     }
   };
 
-  const shareLink = `https://loanbomdhu.app/register?ref=${referralData?.referralCode}`;
-  const shareText = `লোন বন্ধু অ্যাপে যোগ দিন এবং দারুণ সব সুবিধা পান! আমার রেফার কোড: ${referralData?.referralCode}\n\nডাউনলোড লিংক: ${shareLink}`;
+  const shareLink = `https://amarcash.vercel.app/register?ref=${referralData?.referralCode}`;
+  const shareText = `amarcash অ্যাপে যোগ দিন এবং দারুণ সব সুবিধা পান! আমার রেফার কোড: ${referralData?.referralCode}\n\nডাউনলোড লিংক: ${shareLink}`;
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
