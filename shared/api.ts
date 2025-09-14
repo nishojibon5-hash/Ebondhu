@@ -10,3 +10,16 @@
 export interface DemoResponse {
   message: string;
 }
+
+export interface AdminLoginResponse {
+  ok: boolean;
+  token?: string;
+  role?: "admin";
+  error?: string;
+}
+
+export interface AdminVerifyResponse {
+  ok: boolean;
+  role?: "admin";
+  error?: string;
+}
