@@ -33,7 +33,7 @@ const translations = {
     medium: "মাঝার���", 
     hard: "কঠিন",
     pending: "অপেক্ষমাণ",
-    approved: "অনুমোদিত",
+    approved: "অনুমোদি��",
     rejected: "প্রত্যাখ্যাত",
     submitProof: "প্রমাণ জমা দিন",
     viewDetails: "বিস্তারিত দেখুন",
@@ -71,7 +71,7 @@ export default function Tasks({ language }: TasksProps) {
     {
       id: 1,
       title: "ফেসবুকে অ্যাপ শেয়ার করুন",
-      description: "লোন বন্ধু অ্যাপ আপনার ফেসবুক প্রোফাইলে শেয়ার করুন এবং ৩ জন বন্ধুকে ইনস্টল করতে বলুন",
+      description: "amarcash অ্যাপ আপনার ফেসবুক প্রোফাইলে শেয়ার করুন এবং ৩ জন বন্ধুকে ইনস্টল করতে বলুন",
       reward: 50,
       difficulty: "easy" as const,
       deadline: "২ দিন বাকি",
@@ -89,7 +89,7 @@ export default function Tasks({ language }: TasksProps) {
     {
       id: 3,
       title: "প্রমোশনাল ভিডিও তৈরি করুন",
-      description: "লোন বন্ধু বৈশিষ্ট্য প্রচারের জন্য ৩০ সেকেন্ডের ভিডিও তৈরি করুন",
+      description: "amarcash বৈশিষ্ট্য প্রচারের জন্য ৩০ সেকেন্ডের ভিডি��� তৈরি করুন",
       reward: 200,
       difficulty: "hard" as const,
       deadline: "১ সপ্তাহ বাকি",
