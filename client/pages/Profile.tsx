@@ -439,9 +439,9 @@ export default function Profile({ language }: ProfileProps) {
 
         {/* App Version */}
         <div className="text-center py-4">
-          <p className="text-xs text-gray-500">লোন বন্ধু সংস্করণ ১.০.০</p>
+          <p className="text-xs text-gray-500">amarcash সংস্করণ ১.০.০</p>
           <p className="text-xs text-gray-400">
-            © ২০২৪ লোন বন্ধু। সর্বস্বত্ব সংরক্ষিত।
+            © ��০২৪ amarcash। সর্বস্বত্ব সংরক্ষিত।
           </p>
         </div>
       </div>
