@@ -16,6 +16,8 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import ForgotPin from "./pages/ForgotPin";
 import NotFound from "./pages/NotFound";
+import AdminLogin from "./pages/AdminLogin";
+import AdminDashboard from "./pages/AdminDashboard";
 import { BottomNavigation } from "./components/BottomNavigation";
 import { useState, useEffect } from "react";
 
@@ -33,8 +35,14 @@ function PublicRoute({ children }: { children: React.ReactNode }) {
   return !isLoggedIn ? <>{children}</> : <Navigate to="/" replace />;
 }
 
+// Admin Route Guard (client-side flag only)
+function AdminRoute({ children }: { children: React.ReactNode }) {
+  const isAdmin = localStorage.getItem('isAdmin') === 'true';
+  return isAdmin ? <>{children}</> : <Navigate to="/admin-login" replace />;
+}
+
 function App() {
-  const [language, setLanguage] = useState<Language>('bn'); // Default to Bengali
+  const [language, setLanguage] = useState<Language>('bn');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
@@ -64,7 +72,17 @@ function App() {
               </PublicRoute>
             } />
 
-            {/* Protected Routes */}
+            {/* Admin Public Route */}
+            <Route path="/admin-login" element={<AdminLogin />} />
+
+            {/* Admin Protected */}
+            <Route path="/admin" element={
+              <AdminRoute>
+                <AdminDashboard />
+              </AdminRoute>
+            } />
+
+            {/* Protected User Routes */}
             <Route path="/" element={
               <ProtectedRoute>
                 <Dashboard language={language} setLanguage={setLanguage} />
@@ -134,7 +152,6 @@ function App() {
             <Route path="*" element={<NotFound />} />
           </Routes>
 
-          {/* Show bottom navigation only for logged in users */}
           {isLoggedIn && <BottomNavigation language={language} />}
         </div>
       </div>
