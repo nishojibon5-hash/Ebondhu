@@ -16,10 +16,7 @@ function signHS256(header: object, payload: object, secret: string) {
   const headerB64 = base64url(JSON.stringify(header));
   const payloadB64 = base64url(JSON.stringify(payload));
   const data = `${headerB64}.${payloadB64}`;
-  const signature = crypto
-    .createHmac("sha256", secret)
-    .update(data)
-    .digest();
+  const signature = crypto.createHmac("sha256", secret).update(data).digest();
   const sigB64 = base64url(signature);
   return `${data}.${sigB64}`;
 }
@@ -75,7 +72,12 @@ export function createServer() {
     }
 
     const now = Math.floor(Date.now() / 1000);
-    const payload = { sub: "admin", role: "admin", iat: now, exp: now + 60 * 60 * 8 };
+    const payload = {
+      sub: "admin",
+      role: "admin",
+      iat: now,
+      exp: now + 60 * 60 * 8,
+    };
     const token = signHS256({ alg: "HS256", typ: "JWT" }, payload, secret);
     res.json({ ok: true, token, role: "admin" });
   });
@@ -87,10 +89,12 @@ export function createServer() {
     if (!secret) {
       return res.status(500).json({
         ok: false,
-        error: "Server missing ADMIN_JWT_SECRET. Configure environment variable.",
+        error:
+          "Server missing ADMIN_JWT_SECRET. Configure environment variable.",
       });
     }
-    if (!token) return res.status(401).json({ ok: false, error: "Missing token" });
+    if (!token)
+      return res.status(401).json({ ok: false, error: "Missing token" });
     const payload = verifyHS256(token, secret);
     if (!payload || payload.role !== "admin") {
       return res.status(401).json({ ok: false, error: "Invalid token" });

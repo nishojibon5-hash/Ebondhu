@@ -44,7 +44,12 @@ export default function handler(req: VercelRequest, res: VercelResponse) {
     return;
   }
   const now = Math.floor(Date.now() / 1000);
-  const payload = { sub: "admin", role: "admin", iat: now, exp: now + 60 * 60 * 8 };
+  const payload = {
+    sub: "admin",
+    role: "admin",
+    iat: now,
+    exp: now + 60 * 60 * 8,
+  };
   const token = signHS256({ alg: "HS256", typ: "JWT" }, payload, secret);
   res.status(200).json({ ok: true, token, role: "admin" });
 }

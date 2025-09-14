@@ -31,7 +31,9 @@ export default function AdminLogin() {
           </div>
           <div>
             <h1 className="text-xl font-bold text-slate-800">অ্যাডমিন লগইন</h1>
-            <p className="text-sm text-slate-500">শুধুমাত্র অনুমোদিত ব্যবহারের জন্য</p>
+            <p className="text-sm text-slate-500">
+              শুধুমাত্র অনুমোদিত ব্যবহারের জন্য
+            </p>
           </div>
         </div>
 
@@ -43,7 +45,9 @@ export default function AdminLogin() {
 
         <form onSubmit={onSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">পাসওয়ার্ড</label>
+            <label className="block text-sm font-medium text-slate-700 mb-1">
+              পাসওয়ার্ড
+            </label>
             <div className="relative">
               <input
                 type="password"

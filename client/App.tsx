@@ -21,32 +21,32 @@ import AdminDashboard from "./pages/AdminDashboard";
 import { BottomNavigation } from "./components/BottomNavigation";
 import { useState, useEffect } from "react";
 
-export type Language = 'en' | 'bn';
+export type Language = "en" | "bn";
 
 // Protected Route Component
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
-  const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+  const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
   return isLoggedIn ? <>{children}</> : <Navigate to="/login" replace />;
 }
 
 // Public Route Component (redirect to dashboard if logged in)
 function PublicRoute({ children }: { children: React.ReactNode }) {
-  const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+  const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
   return !isLoggedIn ? <>{children}</> : <Navigate to="/" replace />;
 }
 
 // Admin Route Guard (client-side flag only)
 function AdminRoute({ children }: { children: React.ReactNode }) {
-  const isAdmin = localStorage.getItem('isAdmin') === 'true';
+  const isAdmin = localStorage.getItem("isAdmin") === "true";
   return isAdmin ? <>{children}</> : <Navigate to="/admin-login" replace />;
 }
 
 function App() {
-  const [language, setLanguage] = useState<Language>('bn');
+  const [language, setLanguage] = useState<Language>("bn");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    const loggedIn = localStorage.getItem('isLoggedIn') === 'true';
+    const loggedIn = localStorage.getItem("isLoggedIn") === "true";
     setIsLoggedIn(loggedIn);
   }, []);
 
@@ -56,98 +56,149 @@ function App() {
         <div className="max-w-md mx-auto bg-white dark:bg-gray-900 min-h-screen shadow-xl">
           <Routes>
             {/* Public Routes */}
-            <Route path="/login" element={
-              <PublicRoute>
-                <Login />
-              </PublicRoute>
-            } />
-            <Route path="/register" element={
-              <PublicRoute>
-                <Register />
-              </PublicRoute>
-            } />
-            <Route path="/forgot-pin" element={
-              <PublicRoute>
-                <ForgotPin />
-              </PublicRoute>
-            } />
+            <Route
+              path="/login"
+              element={
+                <PublicRoute>
+                  <Login />
+                </PublicRoute>
+              }
+            />
+            <Route
+              path="/register"
+              element={
+                <PublicRoute>
+                  <Register />
+                </PublicRoute>
+              }
+            />
+            <Route
+              path="/forgot-pin"
+              element={
+                <PublicRoute>
+                  <ForgotPin />
+                </PublicRoute>
+              }
+            />
 
             {/* Admin Public Route */}
             <Route path="/admin-login" element={<AdminLogin />} />
 
             {/* Admin Protected */}
-            <Route path="/admin" element={
-              <AdminRoute>
-                <AdminDashboard />
-              </AdminRoute>
-            } />
+            <Route
+              path="/admin"
+              element={
+                <AdminRoute>
+                  <AdminDashboard />
+                </AdminRoute>
+              }
+            />
 
             {/* Protected User Routes */}
-            <Route path="/" element={
-              <ProtectedRoute>
-                <Dashboard language={language} setLanguage={setLanguage} />
-              </ProtectedRoute>
-            } />
-            <Route path="/tasks" element={
-              <ProtectedRoute>
-                <Tasks language={language} />
-              </ProtectedRoute>
-            } />
-            <Route path="/somiti" element={
-              <ProtectedRoute>
-                <Somiti language={language} />
-              </ProtectedRoute>
-            } />
-            <Route path="/profile" element={
-              <ProtectedRoute>
-                <Profile language={language} />
-              </ProtectedRoute>
-            } />
-            <Route path="/task-earning" element={
-              <ProtectedRoute>
-                <TaskEarning />
-              </ProtectedRoute>
-            } />
-            <Route path="/task-earning/create" element={
-              <ProtectedRoute>
-                <TaskCreate />
-              </ProtectedRoute>
-            } />
-            <Route path="/send-money" element={
-              <ProtectedRoute>
-                <SendMoney />
-              </ProtectedRoute>
-            } />
-            <Route path="/mobile-recharge" element={
-              <ProtectedRoute>
-                <MobileRecharge />
-              </ProtectedRoute>
-            } />
-            <Route path="/add-money" element={
-              <ProtectedRoute>
-                <AddMoney />
-              </ProtectedRoute>
-            } />
-            <Route path="/refer" element={
-              <ProtectedRoute>
-                <Refer />
-              </ProtectedRoute>
-            } />
-            <Route path="/loan-application" element={
-              <ProtectedRoute>
-                <LoanApplication />
-              </ProtectedRoute>
-            } />
-            <Route path="/somiti-manager" element={
-              <ProtectedRoute>
-                <SomitiManager />
-              </ProtectedRoute>
-            } />
-            <Route path="/somiti-setup" element={
-              <ProtectedRoute>
-                <SomitiSetup />
-              </ProtectedRoute>
-            } />
+            <Route
+              path="/"
+              element={
+                <ProtectedRoute>
+                  <Dashboard language={language} setLanguage={setLanguage} />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/tasks"
+              element={
+                <ProtectedRoute>
+                  <Tasks language={language} />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/somiti"
+              element={
+                <ProtectedRoute>
+                  <Somiti language={language} />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRoute>
+                  <Profile language={language} />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/task-earning"
+              element={
+                <ProtectedRoute>
+                  <TaskEarning />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/task-earning/create"
+              element={
+                <ProtectedRoute>
+                  <TaskCreate />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/send-money"
+              element={
+                <ProtectedRoute>
+                  <SendMoney />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/mobile-recharge"
+              element={
+                <ProtectedRoute>
+                  <MobileRecharge />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/add-money"
+              element={
+                <ProtectedRoute>
+                  <AddMoney />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/refer"
+              element={
+                <ProtectedRoute>
+                  <Refer />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/loan-application"
+              element={
+                <ProtectedRoute>
+                  <LoanApplication />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/somiti-manager"
+              element={
+                <ProtectedRoute>
+                  <SomitiManager />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/somiti-setup"
+              element={
+                <ProtectedRoute>
+                  <SomitiSetup />
+                </ProtectedRoute>
+              }
+            />
 
             <Route path="*" element={<NotFound />} />
           </Routes>

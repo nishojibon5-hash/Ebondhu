@@ -28,7 +28,13 @@ export default function handler(req: VercelRequest, res: VercelResponse) {
   const token = auth.startsWith("Bearer ") ? auth.slice(7) : null;
   const secret = process.env.ADMIN_JWT_SECRET;
   if (!secret) {
-    res.status(500).json({ ok: false, error: "Server missing ADMIN_JWT_SECRET. Configure environment variable." });
+    res
+      .status(500)
+      .json({
+        ok: false,
+        error:
+          "Server missing ADMIN_JWT_SECRET. Configure environment variable.",
+      });
     return;
   }
   if (!token) {

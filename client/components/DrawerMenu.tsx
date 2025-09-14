@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import {
   X,
   CreditCard,
@@ -8,8 +8,8 @@ import {
   Menu,
   ChevronRight,
   LogOut,
-  Share2
-} from 'lucide-react';
+  Share2,
+} from "lucide-react";
 
 interface DrawerMenuProps {
   isOpen: boolean;
@@ -38,59 +38,61 @@ export function DrawerMenu({ isOpen, onClose }: DrawerMenuProps) {
   }, [isOpen]);
 
   const handleLogout = () => {
-    if (confirm('আপনি কি লগ আউট করতে চান?')) {
-      localStorage.removeItem('isLoggedIn');
-      localStorage.removeItem('userPin');
-      localStorage.removeItem('userPhone');
-      localStorage.removeItem('userName');
-      localStorage.removeItem('userEmail');
+    if (confirm("আপনি কি লগ আউট করতে চান?")) {
+      localStorage.removeItem("isLoggedIn");
+      localStorage.removeItem("userPin");
+      localStorage.removeItem("userPhone");
+      localStorage.removeItem("userName");
+      localStorage.removeItem("userEmail");
       onClose();
-      navigate('/login');
+      navigate("/login");
     }
   };
 
-  const isSomitiManager = localStorage.getItem('isSomitiManager') === 'true';
+  const isSomitiManager = localStorage.getItem("isSomitiManager") === "true";
 
-  const isAdmin = localStorage.getItem('isAdmin') === 'true';
+  const isAdmin = localStorage.getItem("isAdmin") === "true";
 
   const menuItems: MenuItem[] = [
     {
       icon: CreditCard,
-      label: 'টাস্ক আর্নিং',
-      description: 'সোশ্যাল মিডিয়া কাজ করে আয় করুন',
-      color: 'bg-gradient-to-r from-blue-500 to-blue-600',
-      link: '/task-earning'
+      label: "টাস্ক আর্নিং",
+      description: "সোশ্যাল মিডিয়া কাজ করে আয় করুন",
+      color: "bg-gradient-to-r from-blue-500 to-blue-600",
+      link: "/task-earning",
     },
     {
       icon: PiggyBank,
-      label: 'লোন সার্ভিস',
-      description: 'দ্রুত ও সহজ লোন আবেদন করুন',
-      color: 'bg-gradient-to-r from-green-500 to-green-600',
-      link: '/loan-application'
+      label: "লোন সার্ভিস",
+      description: "দ্রুত ও সহজ লোন আবেদন করুন",
+      color: "bg-gradient-to-r from-green-500 to-green-600",
+      link: "/loan-application",
     },
     {
       icon: Users,
-      label: 'সমিতি ম্যানেজার',
-      description: 'সমিতির সদস্য ও লেনদেন পরিচালনা করুন',
-      color: 'bg-gradient-to-r from-purple-500 to-purple-600',
-      link: isSomitiManager ? '/somiti-manager' : '/somiti-setup'
+      label: "সমিতি ম্যানেজার",
+      description: "সমিতির সদস্য ও লেনদেন পরিচালনা করুন",
+      color: "bg-gradient-to-r from-purple-500 to-purple-600",
+      link: isSomitiManager ? "/somiti-manager" : "/somiti-setup",
     },
     {
       icon: Share2,
-      label: 'রেফার করুন',
-      description: 'বন্ধুদের রেফার করে ১৫ টাকা আয় করুন',
-      color: 'bg-gradient-to-r from-orange-500 to-orange-600',
-      link: '/refer'
+      label: "রেফার করুন",
+      description: "বন্ধুদের রেফার করে ১৫ টাকা আয় করুন",
+      color: "bg-gradient-to-r from-orange-500 to-orange-600",
+      link: "/refer",
     },
     ...(isAdmin
-      ? [{
-          icon: Users,
-          label: 'অ্যাডমিন প্যানেল',
-          description: 'ফিচার কনফিগারেশন ও কন্ট্রোল',
-          color: 'bg-gradient-to-r from-slate-700 to-slate-800',
-          link: '/admin'
-        } as MenuItem]
-      : [])
+      ? [
+          {
+            icon: Users,
+            label: "অ্যাডমিন প্যানেল",
+            description: "ফিচার কনফিগারেশন ও কন্ট্রোল",
+            color: "bg-gradient-to-r from-slate-700 to-slate-800",
+            link: "/admin",
+          } as MenuItem,
+        ]
+      : []),
   ];
 
   if (!isVisible) return null;
@@ -98,17 +100,17 @@ export function DrawerMenu({ isOpen, onClose }: DrawerMenuProps) {
   return (
     <>
       {/* Backdrop */}
-      <div 
+      <div
         className={`fixed inset-0 bg-black z-40 transition-opacity duration-300 ${
-          isOpen ? 'bg-opacity-50' : 'bg-opacity-0'
+          isOpen ? "bg-opacity-50" : "bg-opacity-0"
         }`}
         onClick={onClose}
       />
-      
+
       {/* Drawer */}
-      <div 
+      <div
         className={`fixed top-0 right-0 h-full w-80 bg-white shadow-2xl z-50 transform transition-transform duration-300 ease-in-out ${
-          isOpen ? 'translate-x-0' : 'translate-x-full'
+          isOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
         {/* Header */}
@@ -165,7 +167,8 @@ export function DrawerMenu({ isOpen, onClose }: DrawerMenuProps) {
               <div>
                 <h4 className="font-medium text-blue-900 mb-1">আয়ের সুযোগ</h4>
                 <p className="text-sm text-blue-700 leading-relaxed">
-                  টাস্ক করে দৈনিক ৫০০+ টাকা আয় করুন। সমিতি পরিচালনা করে অতিরিক্ত আয় পান।
+                  টাস্ক করে দৈনিক ৫০০+ টাকা আয় করুন। সমিতি পরিচালনা করে
+                  অতিরিক্ত আয় পান।
                 </p>
               </div>
             </div>
@@ -191,7 +194,9 @@ export function DrawerMenu({ isOpen, onClose }: DrawerMenuProps) {
                 <Users className="h-5 w-5 text-purple-600" />
               </div>
               <div>
-                <h4 className="font-medium text-purple-900 mb-1">সমিতি ব্যবস্থাপনা</h4>
+                <h4 className="font-medium text-purple-900 mb-1">
+                  সমিতি ব্যবস্থাপনা
+                </h4>
                 <p className="text-sm text-purple-700 leading-relaxed">
                   ডিজিটাল সমিতি পরিচালনা করুন। সদস্য ও লেনদেন ট্র্যাক করুন।
                 </p>
@@ -205,7 +210,9 @@ export function DrawerMenu({ isOpen, onClose }: DrawerMenuProps) {
                 <Share2 className="h-5 w-5 text-orange-600" />
               </div>
               <div>
-                <h4 className="font-medium text-orange-900 mb-1">রেফার সিস্টেম</h4>
+                <h4 className="font-medium text-orange-900 mb-1">
+                  রেফার সিস্টেম
+                </h4>
                 <p className="text-sm text-orange-700 leading-relaxed">
                   প্রতি রেফারে ১৫ টাকা পান। বন্ধুদের সাথে শেয়ার করুন।
                 </p>
@@ -224,7 +231,9 @@ export function DrawerMenu({ isOpen, onClose }: DrawerMenuProps) {
               </div>
               <div className="text-left">
                 <h4 className="font-medium text-red-900">লগ আউট</h4>
-                <p className="text-sm text-red-700">অ্যাকাউন্ট থেকে বের হয়ে যান</p>
+                <p className="text-sm text-red-700">
+                  অ্যাকাউন্ট থেকে বের হয়ে যান
+                </p>
               </div>
             </button>
           </div>

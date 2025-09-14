@@ -35,7 +35,9 @@ export async function verifyAdmin(): Promise<boolean> {
   }
 }
 
-export async function loginAdmin(password: string): Promise<AdminLoginResponse> {
+export async function loginAdmin(
+  password: string,
+): Promise<AdminLoginResponse> {
   try {
     const res = await fetch("/api/admin/login", {
       method: "POST",

@@ -1,6 +1,10 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { clearAdminSession, isAdminLoggedIn, verifyAdmin } from "../lib/adminAuth";
+import {
+  clearAdminSession,
+  isAdminLoggedIn,
+  verifyAdmin,
+} from "../lib/adminAuth";
 import { CheckCircle2, ToggleLeft, ToggleRight, LogOut } from "lucide-react";
 
 type FeatureFlags = {
@@ -67,27 +71,41 @@ export default function AdminDashboard() {
       <div className="max-w-md mx-auto">
         <div className="bg-white rounded-2xl shadow p-5 mb-4">
           <div className="flex items-center justify-between">
-            <h1 className="text-lg font-bold text-slate-800">অ্যাডমিন ড্যাশবোর্ড</h1>
-            <button onClick={logoutAdmin} className="text-sm text-red-600 flex items-center gap-1">
+            <h1 className="text-lg font-bold text-slate-800">
+              অ্যাডমিন ড্যাশবোর্ড
+            </h1>
+            <button
+              onClick={logoutAdmin}
+              className="text-sm text-red-600 flex items-center gap-1"
+            >
               <LogOut className="h-4 w-4" /> লগআউ���
             </button>
           </div>
-          <p className="text-sm text-slate-500 mt-1">ইউজার অ্যাপের ফিচার কন্ট্রোল করুন</p>
+          <p className="text-sm text-slate-500 mt-1">
+            ইউজার অ্যাপের ফিচার কন্ট্রোল করুন
+          </p>
         </div>
 
         <div className="bg-white rounded-2xl shadow divide-y">
-          {([
-            { key: "sendMoney", label: "টাকা পাঠান" },
-            { key: "cashIn", label: "ক্যাশ ইন" },
-            { key: "cashOut", label: "ক্যাশ আউট" },
-            { key: "recharge", label: "মোবাইল রিচার্জ" },
-            { key: "payBill", label: "বিল পেমেন্ট" },
-            { key: "addMoney", label: "টাকা যোগ করুন" },
-          ] as { key: keyof FeatureFlags; label: string }[]).map((item) => (
-            <div key={item.key} className="flex items-center justify-between p-4">
+          {(
+            [
+              { key: "sendMoney", label: "টাকা পাঠান" },
+              { key: "cashIn", label: "ক্যাশ ইন" },
+              { key: "cashOut", label: "ক্যাশ আউট" },
+              { key: "recharge", label: "মোবাইল রিচার্জ" },
+              { key: "payBill", label: "বিল পেমেন্ট" },
+              { key: "addMoney", label: "টাকা যোগ করুন" },
+            ] as { key: keyof FeatureFlags; label: string }[]
+          ).map((item) => (
+            <div
+              key={item.key}
+              className="flex items-center justify-between p-4"
+            >
               <div>
                 <p className="font-medium text-slate-800">{item.label}</p>
-                <p className="text-xs text-slate-500">হোম পেজে এই অপশন দেখাবেন কি না</p>
+                <p className="text-xs text-slate-500">
+                  হোম পেজে এই অপশন দেখাবেন কি না
+                </p>
               </div>
               <button
                 onClick={() => toggle(item.key)}
