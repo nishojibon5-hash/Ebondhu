@@ -27,7 +27,7 @@ const translations = {
   en: {
     goodMorning: "Good Morning",
     userName: "মোঃ রহিম",
-    appName: "লোন বন্ধু",
+    appName: "amarcash",
     yourBalance: "আপনার ব্যালেন্স",
     sendMoney: "Send Money",
     cashIn: "Cash In",
@@ -50,7 +50,7 @@ const translations = {
   bn: {
     goodMorning: "শুভ সকাল",
     userName: "মোঃ রহিম",
-    appName: "লোন বন্ধু",
+    appName: "amarcash",
     yourBalance: "আপনার ব্যালেন্স",
     sendMoney: "টাকা পাঠান",
     cashIn: "ক্যাশ ইন",
