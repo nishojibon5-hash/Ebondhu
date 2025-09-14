@@ -51,6 +51,8 @@ export function DrawerMenu({ isOpen, onClose }: DrawerMenuProps) {
 
   const isSomitiManager = localStorage.getItem('isSomitiManager') === 'true';
 
+  const isAdmin = localStorage.getItem('isAdmin') === 'true';
+
   const menuItems: MenuItem[] = [
     {
       icon: CreditCard,
@@ -79,7 +81,16 @@ export function DrawerMenu({ isOpen, onClose }: DrawerMenuProps) {
       description: 'বন্ধুদের রেফার করে ১৫ টাকা আয় করুন',
       color: 'bg-gradient-to-r from-orange-500 to-orange-600',
       link: '/refer'
-    }
+    },
+    ...(isAdmin
+      ? [{
+          icon: Users,
+          label: 'অ্যাডমিন প্যানেল',
+          description: 'ফিচার কনফিগারেশন ও কন্ট্রোল',
+          color: 'bg-gradient-to-r from-slate-700 to-slate-800',
+          link: '/admin'
+        } as MenuItem]
+      : [])
   ];
 
   if (!isVisible) return null;
