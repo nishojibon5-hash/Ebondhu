@@ -43,7 +43,7 @@ const translations = {
     today: "আজ",
     yesterday: "গতকাল",
     tapToSeeBalance: "ব্যালেন্স দেখতে ট্যাপ করুন",
-    taskEarning: "টাস্ক আর্নিং",
+    taskEarning: "টাস্�� আর্নিং",
     loanService: "লোন সার্ভিস",
     somitiManager: "সমিতি ম্যানেজার",
   },
@@ -78,8 +78,16 @@ export default function Dashboard({ language, setLanguage }: DashboardProps) {
 
   const t = translations[language];
 
+  const flags = (() => {
+    try {
+      return JSON.parse(localStorage.getItem("featureFlags") || "{}");
+    } catch {
+      return {} as any;
+    }
+  })();
+
   const quickActions = [
-    {
+    flags.sendMoney !== false && {
       icon: Send,
       label: t.sendMoney,
       color: "bg-white shadow-md",
@@ -87,7 +95,7 @@ export default function Dashboard({ language, setLanguage }: DashboardProps) {
       iconColor: "text-bkash-500",
       link: "/send-money",
     },
-    {
+    flags.cashIn !== false && {
       icon: Download,
       label: t.cashIn,
       color: "bg-white shadow-md",
@@ -95,7 +103,7 @@ export default function Dashboard({ language, setLanguage }: DashboardProps) {
       iconColor: "text-green-500",
       link: "/add-money",
     },
-    {
+    flags.cashOut !== false && {
       icon: Upload,
       label: t.cashOut,
       color: "bg-white shadow-md",
@@ -103,7 +111,7 @@ export default function Dashboard({ language, setLanguage }: DashboardProps) {
       iconColor: "text-red-500",
       link: "#",
     },
-    {
+    flags.recharge !== false && {
       icon: Smartphone,
       label: t.recharge,
       color: "bg-white shadow-md",
@@ -111,7 +119,7 @@ export default function Dashboard({ language, setLanguage }: DashboardProps) {
       iconColor: "text-blue-500",
       link: "/mobile-recharge",
     },
-    {
+    flags.payBill !== false && {
       icon: Receipt,
       label: t.payBill,
       color: "bg-white shadow-md",
@@ -119,7 +127,7 @@ export default function Dashboard({ language, setLanguage }: DashboardProps) {
       iconColor: "text-orange-500",
       link: "#",
     },
-    {
+    flags.addMoney !== false && {
       icon: Banknote,
       label: t.addMoney,
       color: "bg-white shadow-md",
@@ -127,7 +135,7 @@ export default function Dashboard({ language, setLanguage }: DashboardProps) {
       iconColor: "text-purple-500",
       link: "/add-money",
     },
-  ];
+  ].filter(Boolean) as any[];
 
   const isSomitiManager = localStorage.getItem("isSomitiManager") === "true";
 
