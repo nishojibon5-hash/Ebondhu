@@ -103,29 +103,41 @@ export default function SendMoney() {
     if (validateStep3()) {
       setIsProcessing(true);
 
-      // Simulate processing
       setTimeout(() => {
-        // Verify PIN
         if (pin === localStorage.getItem("userPin")) {
           const transferAmount = parseFloat(amount);
           const totalDeduction = transferAmount + transferCharge;
 
-          // Update balance
-          const newBalance = currentBalance - totalDeduction;
-          localStorage.setItem("userBalance", newBalance.toString());
-
-          // Persist to registered users store
           const userPhone = localStorage.getItem("userPhone");
-          const users = JSON.parse(
-            localStorage.getItem("registeredUsers") || "[]",
-          );
-          const idx = users.findIndex((u: any) => u.phone === userPhone);
-          if (idx !== -1) {
-            users[idx].balance = newBalance;
-            localStorage.setItem("registeredUsers", JSON.stringify(users));
+          const users = JSON.parse(localStorage.getItem("registeredUsers") || "[]");
+
+          const senderIdx = users.findIndex((u: any) => u.phone === userPhone);
+          const recipientIdx = users.findIndex((u: any) => u.phone === recipient?.phone);
+
+          if (recipientIdx === -1) {
+            setErrors({ recipient: "প্রাপক এই অ্যাপে নিবন্ধিত নন" });
+            setIsProcessing(false);
+            return;
           }
 
-          // Save transaction
+          const newBalance = currentBalance - totalDeduction;
+          if (newBalance < 0) {
+            setErrors({ amount: "অপর্যাপ্ত ব্যালেন্স" });
+            setIsProcessing(false);
+            return;
+          }
+
+          // Update sender local balance
+          localStorage.setItem("userBalance", newBalance.toString());
+
+          // Persist to users store (sender and recipient)
+          if (senderIdx !== -1) {
+            users[senderIdx].balance = newBalance;
+          }
+          users[recipientIdx].balance = (users[recipientIdx].balance || 0) + transferAmount;
+          localStorage.setItem("registeredUsers", JSON.stringify(users));
+
+          // Save sender transaction
           const transaction = {
             id: Date.now(),
             type: "send_money",
@@ -137,19 +149,30 @@ export default function SendMoney() {
             date: new Date().toISOString(),
             status: "completed",
           };
-
-          const transactions = JSON.parse(
-            localStorage.getItem("transactions") || "[]",
-          );
+          const transactions = JSON.parse(localStorage.getItem("transactions") || "[]");
           transactions.unshift(transaction);
           localStorage.setItem("transactions", JSON.stringify(transactions));
 
-          setCurrentStep(4); // Success step
+          // Save recipient transaction log bucketed by phone
+          const recipKey = `transactions_${recipient?.phone}`;
+          const recipTx = JSON.parse(localStorage.getItem(recipKey) || "[]");
+          recipTx.unshift({
+            id: Date.now(),
+            type: "received_money",
+            amount: transferAmount,
+            senderPhone: userPhone,
+            reference,
+            date: new Date().toISOString(),
+            status: "completed",
+          });
+          localStorage.setItem(recipKey, JSON.stringify(recipTx));
+
+          setCurrentStep(4);
         } else {
           setErrors({ pin: "ভুল পিন দিয়েছেন" });
         }
         setIsProcessing(false);
-      }, 2000);
+      }, 800);
     }
   };
 
@@ -234,7 +257,7 @@ export default function SendMoney() {
                 onClick={() => navigate("/")}
                 className="w-full bg-bkash-500 hover:bg-bkash-600 text-white py-3 rounded-xl font-medium transition-colors"
               >
-                হোমে ফিরুন
+                ���োমে ফিরুন
               </button>
               <button
                 onClick={() => {
