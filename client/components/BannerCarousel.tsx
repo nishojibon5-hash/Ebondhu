@@ -37,7 +37,9 @@ export function BannerCarousel() {
     return () => clearInterval(interval);
   }, [emblaApi]);
 
-  const data = banners.length ? banners : [{ id: 0, image: "/placeholder.svg" }];
+  const data = banners.length
+    ? banners
+    : [{ id: 0, image: "/placeholder.svg" }];
 
   return (
     <div className="mb-6">
