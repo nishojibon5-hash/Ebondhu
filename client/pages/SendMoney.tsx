@@ -109,10 +109,14 @@ export default function SendMoney() {
           const totalDeduction = transferAmount + transferCharge;
 
           const userPhone = localStorage.getItem("userPhone");
-          const users = JSON.parse(localStorage.getItem("registeredUsers") || "[]");
+          const users = JSON.parse(
+            localStorage.getItem("registeredUsers") || "[]",
+          );
 
           const senderIdx = users.findIndex((u: any) => u.phone === userPhone);
-          const recipientIdx = users.findIndex((u: any) => u.phone === recipient?.phone);
+          const recipientIdx = users.findIndex(
+            (u: any) => u.phone === recipient?.phone,
+          );
 
           if (recipientIdx === -1) {
             setErrors({ recipient: "প্রাপক এই অ্যাপে নিবন্ধিত নন" });
@@ -134,7 +138,8 @@ export default function SendMoney() {
           if (senderIdx !== -1) {
             users[senderIdx].balance = newBalance;
           }
-          users[recipientIdx].balance = (users[recipientIdx].balance || 0) + transferAmount;
+          users[recipientIdx].balance =
+            (users[recipientIdx].balance || 0) + transferAmount;
           localStorage.setItem("registeredUsers", JSON.stringify(users));
 
           // Save sender transaction
@@ -149,7 +154,9 @@ export default function SendMoney() {
             date: new Date().toISOString(),
             status: "completed",
           };
-          const transactions = JSON.parse(localStorage.getItem("transactions") || "[]");
+          const transactions = JSON.parse(
+            localStorage.getItem("transactions") || "[]",
+          );
           transactions.unshift(transaction);
           localStorage.setItem("transactions", JSON.stringify(transactions));
 

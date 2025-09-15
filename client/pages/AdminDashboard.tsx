@@ -5,7 +5,14 @@ import {
   isAdminLoggedIn,
   verifyAdmin,
 } from "../lib/adminAuth";
-import { CheckCircle2, ToggleLeft, ToggleRight, LogOut, Trash2, Plus } from "lucide-react";
+import {
+  CheckCircle2,
+  ToggleLeft,
+  ToggleRight,
+  LogOut,
+  Trash2,
+  Plus,
+} from "lucide-react";
 
 type FeatureFlags = {
   sendMoney: boolean;
@@ -137,7 +144,9 @@ export default function AdminDashboard() {
 
         {/* Banner Management */}
         <div className="bg-white rounded-2xl shadow p-4 mt-4">
-          <h2 className="font-semibold text-slate-800 mb-3">ব্যানার ম্যানেজমেন্ট</h2>
+          <h2 className="font-semibold text-slate-800 mb-3">
+            ব্যানার ম্যানেজমেন্ট
+          </h2>
           <div className="space-y-2">
             <input
               value={bannerUrl}
@@ -154,7 +163,11 @@ export default function AdminDashboard() {
             <button
               onClick={() => {
                 if (!bannerUrl.trim()) return;
-                const item: Banner = { id: Date.now(), image: bannerUrl.trim(), link: bannerLink.trim() || undefined };
+                const item: Banner = {
+                  id: Date.now(),
+                  image: bannerUrl.trim(),
+                  link: bannerLink.trim() || undefined,
+                };
                 const updated = [item, ...banners].slice(0, 10);
                 setBanners(updated);
                 setBannerUrl("");
@@ -169,14 +182,27 @@ export default function AdminDashboard() {
           {banners.length > 0 && (
             <div className="mt-4 space-y-2">
               {banners.map((b) => (
-                <div key={b.id} className="flex items-center gap-3 p-2 border rounded-lg">
-                  <img src={b.image} alt="banner" className="w-20 h-12 object-cover rounded" />
+                <div
+                  key={b.id}
+                  className="flex items-center gap-3 p-2 border rounded-lg"
+                >
+                  <img
+                    src={b.image}
+                    alt="banner"
+                    className="w-20 h-12 object-cover rounded"
+                  />
                   <div className="flex-1 min-w-0">
                     <p className="text-sm truncate">{b.image}</p>
-                    {b.link && <p className="text-xs text-slate-500 truncate">{b.link}</p>}
+                    {b.link && (
+                      <p className="text-xs text-slate-500 truncate">
+                        {b.link}
+                      </p>
+                    )}
                   </div>
                   <button
-                    onClick={() => setBanners(banners.filter((x) => x.id !== b.id))}
+                    onClick={() =>
+                      setBanners(banners.filter((x) => x.id !== b.id))
+                    }
                     className="p-2 text-red-600 hover:bg-red-50 rounded"
                   >
                     <Trash2 className="h-4 w-4" />

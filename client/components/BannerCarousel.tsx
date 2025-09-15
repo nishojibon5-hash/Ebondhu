@@ -41,16 +41,27 @@ export function BannerCarousel() {
 
   return (
     <div className="mb-6">
-      <div className="overflow-hidden rounded-2xl border border-gray-100" ref={emblaRef}>
+      <div
+        className="overflow-hidden rounded-2xl border border-gray-100"
+        ref={emblaRef}
+      >
         <div className="flex">
           {banners.map((b) => (
             <div className="min-w-0 flex-[0_0_100%]" key={b.id}>
               {b.link ? (
                 <a href={b.link} target="_blank" rel="noreferrer">
-                  <img src={b.image} alt="banner" className="w-full h-36 object-cover" />
+                  <img
+                    src={b.image}
+                    alt="banner"
+                    className="w-full h-36 object-cover"
+                  />
                 </a>
               ) : (
-                <img src={b.image} alt="banner" className="w-full h-36 object-cover" />
+                <img
+                  src={b.image}
+                  alt="banner"
+                  className="w-full h-36 object-cover"
+                />
               )}
             </div>
           ))}
