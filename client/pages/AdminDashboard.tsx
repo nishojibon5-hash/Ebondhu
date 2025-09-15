@@ -5,7 +5,7 @@ import {
   isAdminLoggedIn,
   verifyAdmin,
 } from "../lib/adminAuth";
-import { CheckCircle2, ToggleLeft, ToggleRight, LogOut } from "lucide-react";
+import { CheckCircle2, ToggleLeft, ToggleRight, LogOut, Trash2, Plus } from "lucide-react";
 
 type FeatureFlags = {
   sendMoney: boolean;
@@ -15,6 +15,8 @@ type FeatureFlags = {
   payBill: boolean;
   addMoney: boolean;
 };
+
+type Banner = { id: number; image: string; link?: string };
 
 const DEFAULT_FLAGS: FeatureFlags = {
   sendMoney: true,
@@ -29,6 +31,9 @@ export default function AdminDashboard() {
   const navigate = useNavigate();
   const [flags, setFlags] = useState<FeatureFlags>(DEFAULT_FLAGS);
   const [verified, setVerified] = useState(false);
+  const [banners, setBanners] = useState<Banner[]>([]);
+  const [bannerUrl, setBannerUrl] = useState("");
+  const [bannerLink, setBannerLink] = useState("");
 
   useEffect(() => {
     const init = async () => {
@@ -45,6 +50,10 @@ export default function AdminDashboard() {
       setVerified(true);
       const saved = localStorage.getItem("featureFlags");
       if (saved) setFlags({ ...DEFAULT_FLAGS, ...JSON.parse(saved) });
+      try {
+        const b = JSON.parse(localStorage.getItem("banners") || "[]");
+        if (Array.isArray(b)) setBanners(b);
+      } catch {}
     };
     init();
   }, [navigate]);
@@ -56,6 +65,7 @@ export default function AdminDashboard() {
 
   const save = () => {
     localStorage.setItem("featureFlags", JSON.stringify(flags));
+    localStorage.setItem("banners", JSON.stringify(banners));
     alert("সেভ হয়েছে");
   };
 
@@ -123,6 +133,58 @@ export default function AdminDashboard() {
               </button>
             </div>
           ))}
+        </div>
+
+        {/* Banner Management */}
+        <div className="bg-white rounded-2xl shadow p-4 mt-4">
+          <h2 className="font-semibold text-slate-800 mb-3">ব্যানার ম্যানেজমেন্ট</h2>
+          <div className="space-y-2">
+            <input
+              value={bannerUrl}
+              onChange={(e) => setBannerUrl(e.target.value)}
+              placeholder="ইমেজ URL"
+              className="w-full p-2 border rounded-lg"
+            />
+            <input
+              value={bannerLink}
+              onChange={(e) => setBannerLink(e.target.value)}
+              placeholder="লিংক (ঐচ্ছিক)"
+              className="w-full p-2 border rounded-lg"
+            />
+            <button
+              onClick={() => {
+                if (!bannerUrl.trim()) return;
+                const item: Banner = { id: Date.now(), image: bannerUrl.trim(), link: bannerLink.trim() || undefined };
+                const updated = [item, ...banners].slice(0, 10);
+                setBanners(updated);
+                setBannerUrl("");
+                setBannerLink("");
+              }}
+              className="w-full bg-slate-800 hover:bg-slate-900 text-white rounded-lg p-2 flex items-center justify-center gap-2"
+            >
+              <Plus className="h-4 w-4" /> ব্যানার যোগ করুন
+            </button>
+          </div>
+
+          {banners.length > 0 && (
+            <div className="mt-4 space-y-2">
+              {banners.map((b) => (
+                <div key={b.id} className="flex items-center gap-3 p-2 border rounded-lg">
+                  <img src={b.image} alt="banner" className="w-20 h-12 object-cover rounded" />
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm truncate">{b.image}</p>
+                    {b.link && <p className="text-xs text-slate-500 truncate">{b.link}</p>}
+                  </div>
+                  <button
+                    onClick={() => setBanners(banners.filter((x) => x.id !== b.id))}
+                    className="p-2 text-red-600 hover:bg-red-50 rounded"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
         <button
