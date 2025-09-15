@@ -37,7 +37,7 @@ export function BannerCarousel() {
     return () => clearInterval(interval);
   }, [emblaApi]);
 
-  if (!banners.length) return null;
+  const data = banners.length ? banners : [{ id: 0, image: "/placeholder.svg" }];
 
   return (
     <div className="mb-6">
@@ -46,7 +46,7 @@ export function BannerCarousel() {
         ref={emblaRef}
       >
         <div className="flex">
-          {banners.map((b) => (
+          {data.map((b) => (
             <div className="min-w-0 flex-[0_0_100%]" key={b.id}>
               {b.link ? (
                 <a href={b.link} target="_blank" rel="noreferrer">
@@ -68,7 +68,7 @@ export function BannerCarousel() {
         </div>
       </div>
       <div className="flex justify-center gap-2 mt-2">
-        {banners.map((b, i) => (
+        {data.map((b) => (
           <span key={b.id} className="w-1.5 h-1.5 bg-gray-300 rounded-full" />
         ))}
       </div>
