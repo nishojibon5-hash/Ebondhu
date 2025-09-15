@@ -1,5 +1,7 @@
 # amarcash — React + Vite + Tailwind + Express + Serverless + Capacitor (Android)
 
+বাংলা ভার্সন: README.bn.md
+
 A complete mobile-first wallet-style app with admin dashboard, ready for web (Vercel/Netlify) and Android (Play Store AAB via Capacitor). Includes feature flags controlled from Admin.
 
 Live-ready stack:
