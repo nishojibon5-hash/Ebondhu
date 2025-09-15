@@ -17,6 +17,7 @@ import {
 import { Link } from "react-router-dom";
 import { Language } from "../App";
 import { DrawerMenu, DrawerMenuButton } from "../components/DrawerMenu";
+import { BannerCarousel } from "../components/BannerCarousel";
 
 interface DashboardProps {
   language: Language;
@@ -52,7 +53,7 @@ const translations = {
     userName: "মোঃ রহিম",
     appName: "amarcash",
     yourBalance: "আপনার ব্যালেন্স",
-    sendMoney: "টাকা পাঠা��",
+    sendMoney: "টাকা পাঠান",
     cashIn: "ক্যাশ ইন",
     cashOut: "ক্যাশ আউট",
     recharge: "মোবাইল রিচার্জ",
