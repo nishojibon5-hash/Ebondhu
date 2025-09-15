@@ -52,7 +52,7 @@ const translations = {
     userName: "মোঃ রহিম",
     appName: "amarcash",
     yourBalance: "আপনার ব্যালেন্স",
-    sendMoney: "টাকা পাঠান",
+    sendMoney: "টাকা পাঠা��",
     cashIn: "ক্যাশ ইন",
     cashOut: "ক্যাশ আউট",
     recharge: "মোবাইল রিচার্জ",
@@ -283,6 +283,9 @@ export default function Dashboard({ language, setLanguage }: DashboardProps) {
             })}
           </div>
         </div>
+
+        {/* Banners */}
+        <BannerCarousel />
 
         {/* Recent Transactions */}
         <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
