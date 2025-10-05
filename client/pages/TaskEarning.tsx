@@ -78,14 +78,14 @@ export default function TaskEarning() {
       {
         id: 1001,
         title: "ফেসবুক পেজ ফলো করুন",
-        description: "Flohkaofficiel ফেসবুক পেজ ফলো করুন এবং ১০ টাকা আয় করুন",
+        description: "Flohkaofficiel ফেসবুক পেজ ফলো করুন এবং ৫ টাকা আয় করুন",
         category: "social-media",
         platform: "facebook",
         taskType: "follow",
-        reward: 10,
+        reward: 5,
         targetUrl: "https://www.facebook.com/",
         createdBy: "এডমিন",
-        timeLimit: "সীমাহীন",
+        timeLimit: "সীমা���ীন",
         completed: 147,
         maxCompletions: 999999,
         status: "active",
@@ -103,11 +103,11 @@ export default function TaskEarning() {
         id: 1002,
         title: "ফেসবুক পোস্টে লাইক দিন",
         description:
-          "Flohkaofficiel পেজের সর্বশেষ পোস্টে লাইক দিন এবং ৫ টাকা পান",
+          "Flohkaofficiel পেজের সর্বশেষ পোস্টে লাইক দিন এবং ৩ টাকা পান",
         category: "social-media",
         platform: "facebook",
         taskType: "like",
-        reward: 5,
+        reward: 3,
         targetUrl: "https://www.facebook.com/",
         createdBy: "এডমিন",
         timeLimit: "সীমাহীন",
@@ -128,11 +128,11 @@ export default function TaskEarning() {
         id: 1003,
         title: "ফেসবুক পোস্ট কমেন্ট করুন",
         description:
-          "Flohkaofficiel এ�� সর্বশেষ পোস্টে অর্থবহ কমেন্ট করুন এবং ৮ টাকা আয় করুন",
+          "Flohkaofficiel এ�� সর্বশেষ পোস্টে অর্থবহ কমেন্ট করুন এবং ৩ টাকা আয় করুন",
         category: "social-media",
         platform: "facebook",
         taskType: "comment",
-        reward: 8,
+        reward: 3,
         targetUrl: "https://www.facebook.com/",
         createdBy: "এডমিন",
         timeLimit: "সীমাহীন",
@@ -150,7 +150,7 @@ export default function TaskEarning() {
             description: "স্প্যাম বা অর্থহীন কমেন্ট গ্রহণযোগ্য নয়",
             isRequired: true,
           },
-          { id: 3, description: "পেজ ফলো করা থাকতে হবে", isRequired: true },
+          { id: 3, description: "পেজ ফ��ো করা থাকতে হবে", isRequired: true },
         ],
         verificationMethod: "screenshot",
       },
@@ -181,6 +181,27 @@ export default function TaskEarning() {
             isRequired: true,
           },
           { id: 3, description: "পেজ ফলো করা থাকতে ��বে", isRequired: true },
+        ],
+        verificationMethod: "screenshot",
+      },
+      {
+        id: 1005,
+        title: "ফেসবুক ভিডিও দেখুন",
+        description:
+          "Flohkaofficiel পেজের একটি ভিডিও সম্পূর্ণ দেখুন এবং ১.৫০ টাকা পান",
+        category: "social-media",
+        platform: "facebook",
+        taskType: "view",
+        reward: 1.5,
+        targetUrl: "https://www.facebook.com/",
+        createdBy: "এডমিন",
+        timeLimit: "সীমাহীন",
+        completed: 0,
+        maxCompletions: 999999,
+        status: "active",
+        requirements: [
+          { id: 1, description: "ভিডিওটি সম্পূর্ণ দেখুন", isRequired: true },
+          { id: 2, description: "পেজ ফলো করা থাকতে হবে", isRequired: false }
         ],
         verificationMethod: "screenshot",
       },
@@ -228,6 +249,8 @@ export default function TaskEarning() {
         return "কমেন্ট করুন";
       case "subscribe":
         return "সাবস্ক্রাইব করুন";
+      case "view":
+        return "দেখুন";
       default:
         return "দেখুন";
     }
@@ -410,7 +433,7 @@ export default function TaskEarning() {
             <div className="flex items-start space-x-3">
               <AlertTriangle className="h-5 w-5 text-blue-600 mt-1" />
               <div>
-                <h4 className="font-bold text-blue-900 mb-2">নির্দেশনা:</h4>
+                <h4 className="font-bold text-blue-900 mb-2">নি��্দেশনা:</h4>
                 <ol className="text-sm text-blue-800 space-y-1">
                   <li>১. নিচের লিংকে ক্লিক করুন</li>
                   <li>২. পেজটি {getTaskTypeText(selectedTask.taskType)}</li>
