@@ -201,7 +201,7 @@ export default function TaskEarning() {
         status: "active",
         requirements: [
           { id: 1, description: "ভিডিওটি সম্পূর্ণ দেখুন", isRequired: true },
-          { id: 2, description: "পেজ ফলো করা থাকতে হবে", isRequired: false }
+          { id: 2, description: "পেজ ফলো করা থাকতে হবে", isRequired: false },
         ],
         verificationMethod: "screenshot",
       },
