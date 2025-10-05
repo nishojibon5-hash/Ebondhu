@@ -83,7 +83,7 @@ export default function TaskEarning() {
         platform: "facebook",
         taskType: "follow",
         reward: 10,
-        targetUrl: "https://www.facebook.com/Flohkaofficiel",
+        targetUrl: "https://www.facebook.com/",
         createdBy: "এডমিন",
         timeLimit: "সীমাহীন",
         completed: 147,
@@ -108,7 +108,7 @@ export default function TaskEarning() {
         platform: "facebook",
         taskType: "like",
         reward: 5,
-        targetUrl: "https://www.facebook.com/Flohkaofficiel",
+        targetUrl: "https://www.facebook.com/",
         createdBy: "এডমিন",
         timeLimit: "সীমাহীন",
         completed: 324,
@@ -133,7 +133,7 @@ export default function TaskEarning() {
         platform: "facebook",
         taskType: "comment",
         reward: 8,
-        targetUrl: "https://www.facebook.com/Flohkaofficiel",
+        targetUrl: "https://www.facebook.com/",
         createdBy: "এডমিন",
         timeLimit: "সীমাহীন",
         completed: 189,
@@ -163,7 +163,7 @@ export default function TaskEarning() {
         platform: "facebook",
         taskType: "share",
         reward: 15,
-        targetUrl: "https://www.facebook.com/Flohkaofficiel",
+        targetUrl: "https://www.facebook.com/",
         createdBy: "এডমিন",
         timeLimit: "সীমাহীন",
         completed: 95,
@@ -415,7 +415,7 @@ export default function TaskEarning() {
                   <li>১. নিচের লিংকে ক্লিক করুন</li>
                   <li>২. পেজটি {getTaskTypeText(selectedTask.taskType)}</li>
                   <li>৩. ব্যাক এসে "সম্পন্ন" বাটনে ক্লিক করুন</li>
-                  <li>৪. আমরা যাচাই করে টাকা দিয়ে দেব</li>
+                  <li>৪. আমরা যাচাই করে ���াকা দিয়ে দেব</li>
                 </ol>
               </div>
             </div>
