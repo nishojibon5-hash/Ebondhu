@@ -12,6 +12,8 @@ import {
   LogOut,
   Trash2,
   Plus,
+  Copy,
+  AlertTriangle,
 } from "lucide-react";
 
 type FeatureFlags = {
@@ -41,6 +43,7 @@ export default function AdminDashboard() {
   const [banners, setBanners] = useState<Banner[]>([]);
   const [bannerUrl, setBannerUrl] = useState("");
   const [bannerLink, setBannerLink] = useState("");
+  const [manualTopups, setManualTopups] = useState<any[]>([]);
 
   useEffect(() => {
     const init = async () => {
@@ -61,6 +64,10 @@ export default function AdminDashboard() {
         const b = JSON.parse(localStorage.getItem("banners") || "[]");
         if (Array.isArray(b)) setBanners(b);
       } catch {}
+      try {
+        const r = JSON.parse(localStorage.getItem("manualTopupRequests") || "[]");
+        if (Array.isArray(r)) setManualTopups(r);
+      } catch {}
     };
     init();
   }, [navigate]);
@@ -74,6 +81,65 @@ export default function AdminDashboard() {
     localStorage.setItem("featureFlags", JSON.stringify(flags));
     localStorage.setItem("banners", JSON.stringify(banners));
     alert("সেভ হয়েছে");
+  };
+
+  const updateRequests = (list: any[]) => {
+    setManualTopups(list);
+    localStorage.setItem("manualTopupRequests", JSON.stringify(list));
+  };
+
+  const approveRequest = (id: number) => {
+    const list = manualTopups.map((r) =>
+      r.id === id ? { ...r, status: "approved", reviewedAt: new Date().toISOString() } : r,
+    );
+    const req = manualTopups.find((r) => r.id === id);
+    if (req) {
+      // Update user balance
+      const users = JSON.parse(localStorage.getItem("registeredUsers") || "[]");
+      const idx = users.findIndex((u: any) => u.phone === req.userPhone);
+      if (idx !== -1) {
+        users[idx].balance = (users[idx].balance || 0) + Number(req.amount);
+        localStorage.setItem("registeredUsers", JSON.stringify(users));
+      }
+      // If same user is currently logged in, sync visible balance
+      if (localStorage.getItem("userPhone") === req.userPhone) {
+        const currentBalance = parseFloat(localStorage.getItem("userBalance") || "0");
+        localStorage.setItem("userBalance", (currentBalance + Number(req.amount)).toString());
+      }
+      // Log transaction
+      const transactions = JSON.parse(localStorage.getItem("transactions") || "[]");
+      transactions.unshift({
+        id: Date.now(),
+        type: "manual_add_money",
+        amount: Number(req.amount),
+        method: req.method,
+        accountNumber: req.targetNumber,
+        txnId: req.txnId,
+        date: new Date().toISOString(),
+        status: "completed",
+      });
+      localStorage.setItem("transactions", JSON.stringify(transactions));
+    }
+    updateRequests(list);
+  };
+
+  const rejectRequest = (id: number) => {
+    const reason = prompt("রিজেক্টের কারণ লিখুন (ঐচ্ছিক)") || "";
+    const list = manualTopups.map((r) =>
+      r.id === id ? { ...r, status: "rejected", reason, reviewedAt: new Date().toISOString() } : r,
+    );
+    updateRequests(list);
+  };
+
+  const warnUser = (phone: string) => {
+    const msg = prompt("সতর্কবার্তা লিখুন") || "ভুয়া ট্রানজেকশন আইডি দেওয়া হয়েছে।";
+    const key = "userWarnings";
+    const map = JSON.parse(localStorage.getItem(key) || "{}");
+    const arr = Array.isArray(map[phone]) ? map[phone] : [];
+    arr.unshift({ id: Date.now(), message: msg, date: new Date().toISOString() });
+    map[phone] = arr;
+    localStorage.setItem(key, JSON.stringify(map));
+    alert("নোটিফিকেশন পাঠানো হয়েছে");
   };
 
   const logoutAdmin = () => {
@@ -143,6 +209,43 @@ export default function AdminDashboard() {
         </div>
 
         {/* Banner Management */}
+        {/* Manual Add Money Requests */}
+        <div className="bg-white rounded-2xl shadow p-4 mt-4">
+          <h2 className="font-semibold text-slate-800 mb-3">ম্যানুয়াল Add Money রিকুয়েস্ট</h2>
+          {manualTopups.length === 0 ? (
+            <p className="text-sm text-slate-500">কোনো রিকুয়েস্ট নেই</p>
+          ) : (
+            <div className="space-y-3">
+              {manualTopups.map((r) => (
+                <div key={r.id} className="border rounded-xl p-3">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="font-semibold text-slate-800">৳{r.amount} • {r.method?.toUpperCase?.() || r.method}</p>
+                      <p className="text-xs text-slate-500">ইউজার: {r.userPhone} • সময়: {new Date(r.createdAt).toLocaleString("bn-BD")}</p>
+                    </div>
+                    <span className={`text-xs px-2 py-1 rounded-full ${r.status === "approved" ? "bg-green-100 text-green-700" : r.status === "rejected" ? "bg-red-100 text-red-700" : "bg-yellow-100 text-yellow-700"}`}>{r.status}</span>
+                  </div>
+                  <div className="flex items-center gap-2 mt-2 text-sm">
+                    <span className="text-slate-600">TxnID:</span>
+                    <span className="font-mono text-slate-800 break-all">{r.txnId}</span>
+                    <button onClick={() => navigator.clipboard.writeText(r.txnId)} className="px-2 py-1 border rounded text-slate-600 hover:bg-slate-50 flex items-center gap-1"><Copy className="h-3 w-3"/>কপি</button>
+                  </div>
+                  <div className="flex items-center gap-2 mt-3">
+                    {r.status === "pending" && (
+                      <>
+                        <button onClick={() => approveRequest(r.id)} className="px-3 py-2 bg-green-600 text-white rounded">গ্রহণ করুন</button>
+                        <button onClick={() => rejectRequest(r.id)} className="px-3 py-2 bg-red-100 text-red-700 rounded">রিজেক্ট</button>
+                      </>
+                    )}
+                    <button onClick={() => warnUser(r.userPhone)} className="px-3 py-2 bg-yellow-100 text-yellow-700 rounded flex items-center gap-1"><AlertTriangle className="h-4 w-4"/>ওয়ার্নিং পাঠান</button>
+                  </div>
+                  {r.reason && <p className="text-xs text-red-600 mt-2">কারণ: {r.reason}</p>}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
         <div className="bg-white rounded-2xl shadow p-4 mt-4">
           <h2 className="font-semibold text-slate-800 mb-3">
             ব্যানার ম্যানেজমেন্ট
