@@ -275,6 +275,30 @@ export default function AddMoney() {
     alert("কপি করা হয়েছে!");
   };
 
+  if (currentStep === 6) {
+    return (
+      <div className="pb-20 min-h-screen bg-gray-50">
+        <div className="bg-gradient-to-r from-bkash-500 to-bkash-600 p-4 text-white">
+          <h1 className="text-xl font-bold">রিকুয়েস্ট পাঠানো হয়েছে</h1>
+        </div>
+
+        <div className="p-4">
+          <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 text-center">
+            <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <CheckCircle className="h-10 w-10 text-blue-600" />
+            </div>
+            <h2 className="text-xl font-bold text-gray-900 mb-2">এডমিনের অনুমোদনের অপেক্ষায়</h2>
+            <p className="text-gray-600 mb-6">ট্রানজেকশন আইডি যাচাই করে এডমিন ব্যালেন্সে টাকা যোগ করবেন</p>
+            <div className="space-y-3">
+              <button onClick={() => navigate("/")} className="w-full bg-bkash-500 hover:bg-bkash-600 text-white py-3 rounded-xl font-medium transition-colors">হোমে ফিরুন</button>
+              <button onClick={() => { setCurrentStep(1); setSelectedMethod(null); setAmount(""); setAccountNumber(""); setPin(""); setPaymentUrl(""); setErrors({}); setManualMode(false); setTxnId(""); }} className="w-full bg-gray-200 hover:bg-gray-300 text-gray-700 py-3 rounded-xl font-medium transition-colors">আরো টাকা যোগ করুন</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   if (currentStep === 5) {
     return (
       <div className="pb-20 min-h-screen bg-gray-50">
@@ -373,7 +397,7 @@ export default function AddMoney() {
                 {selectedMethod?.name} পেমেন্ট
               </h2>
               <p className="text-gray-600">
-                ���িচের QR কোড স্ক্যান করুন অথবা লি���কে যান
+                ���িচের QR কোড স্ক্যান করুন অথবা লিংকে যান
               </p>
             </div>
 
@@ -513,7 +537,7 @@ export default function AddMoney() {
           <div className="space-y-6">
             <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
               <h2 className="text-lg font-bold text-gray-900 mb-4">
-                পেমেন্ট পদ���ধতি নির্বাচন করুন
+                পেমেন্ট পদ্ধতি নির্বাচন করুন
               </h2>
 
               {/* Mobile Financial Services */}
@@ -681,7 +705,7 @@ export default function AddMoney() {
               {selectedMethod.type === "mfs" && (
                 <div className="mb-4">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    {selectedMethod.name} ন��্বর
+                    {selectedMethod.name} নম্বর
                   </label>
                   <input
                     type="tel"
