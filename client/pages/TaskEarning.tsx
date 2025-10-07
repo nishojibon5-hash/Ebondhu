@@ -78,11 +78,11 @@ export default function TaskEarning() {
       {
         id: 1001,
         title: "ফেসবুক পেজ ফলো করুন",
-        description: "Flohkaofficiel ফেসবুক পেজ ফলো করুন এবং ৫ টাকা আয় করুন",
+        description: "Flohkaofficiel ফেসবুক পেজ ফলো করুন এবং ২৫ পয়সা আয় করুন",
         category: "social-media",
         platform: "facebook",
         taskType: "follow",
-        reward: 5,
+        reward: 0.25,
         targetUrl: "https://www.facebook.com/thatsalman",
         createdBy: "এডমিন",
         timeLimit: "সীমা���ীন",
@@ -103,11 +103,11 @@ export default function TaskEarning() {
         id: 1002,
         title: "ফেসবুক পোস্টে লাইক দিন",
         description:
-          "Flohkaofficiel পেজের সর্বশেষ পোস্টে লাইক দিন এবং ৩ টাকা পান",
+          "Flohkaofficiel পেজের সর্বশেষ পোস্টে লাইক দিন এবং ২০ পয়সা পান",
         category: "social-media",
         platform: "facebook",
         taskType: "like",
-        reward: 3,
+        reward: 0.2,
         targetUrl: "https://www.facebook.com/thatsalman",
         createdBy: "এডমিন",
         timeLimit: "সীমাহীন",
@@ -117,7 +117,7 @@ export default function TaskEarning() {
         requirements: [
           {
             id: 1,
-            description: "সর্বশেষ পোস্টে লাইক দিতে হবে",
+            description: "��র্বশেষ পোস্টে লাইক দিতে হবে",
             isRequired: true,
           },
           { id: 2, description: "পেজ ফলো করা থাকতে হবে", isRequired: true },
@@ -128,11 +128,11 @@ export default function TaskEarning() {
         id: 1003,
         title: "ফেসবুক ���োস্ট কমেন্ট করুন",
         description:
-          "Flohkaofficiel এ�� সর্বশেষ পোস্টে অর্থবহ কমেন্ট করুন এবং ৩ টাকা আয় করুন",
+          "Flohkaofficiel এর সর্বশেষ পোস্টে অর্থবহ কমেন্ট করুন এবং ৩০ পয়সা আয় করুন",
         category: "social-media",
         platform: "facebook",
         taskType: "comment",
-        reward: 3,
+        reward: 0.3,
         targetUrl: "https://www.facebook.com/thatsalman",
         createdBy: "এডমিন",
         timeLimit: "সীমাহীন",
@@ -158,11 +158,11 @@ export default function TaskEarning() {
         id: 1004,
         title: "ফেসবুক পোস্ট শে��়ার করুন",
         description:
-          "Flohkaofficiel এর সর্বশেষ পোস্ট আপনার টাইমলাইনে শেয়ার করুন এবং ১৫ টাকা পান",
+          "Flohkaofficiel এর সর্বশেষ পোস্ট আপনার টাইমলাইনে শেয়ার করুন এবং ৪০ পয়সা পান",
         category: "social-media",
         platform: "facebook",
         taskType: "share",
-        reward: 15,
+        reward: 0.4,
         targetUrl: "https://www.facebook.com/thatsalman",
         createdBy: "এডমিন",
         timeLimit: "সীমাহীন",
@@ -188,11 +188,11 @@ export default function TaskEarning() {
         id: 1005,
         title: "ফেসবুক ভিডিও দেখুন",
         description:
-          "Flohkaofficiel পেজের একটি ভিডিও সম্পূর্ণ দেখুন এবং ১.৫০ টাকা পান",
+          "Flohkaofficiel পেজের একটি ভিডিও সম্পূর্ণ দেখুন এবং ২০ পয়সা পান",
         category: "social-media",
         platform: "facebook",
         taskType: "view",
-        reward: 1.5,
+        reward: 0.2,
         targetUrl: "https://www.facebook.com/thatsalman",
         createdBy: "এডমিন",
         timeLimit: "সীমাহীন",
@@ -248,7 +248,7 @@ export default function TaskEarning() {
       case "comment":
         return "কমেন্ট করুন";
       case "subscribe":
-        return "সাবস্ক্রাইব করুন";
+        return "সাবস্ক্রাইব ���রুন";
       case "view":
         return "দেখুন";
       default:
@@ -433,7 +433,7 @@ export default function TaskEarning() {
             <div className="flex items-start space-x-3">
               <AlertTriangle className="h-5 w-5 text-blue-600 mt-1" />
               <div>
-                <h4 className="font-bold text-blue-900 mb-2">নি��্দেশনা:</h4>
+                <h4 className="font-bold text-blue-900 mb-2">নি��্দে��না:</h4>
                 <ol className="text-sm text-blue-800 space-y-1">
                   <li>১. নিচের লিংকে ক্লিক করুন</li>
                   <li>২. পেজটি {getTaskTypeText(selectedTask.taskType)}</li>
@@ -878,7 +878,7 @@ export default function TaskEarning() {
                       className="bg-red-100 hover:bg-red-200 text-red-700 px-3 py-2 rounded-lg text-sm transition-colors flex items-center space-x-1"
                     >
                       <Trash2 className="h-4 w-4" />
-                      <span>মুছুন</span>
+                      <span>মুছ��ন</span>
                     </button>
                   </div>
                 </div>
