@@ -100,7 +100,7 @@ export default function AddMoney() {
       type: "bank",
       logo: "🏪",
       color: "bg-blue-600",
-      description: "সিটি ব্যাংক কার্ড দিয়ে টাকা য��গ করুন",
+      description: "সিটি ব্যাংক কার্ড দিয়ে টাকা যোগ করুন",
       minAmount: 100,
       maxAmount: 50000,
       fee: 2,
@@ -132,7 +132,7 @@ export default function AddMoney() {
 
   const validateStep1 = () => {
     const newErrors: { [key: string]: string } = {};
-    if (!selectedMethod) newErrors.method = "পেমেন্ট পদ্ধতি নির্বাচন করুন";
+    if (!selectedMethod) newErrors.method = "পেমেন্ট পদ���ধতি নির্বাচন করুন";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -200,7 +200,7 @@ export default function AddMoney() {
             simulateSuccessfulPayment(addAmount);
           }
         } else {
-          setErrors({ pin: "ভুল পিন দিয়েছেন" });
+          setErrors({ pin: "ভুল পিন দিয��েছেন" });
         }
         setIsProcessing(false);
       }, 2000);
@@ -861,9 +861,12 @@ export default function AddMoney() {
                   )}
                 </div>
 
-                <div className="bg-yellow-50 rounded-xl p-3 border border-yellow-200 mb-4 text-sm text-yellow-900">
+                <div className="bg-yellow-50 rounded-xl p-3 border border-yellow-200 mb-2 text-sm text-yellow-900">
                   ভুল/ভুয়া ট্রানজেকশন আইডি দিলে অ্যাকাউন্টে সতর্কতা পাঠানো হবে।
                 </div>
+                {errors.amount && (
+                  <p className="text-red-500 text-sm mb-2">{errors.amount}</p>
+                )}
 
                 <div className="grid grid-cols-1 gap-3">
                   <button
