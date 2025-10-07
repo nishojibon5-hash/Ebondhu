@@ -797,7 +797,8 @@ export default function AddMoney() {
                   onClick={() => {
                     const addAmount = parseFloat(amount);
                     const err: { [key: string]: string } = {};
-                    if (!selectedMethod) err.method = "পেমেন্ট পদ্ধতি নির্বাচন করুন";
+                    if (!selectedMethod)
+                      err.method = "পেমেন্ট পদ্ধতি নির্বাচন করুন";
                     if (!amount || isNaN(addAmount) || addAmount <= 0)
                       err.amount = "সঠিক পরিমাণ লিখুন";
                     setErrors(err);
