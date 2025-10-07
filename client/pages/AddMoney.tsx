@@ -287,11 +287,35 @@ export default function AddMoney() {
             <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <CheckCircle className="h-10 w-10 text-blue-600" />
             </div>
-            <h2 className="text-xl font-bold text-gray-900 mb-2">এডমিনের অনুমোদনের অপেক্ষায়</h2>
-            <p className="text-gray-600 mb-6">ট্রানজেকশন আইডি যাচাই করে এডমিন ব্যালেন্সে টাকা যোগ করবেন</p>
+            <h2 className="text-xl font-bold text-gray-900 mb-2">
+              এডমিনের অনুমোদনের অপেক্ষায়
+            </h2>
+            <p className="text-gray-600 mb-6">
+              ট্রানজেকশন আইডি যাচাই করে এডমিন ব্যালেন্সে টাকা যোগ করবেন
+            </p>
             <div className="space-y-3">
-              <button onClick={() => navigate("/")} className="w-full bg-bkash-500 hover:bg-bkash-600 text-white py-3 rounded-xl font-medium transition-colors">হোমে ফিরুন</button>
-              <button onClick={() => { setCurrentStep(1); setSelectedMethod(null); setAmount(""); setAccountNumber(""); setPin(""); setPaymentUrl(""); setErrors({}); setManualMode(false); setTxnId(""); }} className="w-full bg-gray-200 hover:bg-gray-300 text-gray-700 py-3 rounded-xl font-medium transition-colors">আরো টাকা যোগ করুন</button>
+              <button
+                onClick={() => navigate("/")}
+                className="w-full bg-bkash-500 hover:bg-bkash-600 text-white py-3 rounded-xl font-medium transition-colors"
+              >
+                হোমে ফিরুন
+              </button>
+              <button
+                onClick={() => {
+                  setCurrentStep(1);
+                  setSelectedMethod(null);
+                  setAmount("");
+                  setAccountNumber("");
+                  setPin("");
+                  setPaymentUrl("");
+                  setErrors({});
+                  setManualMode(false);
+                  setTxnId("");
+                }}
+                className="w-full bg-gray-200 hover:bg-gray-300 text-gray-700 py-3 rounded-xl font-medium transition-colors"
+              >
+                আরো টাকা যোগ করুন
+              </button>
             </div>
           </div>
         </div>
@@ -760,33 +784,63 @@ export default function AddMoney() {
               )}
 
               <div className="grid grid-cols-1 gap-3 mt-4">
-                <button onClick={() => { setManualMode(false); setCurrentStep(3); }} className="w-full bg-bkash-600 hover:bg-bkash-700 text-white py-3 rounded-xl font-medium transition-colors">নেক্সট (লাইভ পেমেন্ট)</button>
-                <button onClick={() => { setManualMode(true); setCurrentStep(3); }} className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-medium transition-colors">সেন্ড মানি করে ট্রানজেকশন আইডি সাবমিট</button>
+                <button
+                  onClick={() => {
+                    setManualMode(false);
+                    setCurrentStep(3);
+                  }}
+                  className="w-full bg-bkash-600 hover:bg-bkash-700 text-white py-3 rounded-xl font-medium transition-colors"
+                >
+                  নেক্সট (লাইভ পেমেন্ট)
+                </button>
+                <button
+                  onClick={() => {
+                    setManualMode(true);
+                    setCurrentStep(3);
+                  }}
+                  className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-medium transition-colors"
+                >
+                  সেন্ড মানি করে ট্রানজেকশন আইডি সাবমিট
+                </button>
               </div>
             </div>
           </div>
         )}
 
         {/* Step 3: Enter PIN or Manual Submit */}
-        {currentStep === 3 && (
-          manualMode ? (
+        {currentStep === 3 &&
+          (manualMode ? (
             <div className="space-y-6">
               <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
-                <h2 className="text-lg font-bold text-gray-900 mb-4">সেন্ড মানি করে ট্রানজেকশন আইডি দিন</h2>
+                <h2 className="text-lg font-bold text-gray-900 mb-4">
+                  সেন্ড মানি করে ট্রানজেকশন আইডি দিন
+                </h2>
 
                 <div className="bg-blue-50 rounded-xl p-4 mb-4 border border-blue-200">
-                  <p className="text-blue-900 font-medium">নিচের বিকাশ নম্বরে সেন্ড মানি করুন</p>
+                  <p className="text-blue-900 font-medium">
+                    নিচের বিকাশ নম্বরে সেন্ড মানি করুন
+                  </p>
                   <div className="flex items-center justify-between mt-2">
-                    <span className="text-xl font-bold text-blue-900">{BKASH_RECEIVER}</span>
-                    <button onClick={() => copyToClipboard(BKASH_RECEIVER)} className="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm flex items-center gap-1">
+                    <span className="text-xl font-bold text-blue-900">
+                      {BKASH_RECEIVER}
+                    </span>
+                    <button
+                      onClick={() => copyToClipboard(BKASH_RECEIVER)}
+                      className="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm flex items-center gap-1"
+                    >
                       <Copy className="h-4 w-4" /> কপি
                     </button>
                   </div>
-                  <p className="text-sm text-blue-800 mt-2">পরিমাণ: ৳{amount} • রেফারেন্স: আপনার মোবাইল নম্বর ({localStorage.getItem("userPhone") || ""})</p>
+                  <p className="text-sm text-blue-800 mt-2">
+                    পরিমাণ: ৳{amount} • রেফারেন্স: আপনার মোবাইল নম্বর (
+                    {localStorage.getItem("userPhone") || ""})
+                  </p>
                 </div>
 
                 <div className="mb-4">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">ট্রানজেকশন আইডি</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    ট্রানজেকশন আইডি
+                  </label>
                   <input
                     type="text"
                     value={txnId}
@@ -804,8 +858,20 @@ export default function AddMoney() {
                 </div>
 
                 <div className="grid grid-cols-1 gap-3">
-                  <button onClick={submitManualRequest} className="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl font-medium transition-colors">রিকুয়েস্ট সাবমিট করুন</button>
-                  <button onClick={() => { setManualMode(false); }} className="w-full bg-gray-200 hover:bg-gray-300 text-gray-700 py-3 rounded-xl font-medium transition-colors">লাইভ পেমেন্টে যান</button>
+                  <button
+                    onClick={submitManualRequest}
+                    className="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl font-medium transition-colors"
+                  >
+                    রিকুয়েস্ট সাবমিট করুন
+                  </button>
+                  <button
+                    onClick={() => {
+                      setManualMode(false);
+                    }}
+                    className="w-full bg-gray-200 hover:bg-gray-300 text-gray-700 py-3 rounded-xl font-medium transition-colors"
+                  >
+                    লাইভ পেমেন্টে যান
+                  </button>
                 </div>
               </div>
             </div>
@@ -821,7 +887,9 @@ export default function AddMoney() {
                   <div className="space-y-2 text-sm">
                     <div className="flex justify-between">
                       <span>পদ্ধতি:</span>
-                      <span className="font-medium">{selectedMethod?.name}</span>
+                      <span className="font-medium">
+                        {selectedMethod?.name}
+                      </span>
                     </div>
                     {selectedMethod?.type === "mfs" && (
                       <div className="flex justify-between">
@@ -905,8 +973,7 @@ export default function AddMoney() {
                 </div>
               </div>
             </div>
-          )
-        )}
+          ))}
 
         {/* Navigation Buttons */}
         {(!manualMode || currentStep !== 3) && (
