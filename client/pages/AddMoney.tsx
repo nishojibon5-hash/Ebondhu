@@ -64,7 +64,7 @@ export default function AddMoney() {
       type: "mfs",
       logo: "📱",
       color: "bg-orange-500",
-      description: "নগদ থেকে সরাসরি টাকা যোগ করুন",
+      description: "নগদ থেকে স���াসরি টাকা যোগ করুন",
       minAmount: 10,
       maxAmount: 20000,
       fee: 15,
@@ -112,7 +112,7 @@ export default function AddMoney() {
       type: "bank",
       logo: "🏛️",
       color: "bg-teal-600",
-      description: "ব্র্যাক ব্য���ংক কার্ড দিয়ে টাকা যোগ করুন",
+      description: "ব্র্যাক ব্যাংক কার্ড দিয়ে টাকা যোগ করুন",
       minAmount: 100,
       maxAmount: 50000,
       fee: 1.75,
@@ -145,7 +145,7 @@ export default function AddMoney() {
     else if (selectedMethod && addAmount < selectedMethod.minAmount) {
       newErrors.amount = `ন্যূনতম ৳${selectedMethod.minAmount} যোগ করতে পারবেন`;
     } else if (selectedMethod && addAmount > selectedMethod.maxAmount) {
-      newErrors.amount = `স��্বোচ্চ ৳${selectedMethod.maxAmount} যোগ করতে পারবেন`;
+      newErrors.amount = `সর্বোচ্চ ৳${selectedMethod.maxAmount} যোগ করতে পারবেন`;
     }
 
     if (
@@ -909,37 +909,39 @@ export default function AddMoney() {
         )}
 
         {/* Navigation Buttons */}
-        <div className="flex space-x-4 mt-6">
-          {currentStep > 1 && (
-            <button
-              onClick={() => setCurrentStep(currentStep - 1)}
-              className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-700 py-3 rounded-xl font-medium transition-colors"
-            >
-              পূর্ববর্তী
-            </button>
-          )}
+        {(!manualMode || currentStep !== 3) && (
+          <div className="flex space-x-4 mt-6">
+            {currentStep > 1 && (
+              <button
+                onClick={() => setCurrentStep(currentStep - 1)}
+                className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-700 py-3 rounded-xl font-medium transition-colors"
+              >
+                পূর্ববর্তী
+              </button>
+            )}
 
-          {currentStep < 3 ? (
-            <button
-              onClick={handleNext}
-              className="flex-1 bg-bkash-500 hover:bg-bkash-600 text-white py-3 rounded-xl font-medium transition-colors"
-            >
-              পরবর্তী
-            </button>
-          ) : (
-            <button
-              onClick={handleAddMoney}
-              disabled={isProcessing}
-              className={`flex-1 py-3 rounded-xl font-medium transition-colors ${
-                isProcessing
-                  ? "bg-gray-400 text-gray-200 cursor-not-allowed"
-                  : "bg-green-600 hover:bg-green-700 text-white"
-              }`}
-            >
-              {isProcessing ? "প্রক্রিয়াধীন..." : "পেমেন্ট শুরু ���রুন"}
-            </button>
-          )}
-        </div>
+            {currentStep < 3 ? (
+              <button
+                onClick={handleNext}
+                className="flex-1 bg-bkash-500 hover:bg-bkash-600 text-white py-3 rounded-xl font-medium transition-colors"
+              >
+                পরবর্তী
+              </button>
+            ) : (
+              <button
+                onClick={handleAddMoney}
+                disabled={isProcessing}
+                className={`flex-1 py-3 rounded-xl font-medium transition-colors ${
+                  isProcessing
+                    ? "bg-gray-400 text-gray-200 cursor-not-allowed"
+                    : "bg-green-600 hover:bg-green-700 text-white"
+                }`}
+              >
+                {isProcessing ? "প্রক্রিয��াধীন..." : "পেমেন্ট শুরু করুন"}
+              </button>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
