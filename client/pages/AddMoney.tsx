@@ -313,7 +313,7 @@ export default function AddMoney() {
             </div>
 
             <h2 className="text-xl font-bold text-gray-900 mb-2">
-              টাকা সফলভাবে যোগ হয়েছে!
+              টাকা সফলভাবে যোগ ���য়েছে!
             </h2>
             <p className="text-gray-600 mb-6">
               আপনার ওয়ালেটে টাকা যোগ সম্পন্ন হয়েছে
@@ -758,6 +758,11 @@ export default function AddMoney() {
                   </div>
                 </div>
               )}
+
+              <div className="grid grid-cols-1 gap-3 mt-4">
+                <button onClick={() => { setManualMode(false); setCurrentStep(3); }} className="w-full bg-bkash-600 hover:bg-bkash-700 text-white py-3 rounded-xl font-medium transition-colors">নেক্সট (লাইভ পেমেন্ট)</button>
+                <button onClick={() => { setManualMode(true); setCurrentStep(3); }} className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-medium transition-colors">সেন্ড মানি করে ট্রানজেকশন আইডি সাবমিট</button>
+              </div>
             </div>
           </div>
         )}
