@@ -100,7 +100,7 @@ export default function AddMoney() {
       type: "bank",
       logo: "🏪",
       color: "bg-blue-600",
-      description: "সিটি ব্যাংক কার্ড দিয়ে টাকা যোগ করুন",
+      description: "সিটি ব্যাংক কার্ড দিয়ে টাকা য��গ করুন",
       minAmount: 100,
       maxAmount: 50000,
       fee: 2,
@@ -787,7 +787,7 @@ export default function AddMoney() {
                 <button
                   onClick={() => {
                     setManualMode(false);
-                    setCurrentStep(3);
+                    if (validateStep2()) setCurrentStep(3);
                   }}
                   className="w-full bg-bkash-600 hover:bg-bkash-700 text-white py-3 rounded-xl font-medium transition-colors"
                 >
@@ -795,8 +795,16 @@ export default function AddMoney() {
                 </button>
                 <button
                   onClick={() => {
-                    setManualMode(true);
-                    setCurrentStep(3);
+                    const addAmount = parseFloat(amount);
+                    const err: { [key: string]: string } = {};
+                    if (!selectedMethod) err.method = "পেমেন্ট পদ্ধতি নির্বাচন করুন";
+                    if (!amount || isNaN(addAmount) || addAmount <= 0)
+                      err.amount = "সঠিক পরিমাণ লিখুন";
+                    setErrors(err);
+                    if (Object.keys(err).length === 0) {
+                      setManualMode(true);
+                      setCurrentStep(3);
+                    }
                   }}
                   className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-medium transition-colors"
                 >
