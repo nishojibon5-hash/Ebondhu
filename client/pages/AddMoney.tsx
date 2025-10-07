@@ -112,7 +112,7 @@ export default function AddMoney() {
       type: "bank",
       logo: "🏛️",
       color: "bg-teal-600",
-      description: "ব্র্যাক ব্যাংক কার্ড দিয়ে টাকা যোগ করুন",
+      description: "ব্র্যাক ব্য���ংক কার্ড দিয়ে টাকা যোগ করুন",
       minAmount: 100,
       maxAmount: 50000,
       fee: 1.75,
@@ -145,7 +145,7 @@ export default function AddMoney() {
     else if (selectedMethod && addAmount < selectedMethod.minAmount) {
       newErrors.amount = `ন্যূনতম ৳${selectedMethod.minAmount} যোগ করতে পারবেন`;
     } else if (selectedMethod && addAmount > selectedMethod.maxAmount) {
-      newErrors.amount = `সর্বোচ্চ ৳${selectedMethod.maxAmount} যোগ করতে পারবেন`;
+      newErrors.amount = `স��্বোচ্চ ৳${selectedMethod.maxAmount} যোগ করতে পারবেন`;
     }
 
     if (
@@ -313,7 +313,7 @@ export default function AddMoney() {
             </div>
 
             <h2 className="text-xl font-bold text-gray-900 mb-2">
-              টাকা সফলভাবে যোগ ���য়েছে!
+              টাকা সফলভাবে যোগ হয়েছে!
             </h2>
             <p className="text-gray-600 mb-6">
               আপনার ওয়ালেটে টাকা যোগ সম্পন্ন হয়েছে
@@ -767,103 +767,145 @@ export default function AddMoney() {
           </div>
         )}
 
-        {/* Step 3: Enter PIN */}
+        {/* Step 3: Enter PIN or Manual Submit */}
         {currentStep === 3 && (
-          <div className="space-y-6">
-            <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
-              <h2 className="text-lg font-bold text-gray-900 mb-4">
-                পিন দিয়ে নিশ্চিত করুন
-              </h2>
+          manualMode ? (
+            <div className="space-y-6">
+              <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
+                <h2 className="text-lg font-bold text-gray-900 mb-4">সেন্ড মানি করে ট্রানজেকশন আইডি দিন</h2>
 
-              {/* Transaction Summary */}
-              <div className="bg-gray-50 rounded-xl p-4 mb-6">
-                <div className="space-y-2 text-sm">
-                  <div className="flex justify-between">
-                    <span>পদ্ধতি:</span>
-                    <span className="font-medium">{selectedMethod?.name}</span>
+                <div className="bg-blue-50 rounded-xl p-4 mb-4 border border-blue-200">
+                  <p className="text-blue-900 font-medium">নিচের বিকাশ নম্বরে সেন্ড মানি করুন</p>
+                  <div className="flex items-center justify-between mt-2">
+                    <span className="text-xl font-bold text-blue-900">{BKASH_RECEIVER}</span>
+                    <button onClick={() => copyToClipboard(BKASH_RECEIVER)} className="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm flex items-center gap-1">
+                      <Copy className="h-4 w-4" /> কপি
+                    </button>
                   </div>
-                  {selectedMethod?.type === "mfs" && (
-                    <div className="flex justify-between">
-                      <span>নম্বর:</span>
-                      <span className="font-medium">{accountNumber}</span>
-                    </div>
-                  )}
-                  <div className="flex justify-between">
-                    <span>পরিমাণ:</span>
-                    <span className="font-medium">৳{amount}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>ফি:</span>
-                    <span className="font-medium">
-                      ৳
-                      {selectedMethod
-                        ? calculateFee(
-                            selectedMethod,
-                            parseFloat(amount),
-                          ).toFixed(2)
-                        : "0"}
-                    </span>
-                  </div>
-                  <div className="flex justify-between font-bold border-t border-gray-200 pt-2">
-                    <span>মোট পেমেন্ট:</span>
-                    <span className="text-bkash-500">
-                      ৳
-                      {selectedMethod
-                        ? (
-                            parseFloat(amount) +
-                            calculateFee(selectedMethod, parseFloat(amount))
-                          ).toFixed(2)
-                        : amount}
-                    </span>
-                  </div>
+                  <p className="text-sm text-blue-800 mt-2">পরিমাণ: ৳{amount} • রেফারেন্স: আপনার মোবাইল নম্বর ({localStorage.getItem("userPhone") || ""})</p>
                 </div>
-              </div>
 
-              {/* PIN Input */}
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  পিন লিখুন
-                </label>
-                <div className="relative">
+                <div className="mb-4">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">ট্রানজেকশন আইডি</label>
                   <input
-                    type={showPin ? "text" : "password"}
-                    value={pin}
-                    onChange={(e) => setPin(e.target.value)}
-                    placeholder="৫ সংখ্যার পিন"
-                    maxLength={5}
-                    className={`w-full pr-10 pl-3 py-3 border rounded-xl focus:ring-2 focus:ring-bkash-500 focus:border-transparent ${
-                      errors.pin ? "border-red-500" : "border-gray-300"
-                    }`}
+                    type="text"
+                    value={txnId}
+                    onChange={(e) => setTxnId(e.target.value)}
+                    placeholder="bKash Transaction ID"
+                    className={`w-full p-3 border rounded-xl focus:ring-2 focus:ring-bkash-500 focus:border-transparent ${errors.txnId ? "border-red-500" : "border-gray-300"}`}
                   />
-                  <button
-                    type="button"
-                    onClick={() => setShowPin(!showPin)}
-                    className="absolute right-3 top-3.5 text-gray-400 hover:text-gray-600"
-                  >
-                    {showPin ? (
-                      <EyeOff className="h-5 w-5" />
-                    ) : (
-                      <Eye className="h-5 w-5" />
-                    )}
-                  </button>
+                  {errors.txnId && (
+                    <p className="text-red-500 text-sm mt-1">{errors.txnId}</p>
+                  )}
                 </div>
-                {errors.pin && (
-                  <p className="text-red-500 text-sm mt-1">{errors.pin}</p>
-                )}
-              </div>
 
-              {/* Warning */}
-              <div className="bg-blue-50 rounded-xl p-3 border border-blue-200">
-                <div className="flex items-start space-x-2">
-                  <AlertCircle className="h-4 w-4 text-blue-600 mt-0.5" />
-                  <p className="text-sm text-blue-800">
-                    নিশ্চিত করার পর আপনাকে {selectedMethod?.name} পেমেন্ট পেজে
-                    নিয়ে যাওয়া হবে।
-                  </p>
+                <div className="bg-yellow-50 rounded-xl p-3 border border-yellow-200 mb-4 text-sm text-yellow-900">
+                  ভুল/ভুয়া ট্রানজেকশন আইডি দিলে অ্যাকাউন্টে সতর্কতা পাঠানো হবে।
+                </div>
+
+                <div className="grid grid-cols-1 gap-3">
+                  <button onClick={submitManualRequest} className="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl font-medium transition-colors">রিকুয়েস্ট সাবমিট করুন</button>
+                  <button onClick={() => { setManualMode(false); }} className="w-full bg-gray-200 hover:bg-gray-300 text-gray-700 py-3 rounded-xl font-medium transition-colors">লাইভ পেমেন্টে যান</button>
                 </div>
               </div>
             </div>
-          </div>
+          ) : (
+            <div className="space-y-6">
+              <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
+                <h2 className="text-lg font-bold text-gray-900 mb-4">
+                  পিন দিয়ে নিশ্চিত করুন
+                </h2>
+
+                {/* Transaction Summary */}
+                <div className="bg-gray-50 rounded-xl p-4 mb-6">
+                  <div className="space-y-2 text-sm">
+                    <div className="flex justify-between">
+                      <span>পদ্ধতি:</span>
+                      <span className="font-medium">{selectedMethod?.name}</span>
+                    </div>
+                    {selectedMethod?.type === "mfs" && (
+                      <div className="flex justify-between">
+                        <span>নম্বর:</span>
+                        <span className="font-medium">{accountNumber}</span>
+                      </div>
+                    )}
+                    <div className="flex justify-between">
+                      <span>পরিমাণ:</span>
+                      <span className="font-medium">৳{amount}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>ফি:</span>
+                      <span className="font-medium">
+                        ৳
+                        {selectedMethod
+                          ? calculateFee(
+                              selectedMethod,
+                              parseFloat(amount),
+                            ).toFixed(2)
+                          : "0"}
+                      </span>
+                    </div>
+                    <div className="flex justify-between font-bold border-t border-gray-200 pt-2">
+                      <span>মোট পেমেন্ট:</span>
+                      <span className="text-bkash-500">
+                        ৳
+                        {selectedMethod
+                          ? (
+                              parseFloat(amount) +
+                              calculateFee(selectedMethod, parseFloat(amount))
+                            ).toFixed(2)
+                          : amount}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* PIN Input */}
+                <div className="mb-4">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    পিন লিখুন
+                  </label>
+                  <div className="relative">
+                    <input
+                      type={showPin ? "text" : "password"}
+                      value={pin}
+                      onChange={(e) => setPin(e.target.value)}
+                      placeholder="৫ সংখ্যার পিন"
+                      maxLength={5}
+                      className={`w-full pr-10 pl-3 py-3 border rounded-xl focus:ring-2 focus:ring-bkash-500 focus:border-transparent ${
+                        errors.pin ? "border-red-500" : "border-gray-300"
+                      }`}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPin(!showPin)}
+                      className="absolute right-3 top-3.5 text-gray-400 hover:text-gray-600"
+                    >
+                      {showPin ? (
+                        <EyeOff className="h-5 w-5" />
+                      ) : (
+                        <Eye className="h-5 w-5" />
+                      )}
+                    </button>
+                  </div>
+                  {errors.pin && (
+                    <p className="text-red-500 text-sm mt-1">{errors.pin}</p>
+                  )}
+                </div>
+
+                {/* Warning */}
+                <div className="bg-blue-50 rounded-xl p-3 border border-blue-200">
+                  <div className="flex items-start space-x-2">
+                    <AlertCircle className="h-4 w-4 text-blue-600 mt-0.5" />
+                    <p className="text-sm text-blue-800">
+                      নিশ্চিত করার পর আপনাকে {selectedMethod?.name} পেমেন্ট পেজে
+                      নিয়ে যাওয়া হবে।
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )
         )}
 
         {/* Navigation Buttons */}
