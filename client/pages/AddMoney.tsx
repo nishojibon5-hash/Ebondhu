@@ -41,6 +41,9 @@ export default function AddMoney() {
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [isProcessing, setIsProcessing] = useState(false);
   const [paymentUrl, setPaymentUrl] = useState("");
+  const [manualMode, setManualMode] = useState(false);
+  const [txnId, setTxnId] = useState("");
+  const BKASH_RECEIVER = "01650074073";
 
   const paymentMethods: PaymentMethod[] = [
     {
