@@ -242,6 +242,34 @@ export default function AddMoney() {
     setCurrentStep(5); // Success step
   };
 
+  const submitManualRequest = () => {
+    const addAmount = parseFloat(amount);
+    const newErrors: { [key: string]: string } = {};
+    if (!selectedMethod) newErrors.method = "পেমেন্ট পদ্ধতি নির্বাচন করুন";
+    if (!amount || addAmount <= 0) newErrors.amount = "সঠিক পরিমাণ লিখুন";
+    if (!txnId || txnId.trim().length < 6)
+      newErrors.txnId = "সঠিক ট্রানজেকশন আইডি লিখুন";
+    setErrors(newErrors);
+    if (Object.keys(newErrors).length > 0) return;
+
+    const userPhone = localStorage.getItem("userPhone") || "unknown";
+    const req = {
+      id: Date.now(),
+      userPhone,
+      amount: addAmount,
+      method: selectedMethod?.id || "bkash",
+      targetNumber: BKASH_RECEIVER,
+      txnId: txnId.trim(),
+      status: "pending",
+      createdAt: new Date().toISOString(),
+    };
+    const key = "manualTopupRequests";
+    const list = JSON.parse(localStorage.getItem(key) || "[]");
+    list.unshift(req);
+    localStorage.setItem(key, JSON.stringify(list));
+    setCurrentStep(6);
+  };
+
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
     alert("কপি করা হয়েছে!");
@@ -345,7 +373,7 @@ export default function AddMoney() {
                 {selectedMethod?.name} পেমেন্ট
               </h2>
               <p className="text-gray-600">
-                ���িচের QR কোড স্ক্যান করুন অথবা লিংকে যান
+                ���িচের QR কোড স্ক্যান করুন অথবা লি���কে যান
               </p>
             </div>
 
@@ -485,7 +513,7 @@ export default function AddMoney() {
           <div className="space-y-6">
             <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
               <h2 className="text-lg font-bold text-gray-900 mb-4">
-                পেমেন্ট পদ্ধতি নির্বাচন করুন
+                পেমেন্ট পদ���ধতি নির্বাচন করুন
               </h2>
 
               {/* Mobile Financial Services */}
@@ -653,7 +681,7 @@ export default function AddMoney() {
               {selectedMethod.type === "mfs" && (
                 <div className="mb-4">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    {selectedMethod.name} নম্বর
+                    {selectedMethod.name} ন��্বর
                   </label>
                   <input
                     type="tel"
