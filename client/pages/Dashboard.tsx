@@ -50,7 +50,7 @@ const translations = {
   },
   bn: {
     goodMorning: "শুভ সকাল",
-    userName: "মোঃ রহিম",
+    userName: "মোঃ ��হিম",
     appName: "amarcash",
     yourBalance: "আপনার ব্যালেন্স",
     sendMoney: "টাকা পাঠান",
@@ -193,9 +193,9 @@ export default function Dashboard({ language, setLanguage }: DashboardProps) {
               >
                 <Globe className="h-5 w-5" />
               </button>
-              <button className="p-2 rounded-full bg-white/20 hover:bg-white/30 transition-colors">
+              <Link to="/notifications" className="p-2 rounded-full bg-white/20 hover:bg-white/30 transition-colors">
                 <Bell className="h-5 w-5" />
-              </button>
+              </Link>
               <button className="p-2 rounded-full bg-white/20 hover:bg-white/30 transition-colors">
                 <Settings className="h-5 w-5" />
               </button>
