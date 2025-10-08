@@ -117,7 +117,7 @@ const verificationMethods = [
   {
     id: "username",
     name: "ইউজারনেম দিন",
-    description: "প্রো���াইল ইউজারনেম দিতে হবে",
+    description: "প্রোফাইল ইউজারনেম দিতে হবে",
   },
   {
     id: "manual",
@@ -158,7 +158,7 @@ export default function TaskCreate() {
     const newErrors: { [key: string]: string } = {};
     if (!formData.title.trim()) newErrors.title = "টাস্কের শিরোনাম আবশ্যক";
     if (!formData.description.trim())
-      newErrors.description = "বিস্তারিত বর্ণন��� আবশ্যক";
+      newErrors.description = "বিস্তারিত বর্ণনা আবশ্যক";
     if (!formData.category) newErrors.category = "ক্যাটেগরি নির্বাচন করুন";
     if (!formData.platform) newErrors.platform = "প্ল্যাটফর্ম নির্বাচন করুন";
     if (!formData.taskType) newErrors.taskType = "কাজের ধরন নির্বাচন করুন";
@@ -186,7 +186,7 @@ export default function TaskCreate() {
       newErrors.reward = `ন্যূনতম পুরস্কার ৳${min.toFixed(2)}`;
     if (formData.maxCompletions < 1)
       newErrors.maxCompletions = "কমপক্ষে ১টি কাজ থাকতে হবে";
-    if (!formData.timeLimit) newErrors.timeLimit = "সময়সীমা নির্বাচন করুন";
+    if (!formData.timeLimit) newErrors.timeLimit = "সময়সীমা ��ির্বাচন করুন";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -581,7 +581,7 @@ export default function TaskCreate() {
               {/* Max Completions */}
               <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  সর্বোচ্চ কতজন ���াজ করতে পারবে{" "}
+                  সর্বোচ্চ কতজন কাজ করতে পারবে{" "}
                   <span className="text-red-500">*</span>
                 </label>
                 <div className="relative">
@@ -868,7 +868,7 @@ export default function TaskCreate() {
                             : formData.timeLimit === "48"
                               ? "৪৮ ঘন্টা"
                               : formData.timeLimit === "72"
-                                ? "৭২ ঘ���্টা"
+                                ? "৭২ ঘন্টা"
                                 : formData.timeLimit === "168"
                                   ? "১ সপ্তাহ"
                                   : formData.timeLimit === "336"
@@ -895,7 +895,7 @@ export default function TaskCreate() {
                 </div>
 
                 <div>
-                  <h4 className="font-medium text-gray-900 mb-1">যাচাইকর���:</h4>
+                  <h4 className="font-medium text-gray-900 mb-1">যাচাইকরণ:</h4>
                   <p className="text-sm text-gray-600">
                     {
                       verificationMethods.find(
@@ -965,7 +965,7 @@ export default function TaskCreate() {
           ) : (
             <button
               onClick={handleSubmit}
-              disabled={currentBalance < totalCost}
+              disabled={currentBalance < totalCost || currentBalance <= 0}
               className={`flex-1 py-3 rounded-xl font-medium transition-colors ${
                 currentBalance >= totalCost
                   ? "bg-green-600 hover:bg-green-700 text-white"
