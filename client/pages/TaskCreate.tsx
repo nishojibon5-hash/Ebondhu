@@ -89,7 +89,7 @@ const taskTypes = {
     { id: "video", name: "ভিডি�� তৈরি", icon: Upload },
     { id: "photo", name: "ছবি তৈরি", icon: Upload },
     { id: "story", name: "স্টোরি পোস্ট", icon: Upload },
-    { id: "article", name: "আর্টিকেল লেখা", icon: MessageSquare },
+    { id: "article", name: "আর্টিকে��� লেখা", icon: MessageSquare },
   ],
   "review-rating": [
     { id: "review", name: "রিভিউ লিখুন", icon: Star },
@@ -318,7 +318,7 @@ export default function TaskCreate() {
           >
             <ArrowLeft className="h-5 w-5" />
           </Link>
-          <h1 className="text-xl font-bold">নতুন টাস্ক ত��রি করুন</h1>
+          <h1 className="text-xl font-bold">নতুন টাস্ক তৈরি করুন</h1>
         </div>
 
         {/* Progress Steps */}
@@ -575,7 +575,7 @@ export default function TaskCreate() {
                 {errors.reward && (
                   <p className="text-red-500 text-sm mt-1">{errors.reward}</p>
                 )}
-                <p className="text-xs text-gray-500 mt-1">ন্যূনতম ৫ টাকা</p>
+                <p className="text-xs text-gray-500 mt-1">ন্যূনতম ৳{getMinReward(formData.taskType).toFixed(2)} (কাজের ধরন অনুযায়ী)</p>
               </div>
 
               {/* Max Completions */}
@@ -790,7 +790,7 @@ export default function TaskCreate() {
                   <p className="text-red-500 text-sm mt-1">{errors.budget}</p>
                 )}
                 <p className="text-xs text-gray-500 mt-1">
-                  ন্যূনতম ৳{totalCost} (মোট কাজ��র খরচ)
+                  ন্যূ���তম ৳{totalCost} (মোট কাজ��র খরচ)
                 </p>
               </div>
 
@@ -873,7 +873,7 @@ export default function TaskCreate() {
                                 : formData.timeLimit === "168"
                                   ? "১ সপ্তাহ"
                                   : formData.timeLimit === "336"
-                                    ? "২ সপ্তাহ"
+                                    ? "২ সপ্তা��"
                                     : formData.timeLimit === "720"
                                       ? "১ মাস"
                                       : formData.timeLimit + " ঘন্টা"}
@@ -928,7 +928,7 @@ export default function TaskCreate() {
                     <span>৳{currentBalance}</span>
                   </div>
                   <div className="flex justify-between text-xs font-bold">
-                    <span>অবশিষ্ট ব্যালেন্���:</span>
+                    <span>অবশিষ্ট ব্যালেন্স:</span>
                     <span
                       className={
                         currentBalance - totalCost >= 0
