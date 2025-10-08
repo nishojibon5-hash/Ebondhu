@@ -1,0 +1,22 @@
+name: Build React App
+on:
+  push:
+    branches: [main] # আপনার ব্রাঞ্চ নাম অনুযায়ী পরিবর্তন করুন (যদি ভিন্ন হয়)
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18' # আপনার প্রজেক্টে ব্যবহৃত Node.js ভার্সন
+      - name: Install Dependencies
+        run: npm install
+      - name: Build React App
+        run: npm run build
+      - name: Upload Build Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: react-build
+          path: build/
