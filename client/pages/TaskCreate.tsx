@@ -576,7 +576,10 @@ export default function TaskCreate() {
                 {errors.reward && (
                   <p className="text-red-500 text-sm mt-1">{errors.reward}</p>
                 )}
-                <p className="text-xs text-gray-500 mt-1">ন্যূনতম ৳{getMinReward(formData.taskType).toFixed(2)} (কাজের ধরন অনুযায়ী)</p>
+                <p className="text-xs text-gray-500 mt-1">
+                  ন্যূনতম ৳{getMinReward(formData.taskType).toFixed(2)} (কাজের
+                  ধরন অনুযায়ী)
+                </p>
               </div>
 
               {/* Max Completions */}
@@ -803,7 +806,9 @@ export default function TaskCreate() {
                     <span className="font-medium">অপর্যাপ্ত ব্যালেন্স</span>
                   </div>
                   <p className="text-sm text-red-700 mt-1">
-                    আপনার বর্তমান ব্যালেন্স ৳{currentBalance}। এই টাস্ক তৈরি করতে ন্যূনতম মোট খরচ ৳{totalCost} এবং বাজেট ৳{formData.budget} প্রয়োজন।
+                    আপনার বর্তমান ব্যালেন্স ৳{currentBalance}। এই টাস্ক তৈরি
+                    করতে ন্যূনতম মোট খরচ ৳{totalCost} এবং বাজেট ৳
+                    {formData.budget} প্রয়োজন।
                   </p>
                 </div>
               )}

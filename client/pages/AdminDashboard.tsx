@@ -53,7 +53,8 @@ export default function AdminDashboard() {
   const [bannerLink, setBannerLink] = useState("");
   const [manualTopups, setManualTopups] = useState<any[]>([]);
   const [cashouts, setCashouts] = useState<any[]>([]);
-  const [payoutWallets, setPayoutWallets] = useState<Record<PayoutWalletKey, PayoutWallet>>(DEFAULT_PAYOUT);
+  const [payoutWallets, setPayoutWallets] =
+    useState<Record<PayoutWalletKey, PayoutWallet>>(DEFAULT_PAYOUT);
   const [adminWalletBalance, setAdminWalletBalance] = useState<number>(0);
 
   useEffect(() => {
@@ -86,11 +87,16 @@ export default function AdminDashboard() {
         if (Array.isArray(c)) setCashouts(c);
       } catch {}
       try {
-        const cfg = JSON.parse(localStorage.getItem("payoutWalletConfig") || "null");
-        if (cfg && typeof cfg === "object") setPayoutWallets({ ...DEFAULT_PAYOUT, ...cfg });
+        const cfg = JSON.parse(
+          localStorage.getItem("payoutWalletConfig") || "null",
+        );
+        if (cfg && typeof cfg === "object")
+          setPayoutWallets({ ...DEFAULT_PAYOUT, ...cfg });
       } catch {}
       try {
-        setAdminWalletBalance(parseFloat(localStorage.getItem("adminWalletBalance") || "0"));
+        setAdminWalletBalance(
+          parseFloat(localStorage.getItem("adminWalletBalance") || "0"),
+        );
       } catch {}
     };
     init();
@@ -140,7 +146,9 @@ export default function AdminDashboard() {
         localStorage.setItem("registeredUsers", JSON.stringify(users));
       }
       if (localStorage.getItem("userPhone") === req.userPhone) {
-        const currentBalance = parseFloat(localStorage.getItem("userBalance") || "0");
+        const currentBalance = parseFloat(
+          localStorage.getItem("userBalance") || "0",
+        );
         const next = Math.max(0, currentBalance - Number(req.amount));
         localStorage.setItem("userBalance", next.toString());
       }
@@ -161,7 +169,9 @@ export default function AdminDashboard() {
       localStorage.setItem("payoutWalletConfig", JSON.stringify(updated));
 
       // Log transaction
-      const transactions = JSON.parse(localStorage.getItem("transactions") || "[]");
+      const transactions = JSON.parse(
+        localStorage.getItem("transactions") || "[]",
+      );
       transactions.unshift({
         id: Date.now(),
         type: "cashout",
@@ -180,7 +190,12 @@ export default function AdminDashboard() {
     const reason = prompt("রিজেক্টের কারণ লিখুন (ঐচ্ছিক)") || "";
     const list = cashouts.map((r) =>
       r.id === id
-        ? { ...r, status: "rejected", reason, reviewedAt: new Date().toISOString() }
+        ? {
+            ...r,
+            status: "rejected",
+            reason,
+            reviewedAt: new Date().toISOString(),
+          }
         : r,
     );
     updateCashouts(list);
@@ -291,10 +306,22 @@ export default function AdminDashboard() {
         <div className="bg-white rounded-2xl shadow divide-y">
           <div className="p-4 flex items-center justify-between">
             <div>
-              <p className="text-sm text-slate-500">অ্যাডমিন ওয়ালেট ব্যালেন্স</p>
-              <p className="text-2xl font-bold text-slate-800">৳{adminWalletBalance.toFixed(2)}</p>
+              <p className="text-sm text-slate-500">
+                অ্যাডমিন ওয়ালেট ব্যালেন্স
+              </p>
+              <p className="text-2xl font-bold text-slate-800">
+                ৳{adminWalletBalance.toFixed(2)}
+              </p>
             </div>
-            <button onClick={() => { setAdminWalletBalance(0); localStorage.setItem("adminWalletBalance", "0"); }} className="px-3 py-2 border rounded-lg text-sm">রিসেট</button>
+            <button
+              onClick={() => {
+                setAdminWalletBalance(0);
+                localStorage.setItem("adminWalletBalance", "0");
+              }}
+              className="px-3 py-2 border rounded-lg text-sm"
+            >
+              রিসেট
+            </button>
           </div>
           {(
             [
@@ -336,7 +363,9 @@ export default function AdminDashboard() {
 
         {/* Cashout Requests */}
         <div className="bg-white rounded-2xl shadow p-4 mt-4">
-          <h2 className="font-semibold text-slate-800 mb-3">ক্যাশ আউট রিকুয়েস্ট</h2>
+          <h2 className="font-semibold text-slate-800 mb-3">
+            ক্যাশ আউট রিকুয়েস্ট
+          </h2>
           {cashouts.length === 0 ? (
             <p className="text-sm text-slate-500">কোনো রিকুয়েস্ট নেই</p>
           ) : (
@@ -345,22 +374,53 @@ export default function AdminDashboard() {
                 <div key={r.id} className="border rounded-xl p-3">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="font-semibold text-slate-800">৳{r.amount} • {r.wallet?.toUpperCase?.() || r.wallet}</p>
-                      <p className="text-xs text-slate-500">ইউজার: {r.userPhone} • সময়: {new Date(r.createdAt).toLocaleString("bn-BD")}</p>
-                      <p className="text-xs text-slate-500">নম্বর: {r.accountNumber}</p>
+                      <p className="font-semibold text-slate-800">
+                        ৳{r.amount} • {r.wallet?.toUpperCase?.() || r.wallet}
+                      </p>
+                      <p className="text-xs text-slate-500">
+                        ইউজার: {r.userPhone} • সময়:{" "}
+                        {new Date(r.createdAt).toLocaleString("bn-BD")}
+                      </p>
+                      <p className="text-xs text-slate-500">
+                        নম্বর: {r.accountNumber}
+                      </p>
                     </div>
-                    <span className={`text-xs px-2 py-1 rounded-full ${r.status === "approved" ? "bg-green-100 text-green-700" : r.status === "rejected" ? "bg-red-100 text-red-700" : "bg-yellow-100 text-yellow-700"}`}>{r.status}</span>
+                    <span
+                      className={`text-xs px-2 py-1 rounded-full ${r.status === "approved" ? "bg-green-100 text-green-700" : r.status === "rejected" ? "bg-red-100 text-red-700" : "bg-yellow-100 text-yellow-700"}`}
+                    >
+                      {r.status}
+                    </span>
                   </div>
                   <div className="flex items-center gap-2 mt-3">
                     {r.status === "pending" && (
                       <>
-                        <button onClick={() => approveCashout(r.id)} className="px-3 py-2 bg-green-600 text-white rounded">গ্রহণ করুন</button>
-                        <button onClick={() => rejectCashout(r.id)} className="px-3 py-2 bg-red-100 text-red-700 rounded">রিজেক্ট</button>
+                        <button
+                          onClick={() => approveCashout(r.id)}
+                          className="px-3 py-2 bg-green-600 text-white rounded"
+                        >
+                          গ্রহণ করুন
+                        </button>
+                        <button
+                          onClick={() => rejectCashout(r.id)}
+                          className="px-3 py-2 bg-red-100 text-red-700 rounded"
+                        >
+                          রিজেক্ট
+                        </button>
                       </>
                     )}
-                    <button onClick={() => warnUser(r.userPhone)} className="px-3 py-2 bg-yellow-100 text-yellow-700 rounded flex items-center gap-1"><AlertTriangle className="h-4 w-4"/>ওয়ার্নিং পাঠান</button>
+                    <button
+                      onClick={() => warnUser(r.userPhone)}
+                      className="px-3 py-2 bg-yellow-100 text-yellow-700 rounded flex items-center gap-1"
+                    >
+                      <AlertTriangle className="h-4 w-4" />
+                      ওয়ার্নিং পাঠান
+                    </button>
                   </div>
-                  {r.reason && <p className="text-xs text-red-600 mt-2">কারণ: {r.reason}</p>}
+                  {r.reason && (
+                    <p className="text-xs text-red-600 mt-2">
+                      কারণ: {r.reason}
+                    </p>
+                  )}
                 </div>
               ))}
             </div>
@@ -445,30 +505,64 @@ export default function AdminDashboard() {
 
         {/* Payout Wallet Config */}
         <div className="bg-white rounded-2xl shadow p-4 mt-4">
-          <h2 className="font-semibold text-slate-800 mb-3">ওয়ালেট সেটিংস (কোন কোন ওয়ালেটে পাঠাবেন)</h2>
+          <h2 className="font-semibold text-slate-800 mb-3">
+            ওয়ালেট সেটিংস (কোন কোন ওয়ালেটে পাঠাবেন)
+          </h2>
           {(Object.keys(payoutWallets) as PayoutWalletKey[]).map((k) => (
-            <div key={k} className="flex items-center justify-between p-3 border rounded-lg mb-2">
+            <div
+              key={k}
+              className="flex items-center justify-between p-3 border rounded-lg mb-2"
+            >
               <div>
-                <p className="font-medium text-slate-800">{k === "bkash" ? "বিকাশ" : k === "nagad" ? "নগদ" : "রকেট"}</p>
-                <p className="text-xs text-slate-500">রিজার্ভ: ৳{payoutWallets[k].reserve.toFixed(2)}</p>
+                <p className="font-medium text-slate-800">
+                  {k === "bkash" ? "বিকাশ" : k === "nagad" ? "নগদ" : "রকেট"}
+                </p>
+                <p className="text-xs text-slate-500">
+                  রিজার্ভ: ৳{payoutWallets[k].reserve.toFixed(2)}
+                </p>
               </div>
               <div className="flex items-center gap-2">
-                <input type="number" step="0.01" className="w-28 p-2 border rounded" value={payoutWallets[k].reserve}
-                  onChange={(e) => setPayoutWallets({ ...payoutWallets, [k]: { ...payoutWallets[k], reserve: parseFloat(e.target.value) || 0 } })} />
+                <input
+                  type="number"
+                  step="0.01"
+                  className="w-28 p-2 border rounded"
+                  value={payoutWallets[k].reserve}
+                  onChange={(e) =>
+                    setPayoutWallets({
+                      ...payoutWallets,
+                      [k]: {
+                        ...payoutWallets[k],
+                        reserve: parseFloat(e.target.value) || 0,
+                      },
+                    })
+                  }
+                />
                 <label className="flex items-center gap-2 text-sm">
-                  <input type="checkbox" checked={payoutWallets[k].enabled}
-                    onChange={(e) => setPayoutWallets({ ...payoutWallets, [k]: { ...payoutWallets[k], enabled: e.target.checked } })} />
+                  <input
+                    type="checkbox"
+                    checked={payoutWallets[k].enabled}
+                    onChange={(e) =>
+                      setPayoutWallets({
+                        ...payoutWallets,
+                        [k]: { ...payoutWallets[k], enabled: e.target.checked },
+                      })
+                    }
+                  />
                   চালু
                 </label>
               </div>
             </div>
           ))}
-          <p className="text-xs text-slate-500 mt-2">সেভ করলে পরিবর্তন কার্যকর হবে</p>
+          <p className="text-xs text-slate-500 mt-2">
+            সেভ করলে পরিবর্তন কার্যকর হবে
+          </p>
         </div>
 
         {/* Banner Management */}
         <div className="bg-white rounded-2xl shadow p-4 mt-4">
-          <h2 className="font-semibold text-slate-800 mb-3">ব্যানার ম্যানেজমেন্ট</h2>
+          <h2 className="font-semibold text-slate-800 mb-3">
+            ব্যানার ম্যানেজমেন্ট
+          </h2>
           <div className="space-y-2">
             <input
               value={bannerUrl}
