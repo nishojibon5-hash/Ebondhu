@@ -89,7 +89,7 @@ const taskTypes = {
     { id: "video", name: "ভিডি�� তৈরি", icon: Upload },
     { id: "photo", name: "ছবি তৈরি", icon: Upload },
     { id: "story", name: "স্টোরি পোস্ট", icon: Upload },
-    { id: "article", name: "আর্টিকে��� লেখা", icon: MessageSquare },
+    { id: "article", name: "আ��্টিকেল লেখা", icon: MessageSquare },
   ],
   "review-rating": [
     { id: "review", name: "রিভিউ লিখুন", icon: Star },
@@ -122,7 +122,7 @@ const verificationMethods = [
   {
     id: "manual",
     name: "ম্যানুয়াল চেক",
-    description: "আমরা ম্যানুয়ালি যাচাই করব",
+    description: "আমরা ম্যান��য়ালি যাচাই করব",
   },
 ];
 
@@ -160,7 +160,7 @@ export default function TaskCreate() {
     if (!formData.description.trim())
       newErrors.description = "বিস্তারিত বর্ণনা আবশ্যক";
     if (!formData.category) newErrors.category = "ক্যাটেগরি নির্বাচন করুন";
-    if (!formData.platform) newErrors.platform = "প্ল্যাটফর্ম নির্বাচন করুন";
+    if (!formData.platform) newErrors.platform = "প���ল্যাটফর্ম নির্বাচন করুন";
     if (!formData.taskType) newErrors.taskType = "কাজের ধরন নির্বাচন করুন";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -790,12 +790,12 @@ export default function TaskCreate() {
                   <p className="text-red-500 text-sm mt-1">{errors.budget}</p>
                 )}
                 <p className="text-xs text-gray-500 mt-1">
-                  ন্যূ���তম ৳{totalCost} (মোট কাজ��র খরচ)
+                  ন্যূনতম ৳{totalCost} (মোট কাজ��র খরচ)
                 </p>
               </div>
 
               {/* Budget Warning */}
-              {formData.budget > currentBalance && (
+              {(formData.budget > currentBalance || currentBalance <= 0) && (
                 <div className="bg-red-50 border border-red-200 rounded-xl p-4">
                   <div className="flex items-center space-x-2 text-red-800">
                     <AlertCircle className="h-5 w-5" />
@@ -816,7 +816,7 @@ export default function TaskCreate() {
           <div className="space-y-6">
             <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
               <h2 className="text-lg font-bold text-gray-900 mb-4">
-                চূড়ান্ত পর্যালোচনা
+                চূড়ান্ত প���্যালোচনা
               </h2>
 
               <div className="space-y-4">
@@ -848,7 +848,7 @@ export default function TaskCreate() {
                       </p>
                     </div>
                     <div>
-                      <span className="font-medium">পুরস্কার:</span>
+                      <span className="font-medium">পুর��্কার:</span>
                       <p className="text-bkash-500 font-bold">
                         ৳{formData.reward}
                       </p>
@@ -873,7 +873,7 @@ export default function TaskCreate() {
                                 : formData.timeLimit === "168"
                                   ? "১ সপ্তাহ"
                                   : formData.timeLimit === "336"
-                                    ? "২ সপ্তা��"
+                                    ? "২ সপ্তাহ"
                                     : formData.timeLimit === "720"
                                       ? "১ মাস"
                                       : formData.timeLimit + " ঘন্টা"}
