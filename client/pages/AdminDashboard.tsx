@@ -82,6 +82,17 @@ export default function AdminDashboard() {
         );
         if (Array.isArray(r)) setManualTopups(r);
       } catch {}
+      try {
+        const c = JSON.parse(localStorage.getItem("cashoutRequests") || "[]");
+        if (Array.isArray(c)) setCashouts(c);
+      } catch {}
+      try {
+        const cfg = JSON.parse(localStorage.getItem("payoutWalletConfig") || "null");
+        if (cfg && typeof cfg === "object") setPayoutWallets({ ...DEFAULT_PAYOUT, ...cfg });
+      } catch {}
+      try {
+        setAdminWalletBalance(parseFloat(localStorage.getItem("adminWalletBalance") || "0"));
+      } catch {}
     };
     init();
   }, [navigate]);
@@ -94,6 +105,8 @@ export default function AdminDashboard() {
   const save = () => {
     localStorage.setItem("featureFlags", JSON.stringify(flags));
     localStorage.setItem("banners", JSON.stringify(banners));
+    localStorage.setItem("payoutWalletConfig", JSON.stringify(payoutWallets));
+    localStorage.setItem("adminWalletBalance", String(adminWalletBalance));
     alert("সেভ হয়েছে");
   };
 
@@ -247,7 +260,7 @@ export default function AdminDashboard() {
         {/* Manual Add Money Requests */}
         <div className="bg-white rounded-2xl shadow p-4 mt-4">
           <h2 className="font-semibold text-slate-800 mb-3">
-            ম্যানুয়াল Add Money রিকুয়েস্ট
+            ম্যানুয়া�� Add Money রিকুয়েস্ট
           </h2>
           {manualTopups.length === 0 ? (
             <p className="text-sm text-slate-500">কোনো রিকুয়েস্ট নেই</p>
@@ -401,7 +414,7 @@ export default function AdminDashboard() {
           onClick={() => navigate("/", { replace: true })}
           className="mt-2 w-full border border-slate-200 text-slate-700 font-semibold rounded-lg p-3"
         >
-          ইউজার অ্যাপে যান
+          ��উজার অ্যাপে যান
         </button>
       </div>
     </div>
