@@ -115,6 +115,73 @@ export default function AdminDashboard() {
     localStorage.setItem("manualTopupRequests", JSON.stringify(list));
   };
 
+  const updateCashouts = (list: any[]) => {
+    setCashouts(list);
+    localStorage.setItem("cashoutRequests", JSON.stringify(list));
+  };
+
+  const approveCashout = (id: number) => {
+    const list = cashouts.map((r) =>
+      r.id === id
+        ? { ...r, status: "approved", reviewedAt: new Date().toISOString() }
+        : r,
+    );
+    const req = cashouts.find((r) => r.id === id);
+    if (req) {
+      // Deduct from user balance
+      const users = JSON.parse(localStorage.getItem("registeredUsers") || "[]");
+      const idx = users.findIndex((u: any) => u.phone === req.userPhone);
+      if (idx !== -1) {
+        users[idx].balance = Math.max(0, (users[idx].balance || 0) - Number(req.amount));
+        localStorage.setItem("registeredUsers", JSON.stringify(users));
+      }
+      if (localStorage.getItem("userPhone") === req.userPhone) {
+        const currentBalance = parseFloat(localStorage.getItem("userBalance") || "0");
+        const next = Math.max(0, currentBalance - Number(req.amount));
+        localStorage.setItem("userBalance", next.toString());
+      }
+      // Add to admin wallet balance and wallet reserve
+      const nextAdmin = adminWalletBalance + Number(req.amount);
+      setAdminWalletBalance(nextAdmin);
+      localStorage.setItem("adminWalletBalance", String(nextAdmin));
+
+      const wKey = (req.wallet || "bkash") as PayoutWalletKey;
+      const updated = {
+        ...payoutWallets,
+        [wKey]: {
+          ...payoutWallets[wKey],
+          reserve: (payoutWallets[wKey]?.reserve || 0) + Number(req.amount),
+        },
+      } as Record<PayoutWalletKey, PayoutWallet>;
+      setPayoutWallets(updated);
+      localStorage.setItem("payoutWalletConfig", JSON.stringify(updated));
+
+      // Log transaction
+      const transactions = JSON.parse(localStorage.getItem("transactions") || "[]");
+      transactions.unshift({
+        id: Date.now(),
+        type: "cashout",
+        amount: Number(req.amount),
+        method: req.wallet,
+        accountNumber: req.accountNumber,
+        date: new Date().toISOString(),
+        status: "completed",
+      });
+      localStorage.setItem("transactions", JSON.stringify(transactions));
+    }
+    updateCashouts(list);
+  };
+
+  const rejectCashout = (id: number) => {
+    const reason = prompt("রিজেক্টের কারণ লিখুন (ঐচ্ছিক)") || "";
+    const list = cashouts.map((r) =>
+      r.id === id
+        ? { ...r, status: "rejected", reason, reviewedAt: new Date().toISOString() }
+        : r,
+    );
+    updateCashouts(list);
+  };
+
   const approveRequest = (id: number) => {
     const list = manualTopups.map((r) =>
       r.id === id
@@ -260,7 +327,7 @@ export default function AdminDashboard() {
         {/* Manual Add Money Requests */}
         <div className="bg-white rounded-2xl shadow p-4 mt-4">
           <h2 className="font-semibold text-slate-800 mb-3">
-            ম্যানুয়া�� Add Money রিকুয়েস্ট
+            ম্যানুয়াল Add Money রিকুয়েস্ট
           </h2>
           {manualTopups.length === 0 ? (
             <p className="text-sm text-slate-500">কোনো রিকুয়েস্ট নেই</p>
@@ -414,7 +481,7 @@ export default function AdminDashboard() {
           onClick={() => navigate("/", { replace: true })}
           className="mt-2 w-full border border-slate-200 text-slate-700 font-semibold rounded-lg p-3"
         >
-          ��উজার অ্যাপে যান
+          ইউজার অ্যাপে যান
         </button>
       </div>
     </div>
