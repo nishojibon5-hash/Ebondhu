@@ -89,7 +89,7 @@ const taskTypes = {
     { id: "video", name: "ভিডি�� তৈরি", icon: Upload },
     { id: "photo", name: "ছবি তৈরি", icon: Upload },
     { id: "story", name: "স্টোরি পোস্ট", icon: Upload },
-    { id: "article", name: "আ��্টিকেল লেখা", icon: MessageSquare },
+    { id: "article", name: "আর্টিকেল লেখা", icon: MessageSquare },
   ],
   "review-rating": [
     { id: "review", name: "রিভিউ লিখুন", icon: Star },
@@ -117,12 +117,12 @@ const verificationMethods = [
   {
     id: "username",
     name: "ইউজারনেম দিন",
-    description: "প্রোফাইল ইউজারনেম দিতে হবে",
+    description: "প্রো���াইল ইউজারনেম দিতে হবে",
   },
   {
     id: "manual",
     name: "ম্যানুয়াল চেক",
-    description: "আমরা ম্যান��য়ালি যাচাই করব",
+    description: "আমরা ম্যানুয়ালি যাচাই করব",
   },
 ];
 
@@ -158,9 +158,9 @@ export default function TaskCreate() {
     const newErrors: { [key: string]: string } = {};
     if (!formData.title.trim()) newErrors.title = "টাস্কের শিরোনাম আবশ্যক";
     if (!formData.description.trim())
-      newErrors.description = "বিস্তারিত বর্ণনা আবশ্যক";
+      newErrors.description = "বিস্তারিত বর্ণন��� আবশ্যক";
     if (!formData.category) newErrors.category = "ক্যাটেগরি নির্বাচন করুন";
-    if (!formData.platform) newErrors.platform = "প���ল্যাটফর্ম নির্বাচন করুন";
+    if (!formData.platform) newErrors.platform = "প্ল্যাটফর্ম নির্বাচন করুন";
     if (!formData.taskType) newErrors.taskType = "কাজের ধরন নির্বাচন করুন";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -581,7 +581,7 @@ export default function TaskCreate() {
               {/* Max Completions */}
               <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  সর্বোচ্চ কতজন কাজ করতে পারবে{" "}
+                  সর্বোচ্চ কতজন ���াজ করতে পারবে{" "}
                   <span className="text-red-500">*</span>
                 </label>
                 <div className="relative">
@@ -802,8 +802,7 @@ export default function TaskCreate() {
                     <span className="font-medium">অপর্যাপ্ত ব্যালেন্স</span>
                   </div>
                   <p className="text-sm text-red-700 mt-1">
-                    আপন��র বর্তমান ব্যালেন্স ৳{currentBalance}। এই টাস্ক তৈরি
-                    করতে ৳{formData.budget} প্রয়োজন।
+                    আপনার বর্তমান ব্যালেন্স ৳{currentBalance}। এই টাস্ক তৈরি করতে ন্যূনতম মোট খরচ ৳{totalCost} এবং বাজেট ৳{formData.budget} প্রয়োজন।
                   </p>
                 </div>
               )}
@@ -816,7 +815,7 @@ export default function TaskCreate() {
           <div className="space-y-6">
             <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
               <h2 className="text-lg font-bold text-gray-900 mb-4">
-                চূড়ান্ত প���্যালোচনা
+                চূড়ান্ত পর্যালোচনা
               </h2>
 
               <div className="space-y-4">
@@ -848,7 +847,7 @@ export default function TaskCreate() {
                       </p>
                     </div>
                     <div>
-                      <span className="font-medium">পুর��্কার:</span>
+                      <span className="font-medium">পুরস্কার:</span>
                       <p className="text-bkash-500 font-bold">
                         ৳{formData.reward}
                       </p>
@@ -869,7 +868,7 @@ export default function TaskCreate() {
                             : formData.timeLimit === "48"
                               ? "৪৮ ঘন্টা"
                               : formData.timeLimit === "72"
-                                ? "৭২ ঘন্টা"
+                                ? "৭২ ঘ���্টা"
                                 : formData.timeLimit === "168"
                                   ? "১ সপ্তাহ"
                                   : formData.timeLimit === "336"
@@ -896,7 +895,7 @@ export default function TaskCreate() {
                 </div>
 
                 <div>
-                  <h4 className="font-medium text-gray-900 mb-1">যাচাইকরণ:</h4>
+                  <h4 className="font-medium text-gray-900 mb-1">যাচাইকর���:</h4>
                   <p className="text-sm text-gray-600">
                     {
                       verificationMethods.find(
