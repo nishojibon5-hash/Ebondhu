@@ -131,7 +131,12 @@ export default function AdminDashboard() {
       const users = JSON.parse(localStorage.getItem("registeredUsers") || "[]");
       const idx = users.findIndex((u: any) => u.phone === req.userPhone);
       if (idx !== -1) {
-        users[idx].balance = Math.max(0, (users[idx].balance || 0) - Number(req.amount));
+        const current = Number(users[idx].balance || 0);
+        if (current < Number(req.amount)) {
+          alert("ইউজারের ব্যালেন্স অ���র্যাপ্ত। অনুমোদন করা যাচ্ছে না।");
+          return;
+        }
+        users[idx].balance = current - Number(req.amount);
         localStorage.setItem("registeredUsers", JSON.stringify(users));
       }
       if (localStorage.getItem("userPhone") === req.userPhone) {
@@ -534,7 +539,7 @@ export default function AdminDashboard() {
           onClick={save}
           className="mt-4 w-full bg-bkash-600 hover:bg-bkash-700 text-white font-semibold rounded-lg p-3 flex items-center justify-center gap-2"
         >
-          <CheckCircle2 className="h-5 w-5" /> স���ভ করুন
+          <CheckCircle2 className="h-5 w-5" /> সেভ করুন
         </button>
 
         <button
