@@ -93,7 +93,7 @@ const taskTypes = {
   ],
   "review-rating": [
     { id: "review", name: "রিভিউ লিখুন", icon: Star },
-    { id: "rating", name: "রেটিং দিন", icon: Star },
+    { id: "rating", name: "র��টিং দিন", icon: Star },
     { id: "testimonial", name: "প্রশংসাপত্র", icon: MessageSquare },
   ],
   "data-entry": [
@@ -136,7 +136,7 @@ export default function TaskCreate() {
     platform: "",
     taskType: "",
     targetUrl: "",
-    reward: 20,
+    reward: 0.25,
     maxCompletions: 100,
     timeLimit: "24",
     requirements: [
