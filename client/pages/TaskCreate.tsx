@@ -49,7 +49,7 @@ interface TaskForm {
 
 const categories = [
   { id: "social-media", name: "সোশ্যাল মিডিয়া", icon: MessageCircle },
-  { id: "content-creation", name: "কনটেন্ট তৈরি", icon: Upload },
+  { id: "content-creation", name: "কনটেন্ট ত���রি", icon: Upload },
   { id: "review-rating", name: "রিভিউ ও রেটিং", icon: Star },
   { id: "promotion", name: "প্রমোশন", icon: Share },
   { id: "data-entry", name: "ডেটা এন্ট্রি", icon: Globe },
@@ -79,10 +79,11 @@ const platforms = [
 
 const taskTypes = {
   "social-media": [
-    { id: "follow", name: "ফলো/লাইক করুন", icon: UserPlus },
+    { id: "follow", name: "ফলো করু��", icon: UserPlus },
     { id: "like", name: "লাইক দিন", icon: Heart },
     { id: "share", name: "শেয়ার করুন", icon: Share },
     { id: "comment", name: "কমেন্ট করুন", icon: MessageSquare },
+    { id: "view", name: "ভিডিও ভিউ", icon: Eye },
     { id: "subscribe", name: "সাবস্ক্রাইব করুন", icon: UserPlus },
   ],
   "content-creation": [
@@ -186,7 +187,7 @@ export default function TaskCreate() {
       newErrors.reward = `ন্যূনতম পুরস্কার ৳${min.toFixed(2)}`;
     if (formData.maxCompletions < 1)
       newErrors.maxCompletions = "কমপক্ষে ১টি কাজ থাকতে হবে";
-    if (!formData.timeLimit) newErrors.timeLimit = "সময়সীমা ��ির্বাচন করুন";
+    if (!formData.timeLimit) newErrors.timeLimit = "সময়সীমা নির্বাচন করুন";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -859,7 +860,7 @@ export default function TaskCreate() {
                       </p>
                     </div>
                     <div>
-                      <span className="font-medium">সময়সীমা:</span>
+                      <span className="font-medium">সম��়সীমা:</span>
                       <p className="text-gray-600">
                         {formData.timeLimit === "12"
                           ? "১২ ঘন্টা"
