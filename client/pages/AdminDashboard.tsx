@@ -14,6 +14,7 @@ import {
   Plus,
   Copy,
   AlertTriangle,
+  AlertTriangle,
 } from "lucide-react";
 
 type FeatureFlags = {
@@ -210,7 +211,7 @@ export default function AdminDashboard() {
               <div>
                 <p className="font-medium text-slate-800">{item.label}</p>
                 <p className="text-xs text-slate-500">
-                  হোম পেজে এই অপশন দেখাবেন কি না
+                  ��োম পেজে এই অপশন দেখাবেন কি না
                 </p>
               </div>
               <button
