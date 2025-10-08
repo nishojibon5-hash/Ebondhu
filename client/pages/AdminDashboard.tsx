@@ -14,7 +14,6 @@ import {
   Plus,
   Copy,
   AlertTriangle,
-  AlertTriangle,
 } from "lucide-react";
 
 type FeatureFlags = {
@@ -535,7 +534,7 @@ export default function AdminDashboard() {
           onClick={save}
           className="mt-4 w-full bg-bkash-600 hover:bg-bkash-700 text-white font-semibold rounded-lg p-3 flex items-center justify-center gap-2"
         >
-          <CheckCircle2 className="h-5 w-5" /> সেভ করুন
+          <CheckCircle2 className="h-5 w-5" /> স���ভ করুন
         </button>
 
         <button
