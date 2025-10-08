@@ -93,7 +93,7 @@ const taskTypes = {
   ],
   "review-rating": [
     { id: "review", name: "রিভিউ লিখুন", icon: Star },
-    { id: "rating", name: "র��টিং দিন", icon: Star },
+    { id: "rating", name: "রেটিং দিন", icon: Star },
     { id: "testimonial", name: "প্রশংসাপত্র", icon: MessageSquare },
   ],
   "data-entry": [
@@ -318,7 +318,7 @@ export default function TaskCreate() {
           >
             <ArrowLeft className="h-5 w-5" />
           </Link>
-          <h1 className="text-xl font-bold">নতুন টাস্ক তৈরি করুন</h1>
+          <h1 className="text-xl font-bold">নতুন টাস্ক ত��রি করুন</h1>
         </div>
 
         {/* Progress Steps */}
@@ -562,11 +562,11 @@ export default function TaskCreate() {
                     onChange={(e) =>
                       setFormData({
                         ...formData,
-                        reward: parseInt(e.target.value) || 0,
+                        reward: parseFloat(e.target.value) || 0,
                       })
                     }
-                    min="5"
-                    step="5"
+                    min={getMinReward(formData.taskType)}
+                    step="0.01"
                     className={`w-full pl-10 pr-3 py-3 border rounded-xl focus:ring-2 focus:ring-bkash-500 focus:border-transparent ${
                       errors.reward ? "border-red-500" : "border-gray-300"
                     }`}
@@ -928,7 +928,7 @@ export default function TaskCreate() {
                     <span>৳{currentBalance}</span>
                   </div>
                   <div className="flex justify-between text-xs font-bold">
-                    <span>অবশিষ্ট ব্যালেন্স:</span>
+                    <span>অবশিষ্ট ব্যালেন্���:</span>
                     <span
                       className={
                         currentBalance - totalCost >= 0
