@@ -139,7 +139,7 @@ export default function AdminDashboard() {
       if (idx !== -1) {
         const current = Number(users[idx].balance || 0);
         if (current < Number(req.amount)) {
-          alert("ইউজারের ব্যালেন্স অ���র্যাপ্ত। অনুমোদন করা যাচ্ছে না।");
+          alert("ইউজারের ব্যা���েন্স অ���র্যাপ্ত। অনুমোদন করা যাচ্ছে না।");
           return;
         }
         users[idx].balance = current - Number(req.amount);
@@ -320,13 +320,13 @@ export default function AdminDashboard() {
               }}
               className="px-3 py-2 border rounded-lg text-sm"
             >
-              রিসেট
+              ���িসেট
             </button>
           </div>
           {(
             [
               { key: "sendMoney", label: "টাকা পাঠান" },
-              { key: "cashIn", label: "ক্যাশ ইন" },
+              { key: "cashIn", label: "���্যাশ ইন" },
               { key: "cashOut", label: "ক্যাশ আউট" },
               { key: "recharge", label: "মোবাইল রিচার্জ" },
               { key: "payBill", label: "বিল পেমেন্ট" },
@@ -576,23 +576,50 @@ export default function AdminDashboard() {
               placeholder="লিংক (ঐচ্ছিক)"
               className="w-full p-2 border rounded-lg"
             />
-            <button
-              onClick={() => {
-                if (!bannerUrl.trim()) return;
-                const item: Banner = {
-                  id: Date.now(),
-                  image: bannerUrl.trim(),
-                  link: bannerLink.trim() || undefined,
-                };
-                const updated = [item, ...banners].slice(0, 10);
-                setBanners(updated);
-                setBannerUrl("");
-                setBannerLink("");
-              }}
-              className="w-full bg-slate-800 hover:bg-slate-900 text-white rounded-lg p-2 flex items-center justify-center gap-2"
-            >
-              <Plus className="h-4 w-4" /> ব্যানার যোগ করুন
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => {
+                  if (!bannerUrl.trim()) return;
+                  const item: Banner = {
+                    id: Date.now(),
+                    image: bannerUrl.trim(),
+                    link: bannerLink.trim() || undefined,
+                  };
+                  const updated = [item, ...banners].slice(0, 10);
+                  setBanners(updated);
+                  setBannerUrl("");
+                  setBannerLink("");
+                }}
+                className="flex-1 bg-slate-800 hover:bg-slate-900 text-white rounded-lg p-2 flex items-center justify-center gap-2"
+              >
+                <Plus className="h-4 w-4" /> URL থেকে যোগ করুন
+              </button>
+              <label className="flex-1 bg-slate-700 hover:bg-slate-800 text-white rounded-lg p-2 text-center cursor-pointer">
+                ফাইল আপলোড
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={async (e) => {
+                    const file = e.target.files?.[0];
+                    if (!file) return;
+                    const reader = new FileReader();
+                    reader.onload = () => {
+                      const item: Banner = {
+                        id: Date.now(),
+                        image: String(reader.result),
+                        link: bannerLink.trim() || undefined,
+                      };
+                      const updated = [item, ...banners].slice(0, 10);
+                      setBanners(updated);
+                    };
+                    reader.readAsDataURL(file);
+                    (e.target as HTMLInputElement).value = "";
+                  }}
+                />
+              </label>
+            </div>
+            <p className="text-xs text-slate-500">যেকোনো ���াইজ সাপোর্টেড — ইউজার অ্যাপে ন্যাচারাল সাইজে দেখাবে।</p>
           </div>
 
           {banners.length > 0 && (
