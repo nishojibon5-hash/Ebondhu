@@ -166,10 +166,24 @@ export default function TaskCreate() {
     return Object.keys(newErrors).length === 0;
   };
 
+  const getMinReward = (type: string) => {
+    const map: Record<string, number> = {
+      follow: 0.25,
+      like: 0.2,
+      comment: 0.3,
+      share: 0.4,
+      view: 0.2,
+    };
+    return map[type] ?? 0.2;
+  };
+
   const validateStep2 = () => {
     const newErrors: { [key: string]: string } = {};
     if (!formData.targetUrl.trim()) newErrors.targetUrl = "টার্গেট URL আবশ্যক";
-    if (formData.reward < 5) newErrors.reward = "ন্যূনতম পুরস্কার ৫ টাক���";
+    if (!formData.taskType) newErrors.taskType = "কাজের ধরন নির্বাচন করুন";
+    const min = getMinReward(formData.taskType);
+    if (formData.reward < min)
+      newErrors.reward = `ন্যূনতম পুরস্কার ৳${min.toFixed(2)}`;
     if (formData.maxCompletions < 1)
       newErrors.maxCompletions = "কমপক্ষে ১টি কাজ থাকতে হবে";
     if (!formData.timeLimit) newErrors.timeLimit = "সময়সীমা নির্বাচন করুন";
