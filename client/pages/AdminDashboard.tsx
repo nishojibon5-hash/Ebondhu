@@ -53,6 +53,9 @@ export default function AdminDashboard() {
   const [bannerUrl, setBannerUrl] = useState("");
   const [bannerLink, setBannerLink] = useState("");
   const [manualTopups, setManualTopups] = useState<any[]>([]);
+  const [cashouts, setCashouts] = useState<any[]>([]);
+  const [payoutWallets, setPayoutWallets] = useState<Record<PayoutWalletKey, PayoutWallet>>(DEFAULT_PAYOUT);
+  const [adminWalletBalance, setAdminWalletBalance] = useState<number>(0);
 
   useEffect(() => {
     const init = async () => {
@@ -197,7 +200,7 @@ export default function AdminDashboard() {
             </button>
           </div>
           <p className="text-sm text-slate-500 mt-1">
-            ইউজার অ্যাপে�� ফিচার কন্ট্রোল করুন
+            ইউজার অ্যাপের ফিচার কন্ট্রোল করুন
           </p>
         </div>
 
@@ -308,7 +311,7 @@ export default function AdminDashboard() {
                   </div>
                   {r.reason && (
                     <p className="text-xs text-red-600 mt-2">
-                      কার��: {r.reason}
+                      কারণ: {r.reason}
                     </p>
                   )}
                 </div>
