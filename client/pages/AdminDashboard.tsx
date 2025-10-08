@@ -285,6 +285,13 @@ export default function AdminDashboard() {
         </div>
 
         <div className="bg-white rounded-2xl shadow divide-y">
+          <div className="p-4 flex items-center justify-between">
+            <div>
+              <p className="text-sm text-slate-500">অ্যাডমিন ওয়ালেট ব্যালেন্স</p>
+              <p className="text-2xl font-bold text-slate-800">৳{adminWalletBalance.toFixed(2)}</p>
+            </div>
+            <button onClick={() => { setAdminWalletBalance(0); localStorage.setItem("adminWalletBalance", "0"); }} className="px-3 py-2 border rounded-lg text-sm">রিসেট</button>
+          </div>
           {(
             [
               { key: "sendMoney", label: "টাকা পাঠান" },
@@ -323,7 +330,39 @@ export default function AdminDashboard() {
           ))}
         </div>
 
-        {/* Banner Management */}
+        {/* Cashout Requests */}
+        <div className="bg-white rounded-2xl shadow p-4 mt-4">
+          <h2 className="font-semibold text-slate-800 mb-3">ক্যাশ আউট রিকুয়েস্ট</h2>
+          {cashouts.length === 0 ? (
+            <p className="text-sm text-slate-500">কোনো রিকুয়েস্ট নেই</p>
+          ) : (
+            <div className="space-y-3">
+              {cashouts.map((r) => (
+                <div key={r.id} className="border rounded-xl p-3">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="font-semibold text-slate-800">৳{r.amount} • {r.wallet?.toUpperCase?.() || r.wallet}</p>
+                      <p className="text-xs text-slate-500">ইউজার: {r.userPhone} • সময়: {new Date(r.createdAt).toLocaleString("bn-BD")}</p>
+                      <p className="text-xs text-slate-500">নম্বর: {r.accountNumber}</p>
+                    </div>
+                    <span className={`text-xs px-2 py-1 rounded-full ${r.status === "approved" ? "bg-green-100 text-green-700" : r.status === "rejected" ? "bg-red-100 text-red-700" : "bg-yellow-100 text-yellow-700"}`}>{r.status}</span>
+                  </div>
+                  <div className="flex items-center gap-2 mt-3">
+                    {r.status === "pending" && (
+                      <>
+                        <button onClick={() => approveCashout(r.id)} className="px-3 py-2 bg-green-600 text-white rounded">গ্রহণ করুন</button>
+                        <button onClick={() => rejectCashout(r.id)} className="px-3 py-2 bg-red-100 text-red-700 rounded">রিজেক্ট</button>
+                      </>
+                    )}
+                    <button onClick={() => warnUser(r.userPhone)} className="px-3 py-2 bg-yellow-100 text-yellow-700 rounded flex items-center gap-1"><AlertTriangle className="h-4 w-4"/>ওয়ার্নিং পাঠান</button>
+                  </div>
+                  {r.reason && <p className="text-xs text-red-600 mt-2">কারণ: {r.reason}</p>}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
         {/* Manual Add Money Requests */}
         <div className="bg-white rounded-2xl shadow p-4 mt-4">
           <h2 className="font-semibold text-slate-800 mb-3">
@@ -400,10 +439,32 @@ export default function AdminDashboard() {
           )}
         </div>
 
+        {/* Payout Wallet Config */}
         <div className="bg-white rounded-2xl shadow p-4 mt-4">
-          <h2 className="font-semibold text-slate-800 mb-3">
-            ব্যানার ম্যানেজমেন্ট
-          </h2>
+          <h2 className="font-semibold text-slate-800 mb-3">ওয়ালেট সেটিংস (কোন কোন ওয়ালেটে পাঠাবেন)</h2>
+          {(Object.keys(payoutWallets) as PayoutWalletKey[]).map((k) => (
+            <div key={k} className="flex items-center justify-between p-3 border rounded-lg mb-2">
+              <div>
+                <p className="font-medium text-slate-800">{k === "bkash" ? "বিকাশ" : k === "nagad" ? "নগদ" : "রকেট"}</p>
+                <p className="text-xs text-slate-500">রিজার্ভ: ৳{payoutWallets[k].reserve.toFixed(2)}</p>
+              </div>
+              <div className="flex items-center gap-2">
+                <input type="number" step="0.01" className="w-28 p-2 border rounded" value={payoutWallets[k].reserve}
+                  onChange={(e) => setPayoutWallets({ ...payoutWallets, [k]: { ...payoutWallets[k], reserve: parseFloat(e.target.value) || 0 } })} />
+                <label className="flex items-center gap-2 text-sm">
+                  <input type="checkbox" checked={payoutWallets[k].enabled}
+                    onChange={(e) => setPayoutWallets({ ...payoutWallets, [k]: { ...payoutWallets[k], enabled: e.target.checked } })} />
+                  চালু
+                </label>
+              </div>
+            </div>
+          ))}
+          <p className="text-xs text-slate-500 mt-2">সেভ করলে পরিবর্তন কার্যকর হবে</p>
+        </div>
+
+        {/* Banner Management */}
+        <div className="bg-white rounded-2xl shadow p-4 mt-4">
+          <h2 className="font-semibold text-slate-800 mb-3">ব্যানার ম্যানেজমেন্ট</h2>
           <div className="space-y-2">
             <input
               value={bannerUrl}
