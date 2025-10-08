@@ -170,6 +170,14 @@ function App() {
               }
             />
             <Route
+              path="/notifications"
+              element={
+                <ProtectedRoute>
+                  <Notifications />
+                </ProtectedRoute>
+              }
+            />
+            <Route
               path="/add-money"
               element={
                 <ProtectedRoute>
