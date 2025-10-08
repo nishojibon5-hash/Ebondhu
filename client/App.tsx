@@ -9,6 +9,7 @@ import SendMoney from "./pages/SendMoney";
 import MobileRecharge from "./pages/MobileRecharge";
 import AddMoney from "./pages/AddMoney";
 import CashOut from "./pages/CashOut";
+import Notifications from "./pages/Notifications";
 import Refer from "./pages/Refer";
 import LoanApplication from "./pages/LoanApplication";
 import SomitiManager from "./pages/SomitiManager";
