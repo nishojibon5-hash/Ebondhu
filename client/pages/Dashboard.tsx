@@ -110,7 +110,7 @@ export default function Dashboard({ language, setLanguage }: DashboardProps) {
       color: "bg-white shadow-md",
       textColor: "text-gray-700",
       iconColor: "text-red-500",
-      link: "#",
+      link: "/cash-out",
     },
     flags.recharge !== false && {
       icon: Smartphone,
