@@ -37,7 +37,9 @@ export function BannerCarousel() {
     return () => clearInterval(interval);
   }, [emblaApi]);
 
-  const data = banners.length ? banners : [{ id: 0, image: "/placeholder.svg" }];
+  const data = banners.length
+    ? banners
+    : [{ id: 0, image: "/placeholder.svg" }];
 
   return (
     <div className="mb-6">
@@ -47,10 +49,18 @@ export function BannerCarousel() {
             <div className="min-w-0 flex-[0_0_100%] px-0 py-0" key={b.id}>
               {b.link ? (
                 <a href={b.link} target="_blank" rel="noreferrer">
-                  <img src={b.image} alt="banner" className="block max-w-full h-auto mx-auto" />
+                  <img
+                    src={b.image}
+                    alt="banner"
+                    className="block max-w-full h-auto mx-auto"
+                  />
                 </a>
               ) : (
-                <img src={b.image} alt="banner" className="block max-w-full h-auto mx-auto" />
+                <img
+                  src={b.image}
+                  alt="banner"
+                  className="block max-w-full h-auto mx-auto"
+                />
               )}
             </div>
           ))}

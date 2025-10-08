@@ -619,7 +619,9 @@ export default function AdminDashboard() {
                 />
               </label>
             </div>
-            <p className="text-xs text-slate-500">যেকোনো ���াইজ সাপোর্টেড — ইউজার অ্যাপে ন্যাচারাল সাইজে দেখাবে।</p>
+            <p className="text-xs text-slate-500">
+              যেকোনো ���াইজ সাপোর্টেড — ইউজার অ্যাপে ন্যাচারাল সাইজে দেখাবে।
+            </p>
           </div>
 
           {banners.length > 0 && (
