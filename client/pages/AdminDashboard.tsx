@@ -28,6 +28,14 @@ type FeatureFlags = {
 
 type Banner = { id: number; image: string; link?: string };
 
+type PayoutWalletKey = "bkash" | "nagad" | "rocket";
+type PayoutWallet = { enabled: boolean; reserve: number };
+const DEFAULT_PAYOUT: Record<PayoutWalletKey, PayoutWallet> = {
+  bkash: { enabled: true, reserve: 0 },
+  nagad: { enabled: true, reserve: 0 },
+  rocket: { enabled: false, reserve: 0 },
+};
+
 const DEFAULT_FLAGS: FeatureFlags = {
   sendMoney: true,
   cashIn: true,
@@ -189,7 +197,7 @@ export default function AdminDashboard() {
             </button>
           </div>
           <p className="text-sm text-slate-500 mt-1">
-            ইউজার অ্যাপের ফিচার কন্ট্রোল করুন
+            ইউজার অ্যাপে�� ফিচার কন্ট্রোল করুন
           </p>
         </div>
 
@@ -300,7 +308,7 @@ export default function AdminDashboard() {
                   </div>
                   {r.reason && (
                     <p className="text-xs text-red-600 mt-2">
-                      কারণ: {r.reason}
+                      কার��: {r.reason}
                     </p>
                   )}
                 </div>
