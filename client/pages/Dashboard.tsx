@@ -460,6 +460,9 @@ export default function Dashboard({ language, setLanguage }: DashboardProps) {
               <button className="p-2.5 rounded-full bg-white hover:bg-gray-100 transition-colors shadow-md">
                 <Search className="h-5 w-5 text-gray-700" />
               </button>
+              <Link to="/notifications" className="p-2.5 rounded-full bg-white hover:bg-gray-100 transition-colors shadow-md">
+                <Bell className="h-5 w-5 text-gray-700" />
+              </Link>
               <button onClick={() => setIsDrawerOpen(true)} className="p-2.5 rounded-full bg-white hover:bg-gray-100 transition-colors shadow-md">
                 <Menu className="h-5 w-5 text-gray-700" />
               </button>
