@@ -64,7 +64,7 @@ const translations = {
     cashOut: "ক্যাশ আউট",
     recharge: "মোবাইল রিচার্জ",
     payBill: "বিল পেমেন্ট",
-    addMoney: "টাকা যোগ করুন",
+    addMoney: "টাকা যোগ করু���",
     recentTransactions: "সাম্প্রতিক লেনদেন",
     viewAll: "সব দেখুন",
     sent: "পাঠানো",
@@ -175,46 +175,27 @@ export default function Dashboard({ language, setLanguage }: DashboardProps) {
 
   return (
     <div className="pb-20 min-h-screen bg-gray-50">
-      {/* Header - Pink with Beautiful Background */}
+      {/* Header - Pink with Animated Background Video */}
       <div className="bg-gradient-to-b from-pink-400 via-pink-500 to-pink-600 p-4 text-white relative overflow-hidden min-h-48">
-        {/* Background Image with Landscape and Birds */}
-        <div className="absolute inset-0 opacity-30">
-          <svg viewBox="0 0 1200 300" className="w-full h-full" preserveAspectRatio="xMidYMid slice">
-            {/* Distant mountains/landscape */}
-            <defs>
-              <linearGradient id="skyGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" style={{ stopColor: '#ec4899', stopOpacity: 0.3 }} />
-                <stop offset="100%" style={{ stopColor: '#be185d', stopOpacity: 0.5 }} />
-              </linearGradient>
-            </defs>
-
-            {/* Back mountains */}
-            <path fill="#be185d" opacity="0.2" d="M0,150 Q150,100 300,150 T600,150 T900,150 T1200,150 L1200,300 L0,300 Z"></path>
-
-            {/* Middle mountains */}
-            <path fill="#be185d" opacity="0.35" d="M0,180 Q200,120 400,180 T800,180 T1200,180 L1200,300 L0,300 Z"></path>
-
-            {/* Front landscape */}
-            <path fill="#9d174d" opacity="0.4" d="M0,220 Q250,160 500,220 T1000,220 T1200,220 L1200,300 L0,300 Z"></path>
-
-            {/* Small landscape details */}
-            <circle cx="150" cy="240" r="20" fill="#9d174d" opacity="0.3"></circle>
-            <circle cx="950" cy="250" r="15" fill="#9d174d" opacity="0.25"></circle>
-            <path d="M200,240 Q210,220 220,240" stroke="#9d174d" strokeWidth="3" fill="none" opacity="0.2"></path>
-
-            {/* Flying birds */}
-            <g opacity="0.4">
-              {/* Bird 1 */}
-              <path d="M100,80 L110,90 M100,80 L90,90" stroke="white" strokeWidth="2" fill="none"></path>
-              {/* Bird 2 */}
-              <path d="M300,120 L312,132 M300,120 L288,132" stroke="white" strokeWidth="2" fill="none"></path>
-              {/* Bird 3 */}
-              <path d="M800,110 L815,125 M800,110 L785,125" stroke="white" strokeWidth="2" fill="none"></path>
-              {/* Bird 4 */}
-              <path d="M1000,95 L1012,108 M1000,95 L988,108" stroke="white" strokeWidth="2" fill="none"></path>
-            </g>
-          </svg>
+        {/* Animated Background Video */}
+        <div className="absolute inset-0 overflow-hidden">
+          <video
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="absolute inset-0 w-full h-full object-cover"
+            style={{ opacity: 0.4 }}
+          >
+            <source
+              src="https://videos.pexels.com/video-files/19701513/19701513-sd_540_960_30fps.mp4"
+              type="video/mp4"
+            />
+          </video>
         </div>
+
+        {/* Overlay gradient for blending */}
+        <div className="absolute inset-0 bg-gradient-to-b from-pink-400/40 via-pink-500/50 to-pink-600/60"></div>
 
         <div className="relative z-10">
           {/* Top Header */}
