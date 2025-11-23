@@ -42,9 +42,9 @@ const translations = {
     recharge: "Mobile Recharge",
     payBill: "Pay Bill",
     addMoney: "Add Money",
-    recentTransactions: "সাম্প্রতিক লেনদেন",
+    recentTransactions: "সাম্প্রতিক লেনদে���",
     viewAll: "সব দেখুন",
-    sent: "পা���ানো",
+    sent: "পাঠানো",
     received: "পেয়েছেন",
     recharged: "রিচার্জ",
     today: "আজ",
@@ -72,7 +72,7 @@ const translations = {
     recharged: "রিচার্জ",
     today: "আজ",
     yesterday: "গতকাল",
-    tapToSeeBalance: "ব্যালেন্স দেখতে ট্যাপ ���রুন",
+    tapToSeeBalance: "ব্যালেন্স দেখতে ট্যাপ করুন",
     taskEarning: "টাস্ক আর্নিং",
     loanService: "লোন সার্ভিস",
     somitiManager: "সমিতি ম্যানেজার",
@@ -238,28 +238,24 @@ export default function Dashboard({ language, setLanguage }: DashboardProps) {
         </svg>
       </div>
 
-      {/* Quick Actions - bKash Grid Style */}
-      <div className="p-4 -mt-4 relative z-10">
-        <div className="bg-white rounded-2xl shadow-lg p-4 mb-6">
-          <div className="grid grid-cols-3 gap-4">
+      {/* Quick Actions - 4x2 Grid */}
+      <div className="p-4 relative z-10">
+        <div className="bg-white rounded-3xl shadow-lg p-6 mb-6">
+          <div className="grid grid-cols-4 gap-4">
             {quickActions.map((action, index) => {
               const Icon = action.icon;
               return (
                 <Link
                   key={index}
                   to={action.link}
-                  className={`${action.color} p-4 rounded-xl hover:scale-105 transition-all duration-200 border border-gray-100 block`}
+                  className="flex flex-col items-center space-y-3 p-3 rounded-2xl hover:bg-gray-50 transition-all duration-200"
                 >
-                  <div className="flex flex-col items-center space-y-2">
-                    <div className="p-2 rounded-full bg-gray-50">
-                      <Icon className={`h-6 w-6 ${action.iconColor}`} />
-                    </div>
-                    <span
-                      className={`text-xs font-medium ${action.textColor} text-center leading-tight`}
-                    >
-                      {action.label}
-                    </span>
+                  <div className="w-16 h-16 rounded-2xl bg-gray-50 flex items-center justify-center">
+                    <Icon className={`h-7 w-7 ${action.iconColor}`} />
                   </div>
+                  <span className="text-xs font-medium text-gray-700 text-center leading-tight">
+                    {action.label}
+                  </span>
                 </Link>
               );
             })}
