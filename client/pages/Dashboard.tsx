@@ -206,10 +206,13 @@ export default function Dashboard({ language, setLanguage }: DashboardProps) {
             </div>
 
             {/* Right Icons */}
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-1">
               <button className="p-2 rounded-full bg-white/20 hover:bg-white/30 transition-colors">
                 <Search className="h-5 w-5" />
               </button>
+              <Link to="/notifications" className="p-2 rounded-full bg-white/20 hover:bg-white/30 transition-colors">
+                <Bell className="h-5 w-5" />
+              </Link>
               <button onClick={() => setIsDrawerOpen(true)} className="p-2 rounded-full bg-white/20 hover:bg-white/30 transition-colors">
                 <Menu className="h-5 w-5" />
               </button>
