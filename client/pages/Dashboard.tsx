@@ -33,7 +33,7 @@ interface DashboardProps {
 const translations = {
   en: {
     goodMorning: "Good Morning",
-    userName: "মোঃ রহিম",
+    userName: "মোঃ ��হিম",
     appName: "amarcash",
     yourBalance: "আপনার ব্যালেন্স",
     sendMoney: "Send Money",
@@ -376,22 +376,41 @@ export default function Dashboard({ language, setLanguage }: DashboardProps) {
             <path d="M575,95 Q585,65 610,58 Q640,55 670,70" fill="none" stroke="white" strokeWidth="1.5" opacity="0.6" />
           </g>
 
-          {/* Birds - Flying in formation, coming from depth */}
+          {/* Birds - More realistic sketch style */}
           <g id="bird1">
-            <path d="M600,80 L615,95 M600,80 L585,95" stroke="white" strokeWidth="3" />
-            <path d="M670,75 L683,88 M670,75 L657,88" stroke="white" strokeWidth="2.5" />
-            <path d="M530,85 L545,100 M530,85 L515,100" stroke="white" strokeWidth="2.5" />
+            {/* Main bird */}
+            <circle cx="600" cy="78" r="3" fill="white" />
+            <path d="M597,80 Q585,92 570,98" stroke="white" strokeWidth="2.2" fill="none" strokeLinecap="round" />
+            <path d="M603,80 Q615,92 630,98" stroke="white" strokeWidth="2.2" fill="none" strokeLinecap="round" />
+            {/* Secondary birds */}
+            <circle cx="665" cy="72" r="2.5" fill="white" />
+            <path d="M663,74 Q655,83 645,88" stroke="white" strokeWidth="1.8" fill="none" strokeLinecap="round" />
+            <path d="M667,74 Q675,83 685,88" stroke="white" strokeWidth="1.8" fill="none" strokeLinecap="round" />
+            <circle cx="535" cy="85" r="2.5" fill="white" />
+            <path d="M533,87 Q525,96 515,101" stroke="white" strokeWidth="1.8" fill="none" strokeLinecap="round" />
+            <path d="M537,87 Q545,96 555,101" stroke="white" strokeWidth="1.8" fill="none" strokeLinecap="round" />
           </g>
 
           <g id="bird2">
-            <path d="M600,130 L620,150 M600,130 L580,150" stroke="white" strokeWidth="3.5" />
-            <path d="M680,120 L698,138 M680,120 L662,138" stroke="white" strokeWidth="3" />
-            <path d="M520,135 L540,155 M520,135 L500,155" stroke="white" strokeWidth="3" />
+            {/* Main birds with larger wings */}
+            <circle cx="600" cy="128" r="3.5" fill="white" />
+            <path d="M596,131 Q580,150 560,160" stroke="white" strokeWidth="2.5" fill="none" strokeLinecap="round" />
+            <path d="M604,131 Q620,150 640,160" stroke="white" strokeWidth="2.5" fill="none" strokeLinecap="round" />
+            <circle cx="675" cy="118" r="3" fill="white" />
+            <path d="M672,121 Q660,138 645,148" stroke="white" strokeWidth="2.2" fill="none" strokeLinecap="round" />
+            <path d="M678,121 Q690,138 705,148" stroke="white" strokeWidth="2.2" fill="none" strokeLinecap="round" />
+            <circle cx="525" cy="133" r="3" fill="white" />
+            <path d="M522,136 Q510,153 495,163" stroke="white" strokeWidth="2.2" fill="none" strokeLinecap="round" />
+            <path d="M528,136 Q540,153 555,163" stroke="white" strokeWidth="2.2" fill="none" strokeLinecap="round" />
           </g>
 
           <g id="bird3">
-            <path d="M600,110 L613,125 M600,110 L587,125" stroke="white" strokeWidth="2.8" />
-            <path d="M660,105 L671,118 M660,105 L649,118" stroke="white" strokeWidth="2.4" />
+            <circle cx="600" cy="108" r="2.8" fill="white" />
+            <path d="M597,110 Q588,121 578,128" stroke="white" strokeWidth="2" fill="none" strokeLinecap="round" />
+            <path d="M603,110 Q612,121 622,128" stroke="white" strokeWidth="2" fill="none" strokeLinecap="round" />
+            <circle cx="660" cy="103" r="2.5" fill="white" />
+            <path d="M657,105 Q650,114 642,121" stroke="white" strokeWidth="1.8" fill="none" strokeLinecap="round" />
+            <path d="M663,105 Q670,114 678,121" stroke="white" strokeWidth="1.8" fill="none" strokeLinecap="round" />
           </g>
 
           {/* Plane - Larger, coming from depth */}
