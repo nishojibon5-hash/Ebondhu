@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   Send,
   Download,
@@ -294,7 +294,7 @@ export default function Dashboard({ language, setLanguage }: DashboardProps) {
 
         {/* Quick Features Section */}
         <div className="bg-white rounded-3xl shadow-lg p-6 mb-6">
-          <h3 className="font-bold text-gray-800 mb-4">কুইক ফিচারসমূহ</h3>
+          <h3 className="font-bold text-gray-800 mb-4">কুই�� ফিচারসমূহ</h3>
           <div className="grid grid-cols-3 gap-4">
             <div className="flex flex-col items-center space-y-2 p-3 bg-orange-50 rounded-2xl">
               <div className="w-12 h-12 rounded-full bg-orange-100 flex items-center justify-center">
