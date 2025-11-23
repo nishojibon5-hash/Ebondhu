@@ -42,7 +42,7 @@ const translations = {
     recharge: "Mobile Recharge",
     payBill: "Pay Bill",
     addMoney: "Add Money",
-    recentTransactions: "সাম্প্রতিক লেনদেন",
+    recentTransactions: "স��ম্প্রতিক লেনদেন",
     viewAll: "সব দেখুন",
     sent: "পাঠানো",
     received: "পেয়েছেন",
@@ -320,19 +320,19 @@ export default function Dashboard({ language, setLanguage }: DashboardProps) {
                 }
               }
 
-              #cloud1 { animation: cloudApproach1 70s infinite linear; }
-              #cloud2 { animation: cloudApproach2 80s infinite linear 15s; }
-              #cloud3 { animation: cloudApproach1 75s infinite linear 35s; }
-              #cloud4 { animation: cloudApproach2 85s infinite linear 50s; }
-              #cloud5 { animation: cloudApproach1 90s infinite linear 65s; }
+              #cloud1 { animation: cloudApproach1 35s infinite linear; }
+              #cloud2 { animation: cloudApproach2 40s infinite linear 8s; }
+              #cloud3 { animation: cloudApproach1 38s infinite linear 16s; }
+              #cloud4 { animation: cloudApproach2 42s infinite linear 24s; }
+              #cloud5 { animation: cloudApproach1 45s infinite linear 32s; }
 
-              #bird1 { animation: birdApproach1 100s infinite linear; }
-              #bird2 { animation: birdApproach2 120s infinite linear 25s; }
-              #bird3 { animation: birdApproach1 110s infinite linear 55s; }
+              #bird1 { animation: birdApproach1 50s infinite linear; }
+              #bird2 { animation: birdApproach2 60s infinite linear 12s; }
+              #bird3 { animation: birdApproach1 55s infinite linear 28s; }
 
-              #plane { animation: planeApproach 140s infinite linear 85s; }
+              #plane { animation: planeApproach 70s infinite linear 42s; }
 
-              #mountains { animation: mountainApproach 150s infinite linear; }
+              #mountains { animation: mountainApproach 75s infinite linear; }
             `}</style>
 
             <linearGradient id="skyGradient" x1="0%" y1="0%" x2="0%" y2="100%">
