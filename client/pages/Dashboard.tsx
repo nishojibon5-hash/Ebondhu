@@ -158,7 +158,7 @@ export default function Dashboard({ language, setLanguage }: DashboardProps) {
       id: 1,
       type: "sent",
       amount: -1500,
-      description: "টাকা পাঠানো - ০১��১১××××××",
+      description: "টাকা পাঠানো - ০১৭১১××××××",
       time: "১০:৩০ AM",
       date: t.today,
     },
@@ -451,7 +451,7 @@ export default function Dashboard({ language, setLanguage }: DashboardProps) {
                 <h2 className="font-bold text-white text-sm">
                   {localStorage.getItem("userName") || t.userName}
                 </h2>
-                <p className="text-yellow-100 text-xs">{t.goodMorning}</p>
+                <p className="text-white/80 text-xs">{t.goodMorning}</p>
               </div>
             </div>
 
