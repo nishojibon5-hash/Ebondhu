@@ -35,7 +35,7 @@ const translations = {
     goodMorning: "Good Morning",
     userName: "মোঃ রহিম",
     appName: "amarcash",
-    yourBalance: "আ���নার ব্যালেন্স",
+    yourBalance: "আপনার ব্যালেন্স",
     sendMoney: "Send Money",
     cashIn: "Cash In",
     cashOut: "Cash Out",
@@ -63,7 +63,7 @@ const translations = {
     cashIn: "ক্যাশ ইন",
     cashOut: "ক্যাশ আউট",
     recharge: "মোবাইল রিচার্জ",
-    payBill: "বিল পেমেন্ট",
+    payBill: "বিল পে���েন্ট",
     addMoney: "টাকা যোগ করুন",
     recentTransactions: "সাম্প্রতিক লেনদেন",
     viewAll: "সব দেখুন",
@@ -182,28 +182,168 @@ export default function Dashboard({ language, setLanguage }: DashboardProps) {
 
   return (
     <div className="pb-20 min-h-screen bg-gray-50">
-      {/* Header - Pink with Animated Background Video */}
+      {/* Header - Pink with Custom Motion Graphics */}
       <div className="bg-gradient-to-b from-pink-400 via-pink-500 to-pink-600 p-4 text-white relative overflow-hidden min-h-48">
-        {/* Animated Background Video */}
-        <div className="absolute inset-0 overflow-hidden">
-          <video
-            ref={videoRef}
-            autoPlay
-            muted
-            loop
-            playsInline
-            className="absolute inset-0 w-full h-full object-cover"
-            style={{ opacity: 0.4 }}
-          >
-            <source
-              src="https://videos.pexels.com/video-files/5847285/5847285-hd_1920_1080_30fps.mp4"
-              type="video/mp4"
-            />
-          </video>
-        </div>
+        {/* SVG Motion Graphics Container */}
+        <svg
+          className="absolute inset-0 w-full h-full"
+          viewBox="0 0 1200 300"
+          preserveAspectRatio="xMidYMid slice"
+          style={{ opacity: 0.5 }}
+        >
+          <defs>
+            <style>{`
+              @keyframes cloudDrift1 {
+                0% { transform: translateX(-100%); opacity: 0; }
+                10% { opacity: 0.6; }
+                50% { transform: translateX(600px); opacity: 0.6; }
+                90% { opacity: 0; }
+                100% { transform: translateX(1300px); opacity: 0; }
+              }
+
+              @keyframes cloudDrift2 {
+                0% { transform: translateX(-150%); opacity: 0; }
+                15% { opacity: 0.5; }
+                55% { transform: translateX(500px); opacity: 0.5; }
+                85% { opacity: 0; }
+                100% { transform: translateX(1300px); opacity: 0; }
+              }
+
+              @keyframes birdFly1 {
+                0% { transform: translateX(-200px) translateY(40px); opacity: 0; }
+                5% { opacity: 0.8; }
+                50% { transform: translateX(700px) translateY(30px); opacity: 0.8; }
+                95% { opacity: 0; }
+                100% { transform: translateX(1300px) translateY(30px); opacity: 0; }
+              }
+
+              @keyframes birdFly2 {
+                0% { transform: translateX(-200px) translateY(80px); opacity: 0; }
+                25% { opacity: 0.7; }
+                65% { transform: translateX(700px) translateY(70px); opacity: 0.7; }
+                95% { opacity: 0; }
+                100% { transform: translateX(1300px) translateY(70px); opacity: 0; }
+              }
+
+              @keyframes planeFly {
+                0% { transform: translateX(-300px) translateY(30px); opacity: 0; }
+                30% { opacity: 0.6; }
+                70% { transform: translateX(800px) translateY(20px); opacity: 0.6; }
+                98% { opacity: 0; }
+                100% { transform: translateX(1300px) translateY(20px); opacity: 0; }
+              }
+
+              @keyframes sunRise {
+                0% { cy: 250px; r: 30px; opacity: 0.2; }
+                20% { cy: 150px; r: 40px; opacity: 0.7; }
+                50% { cy: 80px; r: 45px; opacity: 0.8; }
+                80% { cy: 80px; r: 45px; opacity: 0.6; }
+                100% { cy: -50px; r: 40px; opacity: 0; }
+              }
+
+              @keyframes mountainShift {
+                0% { transform: translateX(0); opacity: 0.3; }
+                30% { opacity: 0.5; }
+                70% { transform: translateX(-200px); opacity: 0.5; }
+                100% { transform: translateX(-400px); opacity: 0.3; }
+              }
+
+              @keyframes skyColorChange {
+                0% { stop-color: #ec4899; }
+                25% { stop-color: #fbbf24; }
+                50% { stop-color: #60a5fa; }
+                75% { stop-color: #f472b6; }
+                100% { stop-color: #ec4899; }
+              }
+
+              #cloud1 { animation: cloudDrift1 80s infinite linear; }
+              #cloud2 { animation: cloudDrift2 90s infinite linear; }
+              #cloud3 { animation: cloudDrift1 100s infinite linear 20s; }
+              #cloud4 { animation: cloudDrift2 110s infinite linear 40s; }
+
+              #bird1 { animation: birdFly1 120s infinite linear; }
+              #bird2 { animation: birdFly2 140s infinite linear 30s; }
+              #bird3 { animation: birdFly1 150s infinite linear 60s; }
+
+              #plane { animation: planeFly 160s infinite linear 80s; }
+
+              #sun { animation: sunRise 180s infinite linear; }
+
+              #mountains { animation: mountainShift 200s infinite linear; }
+
+              #skyGradient stop { animation: skyColorChange 240s infinite linear; }
+            `}</style>
+
+            <linearGradient id="skyGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" style={{ stopColor: '#ec4899', stopOpacity: 0.4 }} />
+              <stop offset="100%" style={{ stopColor: '#be185d', stopOpacity: 0.6 }} />
+            </linearGradient>
+          </defs>
+
+          {/* Sky background */}
+          <rect width="1200" height="300" fill="url(#skyGradient)" />
+
+          {/* Sun/Moon Rising */}
+          <circle id="sun" cx="600" cy="250" r="30" fill="#fbbf24" opacity="0.7" />
+
+          {/* Mountains */}
+          <g id="mountains">
+            <path d="M0,200 Q200,100 400,200 T800,200 T1200,200 L1200,300 L0,300 Z" fill="#be185d" opacity="0.4" />
+            <path d="M100,220 Q250,140 400,220 T800,220 T1200,220 L1200,300 L0,300 Z" fill="#9d174d" opacity="0.35" />
+          </g>
+
+          {/* Clouds - Multiple layers */}
+          <g id="cloud1">
+            <ellipse cx="100" cy="50" rx="50" ry="25" fill="white" opacity="0.6" />
+            <ellipse cx="140" cy="45" rx="40" ry="20" fill="white" opacity="0.6" />
+            <ellipse cx="60" cy="45" rx="35" ry="22" fill="white" opacity="0.6" />
+          </g>
+
+          <g id="cloud2">
+            <ellipse cx="100" cy="120" rx="55" ry="28" fill="white" opacity="0.5" />
+            <ellipse cx="150" cy="115" rx="45" ry="23" fill="white" opacity="0.5" />
+            <ellipse cx="50" cy="115" rx="40" ry="25" fill="white" opacity="0.5" />
+          </g>
+
+          <g id="cloud3">
+            <ellipse cx="100" cy="80" rx="48" ry="24" fill="white" opacity="0.55" />
+            <ellipse cx="145" cy="75" rx="38" ry="18" fill="white" opacity="0.55" />
+            <ellipse cx="55" cy="75" rx="42" ry="20" fill="white" opacity="0.55" />
+          </g>
+
+          <g id="cloud4">
+            <ellipse cx="100" cy="150" rx="52" ry="26" fill="white" opacity="0.45" />
+            <ellipse cx="155" cy="145" rx="42" ry="21" fill="white" opacity="0.45" />
+            <ellipse cx="45" cy="145" rx="38" ry="23" fill="white" opacity="0.45" />
+          </g>
+
+          {/* Birds - Simple V shapes */}
+          <g id="bird1">
+            <path d="M100,80 L110,90 M100,80 L90,90" stroke="white" strokeWidth="2" opacity="0.7" />
+            <path d="M150,75 L158,83 M150,75 L142,83" stroke="white" strokeWidth="2" opacity="0.7" />
+          </g>
+
+          <g id="bird2">
+            <path d="M100,120 L112,135 M100,120 L88,135" stroke="white" strokeWidth="2.5" opacity="0.6" />
+            <path d="M160,115 L170,128 M160,115 L150,128" stroke="white" strokeWidth="2.5" opacity="0.6" />
+            <path d="M50,125 L60,138 M50,125 L40,138" stroke="white" strokeWidth="2.5" opacity="0.6" />
+          </g>
+
+          <g id="bird3">
+            <path d="M100,60 L108,70 M100,60 L92,70" stroke="white" strokeWidth="1.8" opacity="0.65" />
+            <path d="M170,55 L180,65 M170,55 L160,65" stroke="white" strokeWidth="1.8" opacity="0.65" />
+          </g>
+
+          {/* Plane - Simple line art */}
+          <g id="plane">
+            <line x1="100" y1="100" x2="140" y2="100" stroke="white" strokeWidth="2" opacity="0.5" />
+            <polygon points="120,95 120,105 130,100" fill="white" opacity="0.5" />
+            <line x1="105" y1="100" x2="105" y2="108" stroke="white" strokeWidth="1" opacity="0.4" />
+          </g>
+        </svg>
 
         {/* Overlay gradient for blending */}
-        <div className="absolute inset-0 bg-gradient-to-b from-pink-400/40 via-pink-500/50 to-pink-600/60"></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-pink-400/20 via-pink-500/40 to-pink-600/50"></div>
 
         <div className="relative z-10">
           {/* Top Header */}
