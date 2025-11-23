@@ -35,7 +35,7 @@ const translations = {
     goodMorning: "Good Morning",
     userName: "মোঃ রহিম",
     appName: "amarcash",
-    yourBalance: "আপনার ব্যালেন্স",
+    yourBalance: "আপনার ব্য��লেন্স",
     sendMoney: "Send Money",
     cashIn: "Cash In",
     cashOut: "Cash Out",
@@ -65,7 +65,7 @@ const translations = {
     recharge: "মোবাইল রিচার্জ",
     payBill: "বিল পেমেন্ট",
     addMoney: "টাকা যোগ করুন",
-    recentTransactions: "সাম্প্রতিক লেনদেন",
+    recentTransactions: "সাম্প্র���িক লেনদেন",
     viewAll: "সব দেখুন",
     sent: "পাঠানো",
     received: "পেয়েছেন",
@@ -435,11 +435,11 @@ export default function Dashboard({ language, setLanguage }: DashboardProps) {
         {/* Overlay gradient for blending */}
         <div className="absolute inset-0 bg-gradient-to-b from-pink-400/20 via-pink-500/40 to-pink-600/50"></div>
 
-        <div className="relative z-10">
-          {/* Top Header */}
+        <div className="relative z-10 px-4 pt-4">
+          {/* Top Header - Profile and Icons */}
           <div className="flex items-center justify-between mb-6">
             {/* Profile Section */}
-            <div className="flex items-center space-x-3">
+            <div className="flex items-center space-x-3 flex-1">
               <div className="w-14 h-14 rounded-full bg-white shadow-lg flex items-center justify-center overflow-hidden border-2 border-white/30">
                 <img
                   src="https://api.dicebear.com/7.x/avataaars/svg?seed=user"
@@ -448,7 +448,7 @@ export default function Dashboard({ language, setLanguage }: DashboardProps) {
                 />
               </div>
               <div>
-                <h2 className="font-bold text-white text-sm">
+                <h2 className="font-bold text-white text-base">
                   {localStorage.getItem("userName") || t.userName}
                 </h2>
                 <p className="text-white/80 text-xs">{t.goodMorning}</p>
@@ -456,44 +456,49 @@ export default function Dashboard({ language, setLanguage }: DashboardProps) {
             </div>
 
             {/* Right Icons */}
-            <div className="flex items-center space-x-1">
-              <button className="p-2 rounded-full bg-white/20 hover:bg-white/30 transition-colors">
-                <Search className="h-5 w-5" />
+            <div className="flex items-center space-x-2">
+              <button className="p-2.5 rounded-full bg-white hover:bg-gray-100 transition-colors shadow-md">
+                <Search className="h-5 w-5 text-gray-700" />
               </button>
-              <Link to="/notifications" className="p-2 rounded-full bg-white/20 hover:bg-white/30 transition-colors">
-                <Bell className="h-5 w-5" />
-              </Link>
-              <button onClick={() => setIsDrawerOpen(true)} className="p-2 rounded-full bg-white/20 hover:bg-white/30 transition-colors">
-                <Menu className="h-5 w-5" />
+              <button onClick={() => setIsDrawerOpen(true)} className="p-2.5 rounded-full bg-white hover:bg-gray-100 transition-colors shadow-md">
+                <Menu className="h-5 w-5 text-gray-700" />
               </button>
             </div>
           </div>
 
-          {/* Balance Card */}
+          {/* Balance Button - White rounded with BKash logo style */}
           <div
-            className="bg-white rounded-full px-4 py-3 flex items-center justify-between shadow-md mb-6 cursor-pointer hover:shadow-lg transition-all"
+            className="bg-white rounded-full px-5 py-3 flex items-center space-x-3 shadow-md cursor-pointer hover:shadow-lg transition-all"
             onClick={() => setBalanceVisible(!balanceVisible)}
           >
+            {/* BKash-style logo circle */}
+            <div className="bg-pink-500 rounded-lg p-2 flex items-center justify-center min-w-fit">
+              <span className="text-white font-bold text-lg">ℬ</span>
+            </div>
+
+            {/* Balance text */}
             <div className="flex-1">
               {balanceVisible ? (
                 <span className="text-gray-800 font-bold text-sm">
                   ৳ {parseFloat(localStorage.getItem("userBalance") || "0").toLocaleString()}
                 </span>
               ) : (
-                <span className="text-gray-600 text-sm">বালেশ দেখুন</span>
+                <span className="text-gray-600 text-sm font-medium">বালেশ দেখুন</span>
               )}
             </div>
+
+            {/* Eye icon */}
             <button
               onClick={(e) => {
                 e.stopPropagation();
                 setBalanceVisible(!balanceVisible);
               }}
-              className="ml-2"
+              className="p-1"
             >
               {balanceVisible ? (
-                <EyeOff className="h-4 w-4 text-pink-500" />
+                <EyeOff className="h-4 w-4 text-gray-500" />
               ) : (
-                <Eye className="h-4 w-4 text-pink-500" />
+                <Eye className="h-4 w-4 text-gray-500" />
               )}
             </button>
           </div>
