@@ -82,6 +82,13 @@ const translations = {
 export default function Dashboard({ language, setLanguage }: DashboardProps) {
   const [balanceVisible, setBalanceVisible] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.playbackRate = 0.35;
+    }
+  }, []);
 
   const t = translations[language];
 
