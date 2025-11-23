@@ -63,7 +63,7 @@ const translations = {
     cashIn: "ক্যাশ ইন",
     cashOut: "ক্যাশ আউট",
     recharge: "মোবাইল রিচার্জ",
-    payBill: "বিল ���েমেন্ট",
+    payBill: "বিল পেমেন্ট",
     addMoney: "টাকা যোগ করুন",
     recentTransactions: "সাম্প্রতিক লেনদেন",
     viewAll: "সব দেখুন",
@@ -263,12 +263,17 @@ export default function Dashboard({ language, setLanguage }: DashboardProps) {
       </div>
 
       {/* Decorative Landscape Pattern */}
-      <div className="h-24 bg-gradient-to-b from-yellow-500 to-white relative overflow-hidden">
-        <svg viewBox="0 0 1200 120" className="absolute bottom-0 w-full h-32 text-yellow-400">
-          <path fill="currentColor" opacity="0.3" d="M0,50 Q100,30 200,50 T400,50 L400,120 L0,120 Z"></path>
-          <path fill="currentColor" opacity="0.5" d="M200,70 Q300,40 400,70 T600,70 L600,120 L200,120 Z"></path>
-          <path fill="currentColor" opacity="0.3" d="M600,60 Q700,80 800,60 T1000,60 L1000,120 L600,120 Z"></path>
-          <path fill="currentColor" opacity="0.4" d="M900,75 Q1000,50 1100,75 L1200,75 L1200,120 L900,120 Z"></path>
+      <div className="h-32 bg-gradient-to-b from-pink-500 to-white relative overflow-hidden">
+        <svg viewBox="0 0 1200 150" className="absolute bottom-0 w-full h-40 text-pink-400">
+          {/* Landscape layers */}
+          <path fill="#be185d" opacity="0.25" d="M0,50 Q100,30 200,50 T400,50 T600,50 T800,50 T1000,50 T1200,50 L1200,150 L0,150 Z"></path>
+          <path fill="#9d174d" opacity="0.35" d="M0,70 Q150,40 300,70 T600,70 T900,70 T1200,70 L1200,150 L0,150 Z"></path>
+          <path fill="#831843" opacity="0.45" d="M0,100 Q200,60 400,100 T800,100 T1200,100 L1200,150 L0,150 Z"></path>
+
+          {/* Small landscape elements */}
+          <rect x="150" y="105" width="8" height="25" fill="#6b1d36" opacity="0.3"></rect>
+          <polygon points="200,110 210,95 220,110" fill="#6b1d36" opacity="0.25"></polygon>
+          <rect x="950" y="110" width="6" height="20" fill="#6b1d36" opacity="0.25"></rect>
         </svg>
       </div>
 
