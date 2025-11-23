@@ -158,7 +158,7 @@ export default function Dashboard({ language, setLanguage }: DashboardProps) {
       id: 1,
       type: "sent",
       amount: -1500,
-      description: "টাকা পাঠানো - ০১৭১১××××××",
+      description: "টাকা পাঠানো - ০১��১১××××××",
       time: "১০:৩০ AM",
       date: t.today,
     },
@@ -469,14 +469,33 @@ export default function Dashboard({ language, setLanguage }: DashboardProps) {
             </div>
           </div>
 
-          {/* Search Bar */}
-          <div className="bg-white rounded-full px-4 py-2 flex items-center space-x-2 shadow-md mb-6">
-            <Search className="h-4 w-4 text-gray-400" />
-            <input
-              type="text"
-              placeholder="সার্চ করুন"
-              className="flex-1 bg-transparent outline-none text-gray-700 placeholder-gray-400 text-sm"
-            />
+          {/* Balance Card */}
+          <div
+            className="bg-white rounded-full px-4 py-3 flex items-center justify-between shadow-md mb-6 cursor-pointer hover:shadow-lg transition-all"
+            onClick={() => setBalanceVisible(!balanceVisible)}
+          >
+            <div className="flex-1">
+              {balanceVisible ? (
+                <span className="text-gray-800 font-bold text-sm">
+                  ৳ {parseFloat(localStorage.getItem("userBalance") || "0").toLocaleString()}
+                </span>
+              ) : (
+                <span className="text-gray-600 text-sm">বালেশ দেখুন</span>
+              )}
+            </div>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setBalanceVisible(!balanceVisible);
+              }}
+              className="ml-2"
+            >
+              {balanceVisible ? (
+                <EyeOff className="h-4 w-4 text-pink-500" />
+              ) : (
+                <Eye className="h-4 w-4 text-pink-500" />
+              )}
+            </button>
           </div>
         </div>
       </div>
