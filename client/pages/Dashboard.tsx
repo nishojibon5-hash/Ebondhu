@@ -33,7 +33,7 @@ interface DashboardProps {
 const translations = {
   en: {
     goodMorning: "Good Morning",
-    userName: "মোঃ ��হিম",
+    userName: "মোঃ রহিম",
     appName: "amarcash",
     yourBalance: "আপনার ব্যালেন্স",
     sendMoney: "Send Money",
@@ -413,12 +413,22 @@ export default function Dashboard({ language, setLanguage }: DashboardProps) {
             <path d="M663,105 Q670,114 678,121" stroke="white" strokeWidth="1.8" fill="none" strokeLinecap="round" />
           </g>
 
-          {/* Plane - Larger, coming from depth */}
+          {/* Plane - More realistic sketch style */}
           <g id="plane">
-            <line x1="550" y1="100" x2="650" y2="100" stroke="white" strokeWidth="3" />
-            <polygon points="600,90 600,110 625,100" fill="white" />
-            <line x1="575" y1="100" x2="575" y2="115" stroke="white" strokeWidth="2" />
-            <circle cx="575" cy="115" r="3" fill="white" />
+            {/* Fuselage */}
+            <ellipse cx="600" cy="100" rx="55" ry="8" fill="white" stroke="#e0e0e0" strokeWidth="1.5" />
+            {/* Cockpit */}
+            <circle cx="620" cy="97" r="4" fill="#f0f0f0" stroke="white" strokeWidth="1" />
+            {/* Wings */}
+            <path d="M560,100 L540,95 Q530,100 535,105 L575,102" fill="white" stroke="#d9d9d9" strokeWidth="1.2" />
+            <path d="M640,100 L660,95 Q670,100 665,105 L625,102" fill="white" stroke="#d9d9d9" strokeWidth="1.2" />
+            {/* Tail */}
+            <path d="M545,98 L530,90 M545,102 L530,110" stroke="white" strokeWidth="2" />
+            {/* Landing gear shadows */}
+            <line x1="590" y1="108" x2="590" y2="118" stroke="white" strokeWidth="1.5" opacity="0.6" />
+            <line x1="610" y1="108" x2="610" y2="118" stroke="white" strokeWidth="1.5" opacity="0.6" />
+            <circle cx="590" cy="118" r="2.5" fill="white" opacity="0.6" />
+            <circle cx="610" cy="118" r="2.5" fill="white" opacity="0.6" />
           </g>
         </svg>
 
