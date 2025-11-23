@@ -35,7 +35,7 @@ const translations = {
     goodMorning: "Good Morning",
     userName: "মোঃ রহিম",
     appName: "amarcash",
-    yourBalance: "আপনার ব্য��লেন্স",
+    yourBalance: "আপনার ব্যালেন্স",
     sendMoney: "Send Money",
     cashIn: "Cash In",
     cashOut: "Cash Out",
@@ -65,7 +65,7 @@ const translations = {
     recharge: "মোবাইল রিচার্জ",
     payBill: "বিল পেমেন্ট",
     addMoney: "টাকা যোগ করুন",
-    recentTransactions: "সাম্প্র���িক লেনদেন",
+    recentTransactions: "সাম্প্রতিক লেনদেন",
     viewAll: "সব দেখুন",
     sent: "পাঠানো",
     received: "পেয়েছেন",
@@ -521,8 +521,8 @@ export default function Dashboard({ language, setLanguage }: DashboardProps) {
       </div>
 
       {/* Quick Actions - 4x2 Grid */}
-      <div className="p-4 relative z-10 -mt-8">
-        <div className="bg-white rounded-3xl shadow-lg p-6 mb-6">
+      <div className="relative z-10 -mt-12 px-4">
+        <div className="bg-white rounded-t-3xl shadow-xl p-6 mb-0">
           <div className="grid grid-cols-4 gap-4">
             {quickActions.map((action, index) => {
               const Icon = action.icon;
