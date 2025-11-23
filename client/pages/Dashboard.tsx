@@ -43,8 +43,8 @@ const translations = {
     payBill: "Pay Bill",
     addMoney: "Add Money",
     recentTransactions: "সাম্প্রতিক লেনদেন",
-    viewAll: "স��� দেখুন",
-    sent: "পাঠানো",
+    viewAll: "সব দেখুন",
+    sent: "পা���ানো",
     received: "পেয়েছেন",
     recharged: "রিচার্জ",
     today: "আজ",
@@ -72,7 +72,7 @@ const translations = {
     recharged: "রিচার্জ",
     today: "আজ",
     yesterday: "গতকাল",
-    tapToSeeBalance: "ব্যালে���্স দেখতে ট্যাপ করুন",
+    tapToSeeBalance: "ব্যালেন্স দেখতে ট্যাপ ���রুন",
     taskEarning: "টাস্ক আর্নিং",
     loanService: "লোন সার্ভিস",
     somitiManager: "সমিতি ম্যানেজার",
@@ -175,92 +175,67 @@ export default function Dashboard({ language, setLanguage }: DashboardProps) {
 
   return (
     <div className="pb-20 min-h-screen bg-gray-50">
-      {/* Header - bKash Style */}
-      <div className="bg-gradient-to-r from-bkash-500 to-bkash-600 p-4 text-white relative overflow-hidden">
-        {/* Background Pattern */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-0 right-0 w-32 h-32 bg-white rounded-full -translate-y-16 translate-x-16"></div>
-          <div className="absolute bottom-0 left-0 w-24 h-24 bg-white rounded-full translate-y-12 -translate-x-12"></div>
+      {/* Header - Deep Yellow Style */}
+      <div className="bg-gradient-to-b from-yellow-400 via-yellow-500 to-yellow-600 p-4 text-white relative overflow-hidden">
+        {/* Wavy Background Pattern */}
+        <div className="absolute inset-0 opacity-20">
+          <svg viewBox="0 0 1200 120" className="w-full h-full" preserveAspectRatio="none">
+            <path fill="currentColor" fillOpacity="0.1" d="M0,50 Q300,10 600,50 T1200,50 L1200,120 L0,120 Z"></path>
+            <path fill="currentColor" fillOpacity="0.15" d="M0,60 Q300,30 600,60 T1200,60 L1200,120 L0,120 Z"></path>
+          </svg>
         </div>
 
         <div className="relative z-10">
+          {/* Top Header */}
           <div className="flex items-center justify-between mb-6">
-            <div>
-              <h1 className="text-xl font-bold">{t.appName}</h1>
-              <p className="text-pink-100 text-sm">
-                {t.goodMorning},{" "}
-                {localStorage.getItem("userName") || t.userName}
-              </p>
-            </div>
+            {/* Profile Section */}
             <div className="flex items-center space-x-3">
-              <button
-                onClick={() => setLanguage(language === "en" ? "bn" : "en")}
-                className="p-2 rounded-full bg-white/20 hover:bg-white/30 transition-colors"
-              >
-                <Globe className="h-5 w-5" />
-              </button>
-              <Link to="/notifications" className="p-2 rounded-full bg-white/20 hover:bg-white/30 transition-colors">
-                <Bell className="h-5 w-5" />
-              </Link>
+              <div className="w-14 h-14 rounded-full bg-white shadow-lg flex items-center justify-center overflow-hidden border-2 border-white/30">
+                <img
+                  src="https://api.dicebear.com/7.x/avataaars/svg?seed=user"
+                  alt="Profile"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div>
+                <h2 className="font-bold text-white text-sm">
+                  {localStorage.getItem("userName") || t.userName}
+                </h2>
+                <p className="text-yellow-100 text-xs">{t.goodMorning}</p>
+              </div>
+            </div>
+
+            {/* Right Icons */}
+            <div className="flex items-center space-x-2">
               <button className="p-2 rounded-full bg-white/20 hover:bg-white/30 transition-colors">
-                <Settings className="h-5 w-5" />
+                <Search className="h-5 w-5" />
               </button>
-              <DrawerMenuButton onClick={() => setIsDrawerOpen(true)} />
+              <button onClick={() => setIsDrawerOpen(true)} className="p-2 rounded-full bg-white/20 hover:bg-white/30 transition-colors">
+                <Menu className="h-5 w-5" />
+              </button>
             </div>
           </div>
 
-          {/* Balance Card - bKash Style */}
-          <div
-            className="bg-white/15 backdrop-blur-sm rounded-2xl p-5 border border-white/20 cursor-pointer hover:bg-white/20 transition-all"
-            onClick={() => setBalanceVisible(!balanceVisible)}
-          >
-            <div className="flex items-center justify-between">
-              <div className="flex-1">
-                <p className="text-pink-100 text-sm mb-1">{t.yourBalance}</p>
-                <div className="flex items-center space-x-3">
-                  {balanceVisible ? (
-                    <span className="text-3xl font-bold">
-                      ৳{" "}
-                      {parseFloat(
-                        localStorage.getItem("userBalance") || "0",
-                      ).toLocaleString()}
-                    </span>
-                  ) : (
-                    <div className="flex flex-col">
-                      <span className="text-lg font-medium">
-                        {t.tapToSeeBalance}
-                      </span>
-                      <div className="flex space-x-1 mt-1">
-                        {[...Array(8)].map((_, i) => (
-                          <div
-                            key={i}
-                            className="w-2 h-2 bg-white/50 rounded-full"
-                          ></div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setBalanceVisible(!balanceVisible);
-                    }}
-                    className="p-1 rounded-full hover:bg-white/20 transition-colors"
-                  >
-                    {balanceVisible ? (
-                      <EyeOff className="h-5 w-5" />
-                    ) : (
-                      <Eye className="h-5 w-5" />
-                    )}
-                  </button>
-                </div>
-              </div>
-              <div className="bg-white/20 p-3 rounded-xl">
-                <QrCode className="h-8 w-8" />
-              </div>
-            </div>
+          {/* Search Bar */}
+          <div className="bg-white rounded-full px-4 py-2 flex items-center space-x-2 shadow-md mb-6">
+            <Search className="h-4 w-4 text-gray-400" />
+            <input
+              type="text"
+              placeholder="সার্চ করুন"
+              className="flex-1 bg-transparent outline-none text-gray-700 placeholder-gray-400 text-sm"
+            />
           </div>
         </div>
+      </div>
+
+      {/* Decorative Landscape Pattern */}
+      <div className="h-24 bg-gradient-to-b from-yellow-500 to-white relative overflow-hidden">
+        <svg viewBox="0 0 1200 120" className="absolute bottom-0 w-full h-32 text-yellow-400">
+          <path fill="currentColor" opacity="0.3" d="M0,50 Q100,30 200,50 T400,50 L400,120 L0,120 Z"></path>
+          <path fill="currentColor" opacity="0.5" d="M200,70 Q300,40 400,70 T600,70 L600,120 L200,120 Z"></path>
+          <path fill="currentColor" opacity="0.3" d="M600,60 Q700,80 800,60 T1000,60 L1000,120 L600,120 Z"></path>
+          <path fill="currentColor" opacity="0.4" d="M900,75 Q1000,50 1100,75 L1200,75 L1200,120 L900,120 Z"></path>
+        </svg>
       </div>
 
       {/* Quick Actions - bKash Grid Style */}
