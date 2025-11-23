@@ -64,7 +64,7 @@ const translations = {
     cashOut: "ক্যাশ আউট",
     recharge: "মোবাইল রিচার্জ",
     payBill: "বিল পেমেন্ট",
-    addMoney: "টাকা যোগ করু���",
+    addMoney: "টাকা যোগ করুন",
     recentTransactions: "সাম্প্রতিক লেনদেন",
     viewAll: "সব দেখুন",
     sent: "পাঠানো",
@@ -259,7 +259,7 @@ export default function Dashboard({ language, setLanguage }: DashboardProps) {
       </div>
 
       {/* Quick Actions - 4x2 Grid */}
-      <div className="p-4 relative z-10">
+      <div className="p-4 relative z-10 -mt-8">
         <div className="bg-white rounded-3xl shadow-lg p-6 mb-6">
           <div className="grid grid-cols-4 gap-4">
             {quickActions.map((action, index) => {
