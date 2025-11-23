@@ -42,7 +42,7 @@ const translations = {
     recharge: "Mobile Recharge",
     payBill: "Pay Bill",
     addMoney: "Add Money",
-    recentTransactions: "স��ম্প্রতিক লেনদেন",
+    recentTransactions: "সাম্প্রতিক লেনদেন",
     viewAll: "সব দেখুন",
     sent: "পাঠানো",
     received: "পেয়েছেন",
@@ -350,35 +350,30 @@ export default function Dashboard({ language, setLanguage }: DashboardProps) {
             <path d="M-100,200 Q150,120 450,200 T850,200 T1400,200 L1400,300 L-100,300 Z" fill="#831843" opacity="0.4" />
           </g>
 
-          {/* Clouds - Coming from center */}
+          {/* Clouds - More realistic sketch style */}
           <g id="cloud1" transform-origin="600 50">
-            <ellipse cx="600" cy="50" rx="70" ry="35" fill="white" />
-            <ellipse cx="660" cy="40" rx="55" ry="28" fill="white" />
-            <ellipse cx="540" cy="40" rx="50" ry="30" fill="white" />
+            <path d="M560,65 Q560,40 590,35 Q610,30 640,35 Q660,38 675,55 Q670,70 650,75 Q620,80 590,78 Q570,76 560,65 Z" fill="white" stroke="#e0e0e0" strokeWidth="1.5" />
+            <path d="M570,70 Q575,55 595,52 Q615,50 635,55 Q655,60 665,72" fill="none" stroke="white" strokeWidth="2" opacity="0.6" />
           </g>
 
           <g id="cloud2" transform-origin="600 100">
-            <ellipse cx="600" cy="100" rx="75" ry="38" fill="white" />
-            <ellipse cx="670" cy="90" rx="60" ry="32" fill="white" />
-            <ellipse cx="530" cy="90" rx="55" ry="35" fill="white" />
+            <path d="M550,115 Q545,85 580,78 Q610,75 650,82 Q680,88 690,115 Q685,130 660,135 Q620,140 580,138 Q560,135 550,115 Z" fill="white" stroke="#d9d9d9" strokeWidth="1.5" />
+            <path d="M560,125 Q570,95 600,90 Q630,88 665,100 Q680,110 680,125" fill="none" stroke="white" strokeWidth="2" opacity="0.5" />
           </g>
 
           <g id="cloud3" transform-origin="600 120">
-            <ellipse cx="600" cy="120" rx="65" ry="32" fill="white" />
-            <ellipse cx="655" cy="112" rx="50" ry="25" fill="white" />
-            <ellipse cx="545" cy="112" rx="48" ry="27" fill="white" />
+            <path d="M570,135 Q565,110 595,102 Q620,98 650,105 Q670,112 680,130 Q675,145 655,150 Q620,155 590,153 Q575,150 570,135 Z" fill="white" stroke="#e5e5e5" strokeWidth="1.5" />
+            <path d="M575,140 Q585,115 610,108 Q640,105 665,120" fill="none" stroke="white" strokeWidth="1.5" opacity="0.6" />
           </g>
 
           <g id="cloud4" transform-origin="600 160">
-            <ellipse cx="600" cy="160" rx="72" ry="36" fill="white" />
-            <ellipse cx="668" cy="150" rx="58" ry="30" fill="white" />
-            <ellipse cx="532" cy="150" rx="52" ry="32" fill="white" />
+            <path d="M540,175 Q535,145 570,135 Q605,130 655,140 Q690,148 700,175 Q695,195 670,200 Q615,205 570,203 Q555,200 540,175 Z" fill="white" stroke="#dcdcdc" strokeWidth="1.5" />
+            <path d="M555,190 Q570,155 600,147 Q640,145 680,165" fill="none" stroke="white" strokeWidth="2" opacity="0.5" />
           </g>
 
           <g id="cloud5" transform-origin="600 70">
-            <ellipse cx="600" cy="70" rx="68" ry="34" fill="white" />
-            <ellipse cx="662" cy="62" rx="52" ry="26" fill="white" />
-            <ellipse cx="538" cy="62" rx="54" ry="28" fill="white" />
+            <path d="M565,85 Q560,55 590,48 Q620,44 650,50 Q675,56 685,80 Q680,100 660,105 Q620,108 585,105 Q570,102 565,85 Z" fill="white" stroke="#e8e8e8" strokeWidth="1.5" />
+            <path d="M575,95 Q585,65 610,58 Q640,55 670,70" fill="none" stroke="white" strokeWidth="1.5" opacity="0.6" />
           </g>
 
           {/* Birds - Flying in formation, coming from depth */}
