@@ -35,7 +35,7 @@ const translations = {
     goodMorning: "Good Morning",
     userName: "মোঃ রহিম",
     appName: "amarcash",
-    yourBalance: "আপনার ব্যালেন্স",
+    yourBalance: "আ���নার ব্যালেন্স",
     sendMoney: "Send Money",
     cashIn: "Cash In",
     cashOut: "Cash Out",
@@ -187,6 +187,7 @@ export default function Dashboard({ language, setLanguage }: DashboardProps) {
         {/* Animated Background Video */}
         <div className="absolute inset-0 overflow-hidden">
           <video
+            ref={videoRef}
             autoPlay
             muted
             loop
@@ -195,7 +196,7 @@ export default function Dashboard({ language, setLanguage }: DashboardProps) {
             style={{ opacity: 0.4 }}
           >
             <source
-              src="https://videos.pexels.com/video-files/19701513/19701513-sd_540_960_30fps.mp4"
+              src="https://videos.pexels.com/video-files/5847285/5847285-hd_1920_1080_30fps.mp4"
               type="video/mp4"
             />
           </video>
