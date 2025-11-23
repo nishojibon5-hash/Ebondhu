@@ -340,7 +340,7 @@ export default function Dashboard({ language, setLanguage }: DashboardProps) {
         <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
           <div className="flex items-center justify-between p-4 bg-gray-50 border-b">
             <h2 className="font-bold text-gray-800">{t.recentTransactions}</h2>
-            <button className="text-yellow-600 text-sm font-medium">
+            <button className="text-pink-600 text-sm font-medium">
               {t.viewAll}
             </button>
           </div>
