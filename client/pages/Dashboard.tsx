@@ -303,7 +303,7 @@ export default function Dashboard({ language, setLanguage }: DashboardProps) {
 
         {/* See More Dropdown */}
         <div className="mb-6 flex justify-center">
-          <button className="bg-white/80 text-yellow-600 px-6 py-2 rounded-full text-sm font-medium shadow-md border border-yellow-200">
+          <button className="bg-white/80 text-pink-600 px-6 py-2 rounded-full text-sm font-medium shadow-md border border-pink-200">
             আমরা দেখুন ▼
           </button>
         </div>
