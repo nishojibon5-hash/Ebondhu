@@ -13,6 +13,12 @@ import {
   Globe,
   Home,
   Banknote,
+  Search,
+  Menu,
+  Clock,
+  Lightbulb,
+  Gift,
+  Wallet,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Language } from "../App";
@@ -37,7 +43,7 @@ const translations = {
     payBill: "Pay Bill",
     addMoney: "Add Money",
     recentTransactions: "সাম্প্রতিক লেনদেন",
-    viewAll: "সব দেখুন",
+    viewAll: "স��� দেখুন",
     sent: "পাঠানো",
     received: "পেয়েছেন",
     recharged: "রিচার্জ",
@@ -66,7 +72,7 @@ const translations = {
     recharged: "রিচার্জ",
     today: "আজ",
     yesterday: "গতকাল",
-    tapToSeeBalance: "ব্যালেন্স দেখতে ট্যাপ করুন",
+    tapToSeeBalance: "ব্যালে���্স দেখতে ট্যাপ করুন",
     taskEarning: "টাস্ক আর্নিং",
     loanService: "লোন সার্ভিস",
     somitiManager: "সমিতি ম্যানেজার",
