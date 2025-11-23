@@ -262,14 +262,46 @@ export default function Dashboard({ language, setLanguage }: DashboardProps) {
           </div>
         </div>
 
+        {/* See More Dropdown */}
+        <div className="mb-6 flex justify-center">
+          <button className="bg-white/80 text-yellow-600 px-6 py-2 rounded-full text-sm font-medium shadow-md border border-yellow-200">
+            আমরা দেখুন ▼
+          </button>
+        </div>
+
         {/* Banners */}
         <BannerCarousel />
+
+        {/* Quick Features Section */}
+        <div className="bg-white rounded-3xl shadow-lg p-6 mb-6">
+          <h3 className="font-bold text-gray-800 mb-4">কুইক ফিচারসমূহ</h3>
+          <div className="grid grid-cols-3 gap-4">
+            <div className="flex flex-col items-center space-y-2 p-3 bg-orange-50 rounded-2xl">
+              <div className="w-12 h-12 rounded-full bg-orange-100 flex items-center justify-center">
+                <Gift className="h-6 w-6 text-orange-500" />
+              </div>
+              <span className="text-xs font-medium text-gray-700 text-center">অফার</span>
+            </div>
+            <div className="flex flex-col items-center space-y-2 p-3 bg-blue-50 rounded-2xl">
+              <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center">
+                <Lightbulb className="h-6 w-6 text-blue-500" />
+              </div>
+              <span className="text-xs font-medium text-gray-700 text-center">ছাড়</span>
+            </div>
+            <div className="flex flex-col items-center space-y-2 p-3 bg-yellow-50 rounded-2xl">
+              <div className="w-12 h-12 rounded-full bg-yellow-100 flex items-center justify-center">
+                <Clock className="h-6 w-6 text-yellow-600" />
+              </div>
+              <span className="text-xs font-medium text-gray-700 text-center">পুরস্কার</span>
+            </div>
+          </div>
+        </div>
 
         {/* Recent Transactions */}
         <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
           <div className="flex items-center justify-between p-4 bg-gray-50 border-b">
             <h2 className="font-bold text-gray-800">{t.recentTransactions}</h2>
-            <button className="text-bkash-500 text-sm font-medium">
+            <button className="text-yellow-600 text-sm font-medium">
               {t.viewAll}
             </button>
           </div>
