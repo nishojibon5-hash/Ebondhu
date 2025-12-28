@@ -451,7 +451,7 @@ export default function Dashboard({ language, setLanguage }: DashboardProps) {
               </div>
               <div>
                 <h2 className="font-bold text-white text-base">
-                  {localStorage.getItem("userName") || t.userName}
+                  {userName || t.userName}
                 </h2>
                 <p className="text-white/80 text-xs">{t.goodMorning}</p>
               </div>
