@@ -83,23 +83,24 @@ const translations = {
 export default function Dashboard({ language, setLanguage }: DashboardProps) {
   const [balanceVisible, setBalanceVisible] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [userBalance, setUserBalance] = useState(0);
+  const [userName, setUserName] = useState("");
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
     if (videoRef.current) {
       videoRef.current.playbackRate = 0.35;
     }
+
+    // Load user session from storage
+    const session = getUserSession();
+    setUserName(session.userName || "অতিথি");
+    setUserBalance(session.userBalance || 0);
   }, []);
 
   const t = translations[language];
 
-  const flags = (() => {
-    try {
-      return JSON.parse(localStorage.getItem("featureFlags") || "{}");
-    } catch {
-      return {} as any;
-    }
-  })();
+  const flags = getFeatureFlags();
 
   const quickActions = [
     flags.sendMoney !== false && {
