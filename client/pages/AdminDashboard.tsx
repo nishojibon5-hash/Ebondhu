@@ -84,34 +84,15 @@ export default function AdminDashboard() {
         return;
       }
       setVerified(true);
-      const saved = localStorage.getItem("featureFlags");
-      if (saved) setFlags({ ...DEFAULT_FLAGS, ...JSON.parse(saved) });
-      try {
-        const b = JSON.parse(localStorage.getItem("banners") || "[]");
-        if (Array.isArray(b)) setBanners(b);
-      } catch {}
-      try {
-        const r = JSON.parse(
-          localStorage.getItem("manualTopupRequests") || "[]",
-        );
-        if (Array.isArray(r)) setManualTopups(r);
-      } catch {}
-      try {
-        const c = JSON.parse(localStorage.getItem("cashoutRequests") || "[]");
-        if (Array.isArray(c)) setCashouts(c);
-      } catch {}
-      try {
-        const cfg = JSON.parse(
-          localStorage.getItem("payoutWalletConfig") || "null",
-        );
-        if (cfg && typeof cfg === "object")
-          setPayoutWallets({ ...DEFAULT_PAYOUT, ...cfg });
-      } catch {}
-      try {
-        setAdminWalletBalance(
-          parseFloat(localStorage.getItem("adminWalletBalance") || "0"),
-        );
-      } catch {}
+      const savedFlags = getFeatureFlags();
+      setFlags({ ...DEFAULT_FLAGS, ...savedFlags });
+      setBanners(getBanners());
+      setManualTopups(getManualTopupRequests());
+      setCashouts(getCashoutRequests());
+      const cfg = getPayoutWalletConfig();
+      if (cfg && typeof cfg === "object")
+        setPayoutWallets({ ...DEFAULT_PAYOUT, ...cfg });
+      setAdminWalletBalance(getAdminWalletBalance());
     };
     init();
   }, [navigate]);
