@@ -13,6 +13,7 @@ import {
   ArrowLeft,
   Gift,
 } from "lucide-react";
+import { registerUser } from "../lib/api/users";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -37,7 +38,7 @@ export default function Register() {
     const refCode = searchParams.get("ref");
     if (refCode) {
       setFormData((prev) => ({ ...prev, referralCode: refCode }));
-      setReferralBonus(15); // ১৫ টাকা bonus for referral
+      setReferralBonus(15);
     }
   }, [searchParams]);
 
@@ -46,7 +47,7 @@ export default function Register() {
       ...prev,
       [field]: value,
     }));
-    setError(""); // Clear error when user types
+    setError("");
   };
 
   const validateStep1 = () => {
@@ -62,17 +63,8 @@ export default function Register() {
       setError("সঠিক মোবাইল নম্বর দিন (১১ সংখ্যা)");
       return false;
     }
-
-    // Check if phone number already exists
-    const existingUsers = JSON.parse(
-      localStorage.getItem("registeredUsers") || "[]",
-    );
-    if (existingUsers.some((user: any) => user.phone === formData.phone)) {
-      setError("এই নম্বর দিয়ে ইতিমধ্যে অ্যাকাউন্ট আছে");
-      return false;
-    }
     if (!formData.phone.startsWith("01")) {
-      setError("মোবাইল নম্বর ০১ দি��়ে শুরু হতে হবে");
+      setError("মোবাইল নম্বর ০১ দিয়ে শুরু হতে হবে");
       return false;
     }
     return true;
@@ -88,7 +80,7 @@ export default function Register() {
       return false;
     }
     if (!formData.confirmPin) {
-      setError("পি��� নিশ্চিত করুন");
+      setError("পিন নিশ্চিত করুন");
       return false;
     }
     if (formData.pin !== formData.confirmPin) {
@@ -115,38 +107,16 @@ export default function Register() {
       return;
     }
 
-    // Simulate API call
-    setTimeout(() => {
-      // Create new user object
-      const newUser = {
-        name: formData.name,
-        phone: formData.phone,
-        pin: formData.pin,
-        joinDate: new Date().toISOString(),
-        referredBy: formData.referralCode || null,
-        balance: referralBonus, // Start with referral bonus if any
-      };
+    const response = await registerUser({
+      name: formData.name,
+      phone: formData.phone,
+      pin: formData.pin,
+    });
 
-      // Add to registered users
-      const existingUsers = JSON.parse(
-        localStorage.getItem("registeredUsers") || "[]",
-      );
-      existingUsers.push(newUser);
-      localStorage.setItem("registeredUsers", JSON.stringify(existingUsers));
-
-      // Process referral if exists
-      if (formData.referralCode) {
-        processReferralReward(formData.referralCode, newUser);
-      }
-
-      // Store user data for future login (but don't auto-login)
-      localStorage.setItem("registeredPhone", formData.phone);
-      localStorage.setItem("registeredName", formData.name);
-      localStorage.setItem("registeredPin", formData.pin);
-
+    if (response.ok) {
       const successMessage =
         referralBonus > 0
-          ? `রেজ��স্ট্রেশন সফল! ৳${referralBonus} বোনাস পেয়েছেন। এখন লগিন করুন।`
+          ? `রেজিস্ট্রেশন সফল! ৳${referralBonus} বোনাস পেয়েছেন। এখন লগিন করুন।`
           : "রেজিস্ট্রেশন সফল হয়েছে! এখন লগিন করুন।";
 
       setSuccess(successMessage);
@@ -154,66 +124,10 @@ export default function Register() {
       setTimeout(() => {
         navigate("/login");
       }, 3000);
-      setIsLoading(false);
-    }, 2000);
-  };
-
-  const processReferralReward = (referralCode: string, newUser: any) => {
-    // Find the referrer by code
-    const allUsers = JSON.parse(
-      localStorage.getItem("registeredUsers") || "[]",
-    );
-    const referrer = allUsers.find(
-      (user: any) => `LB${user.phone.slice(-6)}` === referralCode,
-    );
-
-    if (referrer) {
-      // Update referrer's referral data
-      const referralData = JSON.parse(
-        localStorage.getItem("referralData") || "{}",
-      );
-
-      if (!referralData[referrer.phone]) {
-        referralData[referrer.phone] = {
-          referralCode: `LB${referrer.phone.slice(-6)}`,
-          totalReferrals: 0,
-          totalEarnings: 0,
-          referredUsers: [],
-        };
-      }
-
-      // Add new referral
-      referralData[referrer.phone].totalReferrals += 1;
-      referralData[referrer.phone].totalEarnings += 15;
-      referralData[referrer.phone].referredUsers.push({
-        id: Date.now(),
-        name: newUser.name,
-        phone: newUser.phone,
-        joinDate: new Date().toLocaleDateString("bn-BD"),
-        status: "completed",
-        reward: 15,
-      });
-
-      localStorage.setItem("referralData", JSON.stringify(referralData));
-
-      // Add ৳15 to referrer's balance if they're currently logged in
-      if (localStorage.getItem("userPhone") === referrer.phone) {
-        const currentBalance = parseFloat(
-          localStorage.getItem("userBalance") || "0",
-        );
-        const newBalance = currentBalance + 15;
-        localStorage.setItem("userBalance", newBalance.toString());
-        // Persist to registered users store
-        const users = JSON.parse(
-          localStorage.getItem("registeredUsers") || "[]",
-        );
-        const idx = users.findIndex((u: any) => u.phone === referrer.phone);
-        if (idx !== -1) {
-          users[idx].balance = (users[idx].balance || 0) + 15;
-          localStorage.setItem("registeredUsers", JSON.stringify(users));
-        }
-      }
+    } else {
+      setError(response.error || "রেজিস্ট্রেশন ব্যর্থ হয়েছে");
     }
+    setIsLoading(false);
   };
 
   return (
@@ -427,9 +341,9 @@ export default function Register() {
                   <p className="text-blue-800 text-xs">
                     <strong>পিন নির্দেশিকা:</strong>
                     <br />
-                    ��� ৫ সংখ্যার পিন ব্যবহার করুন
+                    • ৫ সংখ্যার পিন ব্যবহার করুন
                     <br />
-                    • সহজ পিন (১২৩৪৫) এ��়িয়ে চলুন
+                    • সহজ পিন (১২৩৪৫) এড়িয়ে চলুন
                     <br />• পিনটি গোপন রাখুন
                   </p>
                 </div>
