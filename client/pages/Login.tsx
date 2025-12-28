@@ -10,6 +10,8 @@ import {
   CheckCircle,
   Smartphone,
 } from "lucide-react";
+import { loginUser } from "../lib/api/users";
+import { setUserSession } from "../lib/storage";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -54,45 +56,30 @@ export default function Login() {
       return;
     }
 
-    // Simulate API call
-    setTimeout(() => {
-      // Check registered users
-      const registeredUsers = JSON.parse(
-        localStorage.getItem("registeredUsers") || "[]",
-      );
-      const user = registeredUsers.find(
-        (u: any) => u.phone === formData.phone && u.pin === formData.pin,
-      );
+    // Call API
+    const response = await loginUser({
+      phone: formData.phone,
+      pin: formData.pin,
+    });
 
-      if (user) {
-        setSuccess("সফলভাবে লগিন হয়েছে!");
+    if (response.ok && response.user) {
+      setSuccess("সফলভাবে লগিন হয়েছে!");
 
-        // Store user data in localStorage
-        localStorage.setItem("isLoggedIn", "true");
-        localStorage.setItem("userPhone", user.phone);
-        localStorage.setItem("userName", user.name);
-        localStorage.setItem("userPin", user.pin);
-        localStorage.setItem("userBalance", user.balance.toString());
+      // Store user data in localStorage
+      setUserSession({
+        isLoggedIn: true,
+        userPhone: response.user.phone,
+        userName: response.user.name,
+        userBalance: response.user.balance,
+      });
 
-        // Load user's referral data
-        const allReferralData = JSON.parse(
-          localStorage.getItem("referralData") || "{}",
-        );
-        if (allReferralData[user.phone]) {
-          localStorage.setItem(
-            "referralData",
-            JSON.stringify(allReferralData[user.phone]),
-          );
-        }
-
-        setTimeout(() => {
-          navigate("/");
-        }, 1000);
-      } else {
-        setError("ভুল ফোন নম্বর বা পিন");
-      }
+      setTimeout(() => {
+        navigate("/");
+      }, 1000);
+    } else {
+      setError(response.error || "লগিন ব্যর্থ হয়েছে");
       setIsLoading(false);
-    }, 2000);
+    }
   };
 
   return (
