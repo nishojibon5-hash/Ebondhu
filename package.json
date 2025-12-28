@@ -28,9 +28,11 @@
     "@capacitor/core": "^6.1.2",
     "@googleapis/drive": "^20.0.0",
     "@googleapis/sheets": "^13.0.1",
+    "@types/multer": "^2.0.0",
     "dotenv": "^17.2.1",
     "express": "^5.1.0",
     "googleapis": "^169.0.0",
+    "multer": "^2.0.2",
     "zod": "^3.25.76"
   },
   "devDependencies": {
