@@ -485,7 +485,7 @@ export default function Dashboard({ language, setLanguage }: DashboardProps) {
             <div className="flex-1">
               {balanceVisible ? (
                 <span className="text-gray-800 font-bold text-sm">
-                  ৳ {parseFloat(localStorage.getItem("userBalance") || "0").toLocaleString()}
+                  ৳ {userBalance.toLocaleString()}
                 </span>
               ) : (
                 <span className="text-gray-600 text-sm font-medium">বালেশ দেখুন</span>
