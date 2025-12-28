@@ -1,8 +1,45 @@
 import "dotenv/config";
-import express from "express";
+import express, { Request, Response } from "express";
 import cors from "cors";
 import crypto from "crypto";
+import multer from "multer";
 import { handleDemo } from "./routes/demo";
+import { initializeSheets } from "./services/sheets";
+import {
+  handleUserLogin,
+  handleUserRegister,
+  handleGetUser,
+  handleUpdateUserBalance,
+  handleGetAllUsers,
+} from "./routes/users";
+import {
+  handleAddTransaction,
+  handleGetUserTransactions,
+  handleGetAllTransactions,
+  handleUpdateTransactionStatus,
+} from "./routes/transactions";
+import {
+  handleGetFeatureFlags,
+  handleUpdateFeatureFlags,
+  handleGetBanners,
+  handleAddBanner,
+  handleDeleteBanner,
+  handleGetPayoutWallets,
+  handleUpdatePayoutWallets,
+  handleAddRequest,
+  handleGetRequests,
+  handleUpdateRequestStatus,
+} from "./routes/admin-data";
+import {
+  handleUploadImage,
+  handleUploadAudio,
+  handleUploadVideo,
+  handleUploadUserPhoto,
+  handleUploadFile,
+} from "./routes/media";
+
+// Configure multer for file uploads
+const upload = multer({ storage: multer.memoryStorage() });
 
 function base64url(input: Buffer | string) {
   return (typeof input === "string" ? Buffer.from(input) : input)
