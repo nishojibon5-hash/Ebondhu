@@ -24,6 +24,7 @@ import { Link } from "react-router-dom";
 import { Language } from "../App";
 import { DrawerMenu, DrawerMenuButton } from "../components/DrawerMenu";
 import { BannerCarousel } from "../components/BannerCarousel";
+import { getUserSession, getFeatureFlags, getBanners } from "../lib/storage";
 
 interface DashboardProps {
   language: Language;
