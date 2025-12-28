@@ -103,21 +103,21 @@ export default function AdminDashboard() {
   };
 
   const save = () => {
-    localStorage.setItem("featureFlags", JSON.stringify(flags));
-    localStorage.setItem("banners", JSON.stringify(banners));
-    localStorage.setItem("payoutWalletConfig", JSON.stringify(payoutWallets));
-    localStorage.setItem("adminWalletBalance", String(adminWalletBalance));
+    setFeatureFlags(flags);
+    setBanners(banners);
+    setPayoutWalletConfig(payoutWallets);
+    setAdminWalletBalance(adminWalletBalance);
     alert("সেভ হয়েছে");
   };
 
   const updateRequests = (list: any[]) => {
     setManualTopups(list);
-    localStorage.setItem("manualTopupRequests", JSON.stringify(list));
+    setManualTopupRequests(list);
   };
 
   const updateCashouts = (list: any[]) => {
     setCashouts(list);
-    localStorage.setItem("cashoutRequests", JSON.stringify(list));
+    setCashoutRequests(list);
   };
 
   const approveCashout = (id: number) => {
