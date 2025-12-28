@@ -80,9 +80,12 @@ export function createServer() {
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
 
-  // Initialize Google Sheets on startup
+  // Initialize Google Sheets on startup (non-blocking)
   initializeSheets().catch((error) => {
-    console.error("Failed to initialize Google Sheets:", error);
+    console.warn(
+      "Google Sheets initialization warning (non-blocking):",
+      error.message,
+    );
   });
 
   // Example API routes
