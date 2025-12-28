@@ -80,6 +80,11 @@ export function createServer() {
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
 
+  // Initialize Google Sheets on startup
+  initializeSheets().catch((error) => {
+    console.error("Failed to initialize Google Sheets:", error);
+  });
+
   // Example API routes
   app.get("/api/ping", (_req, res) => {
     const ping = process.env.PING_MESSAGE ?? "ping";
@@ -138,6 +143,48 @@ export function createServer() {
     }
     res.json({ ok: true, role: payload.role });
   });
+
+  // User Management Routes
+  app.post("/api/users/login", handleUserLogin);
+  app.post("/api/users/register", handleUserRegister);
+  app.get("/api/users/:phone", handleGetUser);
+  app.post("/api/users/balance", handleUpdateUserBalance);
+  app.get("/api/users", handleGetAllUsers);
+
+  // Transaction Routes
+  app.post("/api/transactions", handleAddTransaction);
+  app.get("/api/transactions/:phone", handleGetUserTransactions);
+  app.get("/api/transactions", handleGetAllTransactions);
+  app.post("/api/transactions/status", handleUpdateTransactionStatus);
+
+  // Admin Data Routes - Feature Flags
+  app.get("/api/admin/feature-flags", handleGetFeatureFlags);
+  app.post("/api/admin/feature-flags", handleUpdateFeatureFlags);
+
+  // Admin Data Routes - Banners
+  app.get("/api/admin/banners", handleGetBanners);
+  app.post("/api/admin/banners", handleAddBanner);
+  app.delete("/api/admin/banners", handleDeleteBanner);
+
+  // Admin Data Routes - Payout Wallets
+  app.get("/api/admin/payout-wallets", handleGetPayoutWallets);
+  app.post("/api/admin/payout-wallets", handleUpdatePayoutWallets);
+
+  // Admin Data Routes - Requests
+  app.post("/api/admin/requests", handleAddRequest);
+  app.get("/api/admin/requests", handleGetRequests);
+  app.post("/api/admin/requests/status", handleUpdateRequestStatus);
+
+  // Media Upload Routes
+  app.post("/api/media/upload/image", upload.single("file"), handleUploadImage);
+  app.post("/api/media/upload/audio", upload.single("file"), handleUploadAudio);
+  app.post("/api/media/upload/video", upload.single("file"), handleUploadVideo);
+  app.post(
+    "/api/media/upload/photo",
+    upload.single("file"),
+    handleUploadUserPhoto,
+  );
+  app.post("/api/media/upload/file", upload.single("file"), handleUploadFile);
 
   return app;
 }
