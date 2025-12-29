@@ -14,8 +14,7 @@ function getAuth() {
     client_id: process.env.GOOGLE_CLIENT_ID,
     auth_uri: "https://accounts.google.com/o/oauth2/auth",
     token_uri: "https://oauth2.googleapis.com/token",
-    auth_provider_x509_cert_url:
-      "https://www.googleapis.com/oauth2/v1/certs",
+    auth_provider_x509_cert_url: "https://www.googleapis.com/oauth2/v1/certs",
     client_x509_cert_url: process.env.GOOGLE_CLIENT_X509_CERT_URL,
   };
 
@@ -83,7 +82,8 @@ export async function initializeSheets() {
     spreadsheetId: SPREADSHEET_ID,
   });
 
-  const existingSheets = result.data.sheets?.map((s) => s.properties?.title) || [];
+  const existingSheets =
+    result.data.sheets?.map((s) => s.properties?.title) || [];
 
   // Create missing sheets
   const requests: any[] = [];
@@ -184,12 +184,7 @@ async function initializeSheetHeaders() {
       "read",
       "createdAt",
     ],
-    [SHEET_NAMES.PAYOUT_WALLETS]: [
-      "key",
-      "enabled",
-      "reserve",
-      "updatedAt",
-    ],
+    [SHEET_NAMES.PAYOUT_WALLETS]: ["key", "enabled", "reserve", "updatedAt"],
   };
 
   for (const [sheetName, headerRow] of Object.entries(headers)) {
