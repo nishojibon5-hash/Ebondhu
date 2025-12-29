@@ -114,10 +114,14 @@ export default function Register() {
     });
 
     if (response.ok) {
+      // Store PIN in localStorage for fallback login (hashed would be better in production)
+      localStorage.setItem(`pin_${formData.phone}`, formData.pin);
+
+      const syncStatus = response.synced ? "" : " (ডাটা সিঙ্ক হচ্ছে...)";
       const successMessage =
         referralBonus > 0
-          ? `রেজিস্ট্রেশন সফল! ৳${referralBonus} বোনাস পেয়েছেন। এখন লগিন করুন।`
-          : "রেজিস্ট্রেশন সফল হয়েছে! এখন লগিন করুন।";
+          ? `রেজিস্ট্রেশন সফল! ৳${referralBonus} বোনাস পেয়েছেন।${syncStatus} এখন লগিন করুন।`
+          : `রেজিস্ট্রেশন সফল হয়েছে!${syncStatus} এখন লগিন করুন।`;
 
       setSuccess(successMessage);
 
