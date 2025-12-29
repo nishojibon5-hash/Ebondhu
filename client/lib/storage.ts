@@ -36,7 +36,10 @@ export function setUserSession(session: Partial<UserSession>) {
     localStorage.setItem(STORAGE_KEYS.USER_NAME, session.userName);
   }
   if (session.userBalance !== undefined) {
-    localStorage.setItem(STORAGE_KEYS.USER_BALANCE, String(session.userBalance));
+    localStorage.setItem(
+      STORAGE_KEYS.USER_BALANCE,
+      String(session.userBalance),
+    );
   }
   if (session.userPin !== undefined) {
     localStorage.setItem(STORAGE_KEYS.USER_PIN, session.userPin);
@@ -48,7 +51,9 @@ export function getUserSession(): UserSession {
     isLoggedIn: localStorage.getItem(STORAGE_KEYS.IS_LOGGED_IN) === "true",
     userPhone: localStorage.getItem(STORAGE_KEYS.USER_PHONE) || "",
     userName: localStorage.getItem(STORAGE_KEYS.USER_NAME) || "",
-    userBalance: parseFloat(localStorage.getItem(STORAGE_KEYS.USER_BALANCE) || "0"),
+    userBalance: parseFloat(
+      localStorage.getItem(STORAGE_KEYS.USER_BALANCE) || "0",
+    ),
     userPin: localStorage.getItem(STORAGE_KEYS.USER_PIN) || "",
   };
 }
@@ -91,7 +96,9 @@ export function setBanners(banners: any[]) {
 // Requests (Topup, Cashout, etc.)
 export function getManualTopupRequests(): any[] {
   try {
-    return JSON.parse(localStorage.getItem(STORAGE_KEYS.MANUAL_TOPUP_REQUESTS) || "[]");
+    return JSON.parse(
+      localStorage.getItem(STORAGE_KEYS.MANUAL_TOPUP_REQUESTS) || "[]",
+    );
   } catch {
     return [];
   }
@@ -106,7 +113,9 @@ export function setManualTopupRequests(requests: any[]) {
 
 export function getCashoutRequests(): any[] {
   try {
-    return JSON.parse(localStorage.getItem(STORAGE_KEYS.CASHOUT_REQUESTS) || "[]");
+    return JSON.parse(
+      localStorage.getItem(STORAGE_KEYS.CASHOUT_REQUESTS) || "[]",
+    );
   } catch {
     return [];
   }
@@ -119,19 +128,26 @@ export function setCashoutRequests(requests: any[]) {
 // Payout Wallet Config
 export function getPayoutWalletConfig(): Record<string, any> {
   try {
-    return JSON.parse(localStorage.getItem(STORAGE_KEYS.PAYOUT_WALLET_CONFIG) || "{}");
+    return JSON.parse(
+      localStorage.getItem(STORAGE_KEYS.PAYOUT_WALLET_CONFIG) || "{}",
+    );
   } catch {
     return {};
   }
 }
 
 export function setPayoutWalletConfig(config: Record<string, any>) {
-  localStorage.setItem(STORAGE_KEYS.PAYOUT_WALLET_CONFIG, JSON.stringify(config));
+  localStorage.setItem(
+    STORAGE_KEYS.PAYOUT_WALLET_CONFIG,
+    JSON.stringify(config),
+  );
 }
 
 // Admin Wallet Balance
 export function getAdminWalletBalance(): number {
-  return parseFloat(localStorage.getItem(STORAGE_KEYS.ADMIN_WALLET_BALANCE) || "0");
+  return parseFloat(
+    localStorage.getItem(STORAGE_KEYS.ADMIN_WALLET_BALANCE) || "0",
+  );
 }
 
 export function setAdminWalletBalance(balance: number) {
@@ -141,7 +157,9 @@ export function setAdminWalletBalance(balance: number) {
 // Registered Users (for migration from localStorage to server)
 export function getRegisteredUsers(): any[] {
   try {
-    return JSON.parse(localStorage.getItem(STORAGE_KEYS.REGISTERED_USERS) || "[]");
+    return JSON.parse(
+      localStorage.getItem(STORAGE_KEYS.REGISTERED_USERS) || "[]",
+    );
   } catch {
     return [];
   }
