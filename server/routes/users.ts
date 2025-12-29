@@ -245,3 +245,41 @@ export const handleGetAllUsers: RequestHandler = async (req, res) => {
     });
   }
 };
+
+export const handleDeleteUser: RequestHandler = async (req, res) => {
+  try {
+    const { phone } = req.params;
+
+    if (!phone) {
+      return res.status(400).json({
+        ok: false,
+        error: "Phone number is required",
+      });
+    }
+
+    const rows = await getRows(SHEET_NAMES.USERS);
+    const userIndex = rows.findIndex((row) => row.phone === phone);
+
+    if (userIndex === -1) {
+      return res.status(404).json({
+        ok: false,
+        error: "User not found",
+      });
+    }
+
+    // Import deleteRow from sheets
+    const { deleteRow } = await import("../services/sheets");
+    await deleteRow(SHEET_NAMES.USERS, userIndex);
+
+    res.json({
+      ok: true,
+      message: `User ${phone} deleted successfully`,
+    });
+  } catch (error) {
+    console.error("Delete user error:", error);
+    res.status(500).json({
+      ok: false,
+      error: "Internal server error",
+    });
+  }
+};
