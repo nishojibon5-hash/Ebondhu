@@ -19,7 +19,34 @@ function getAuth() {
     client_x509_cert_url: process.env.GOOGLE_CLIENT_X509_CERT_URL,
   };
 
-  return google.auth.fromJSON(credentials);
+  // Validate credentials
+  if (!credentials.client_email) {
+    console.error("Missing GOOGLE_CLIENT_EMAIL environment variable");
+    throw new Error(
+      "Google credentials incomplete: missing client_email. Please set GOOGLE_CLIENT_EMAIL in environment variables.",
+    );
+  }
+
+  if (!credentials.private_key) {
+    console.error("Missing GOOGLE_PRIVATE_KEY environment variable");
+    throw new Error(
+      "Google credentials incomplete: missing private_key. Please set GOOGLE_PRIVATE_KEY in environment variables.",
+    );
+  }
+
+  if (!credentials.project_id) {
+    console.error("Missing GOOGLE_PROJECT_ID environment variable");
+    throw new Error(
+      "Google credentials incomplete: missing project_id. Please set GOOGLE_PROJECT_ID in environment variables.",
+    );
+  }
+
+  try {
+    return google.auth.fromJSON(credentials);
+  } catch (error) {
+    console.error("Error creating Google auth:", error);
+    throw error;
+  }
 }
 
 export function getSheetsAPI() {
