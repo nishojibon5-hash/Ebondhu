@@ -148,12 +148,46 @@ export function createServer() {
     res.json({ ok: true, role: payload.role });
   });
 
+  // Admin middleware to verify JWT token
+  const adminMiddleware = (req: Request, res: any, next: any) => {
+    const auth = req.headers.authorization || "";
+    const token = auth.startsWith("Bearer ") ? auth.slice(7) : null;
+    const secret = process.env.ADMIN_JWT_SECRET;
+
+    if (!secret) {
+      return res.status(500).json({
+        ok: false,
+        error: "Server missing ADMIN_JWT_SECRET",
+      });
+    }
+
+    if (!token) {
+      return res.status(401).json({
+        ok: false,
+        error: "Missing authorization token",
+      });
+    }
+
+    const payload = verifyHS256(token, secret);
+    if (!payload || payload.role !== "admin") {
+      return res.status(401).json({
+        ok: false,
+        error: "Unauthorized",
+      });
+    }
+
+    next();
+  };
+
   // User Management Routes
   app.post("/api/users/login", handleUserLogin);
   app.post("/api/users/register", handleUserRegister);
   app.get("/api/users/:phone", handleGetUser);
   app.post("/api/users/balance", handleUpdateUserBalance);
   app.get("/api/users", handleGetAllUsers);
+
+  // Admin-only routes
+  app.delete("/api/admin/users/:phone", adminMiddleware, handleDeleteUser);
 
   // Transaction Routes
   app.post("/api/transactions", handleAddTransaction);
