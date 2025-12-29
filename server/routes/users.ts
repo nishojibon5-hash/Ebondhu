@@ -1,5 +1,12 @@
 import { RequestHandler } from "express";
-import { appendRow, findRow, findRows, getRows, updateRow, SHEET_NAMES } from "../services/sheets";
+import {
+  appendRow,
+  findRow,
+  findRows,
+  getRows,
+  updateRow,
+  SHEET_NAMES,
+} from "../services/sheets";
 import crypto from "crypto";
 
 export const handleUserLogin: RequestHandler = async (req, res) => {
@@ -191,7 +198,9 @@ export const handleUpdateUserBalance: RequestHandler = async (req, res) => {
     }
 
     const user = rows[userIndex];
-    const newBalance = (parseFloat(user.balance || "0") + parseFloat(amount)).toString();
+    const newBalance = (
+      parseFloat(user.balance || "0") + parseFloat(amount)
+    ).toString();
     const now = new Date().toISOString();
 
     const updatedValues = [

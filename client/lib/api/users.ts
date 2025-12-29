@@ -56,7 +56,10 @@ async function retryRequest<T>(
       lastError = error instanceof Error ? error : new Error(String(error));
       if (attempt < maxAttempts) {
         await new Promise((resolve) => setTimeout(resolve, delay));
-        delay = Math.min(delay * RETRY_CONFIG.backoffMultiplier, RETRY_CONFIG.maxDelay);
+        delay = Math.min(
+          delay * RETRY_CONFIG.backoffMultiplier,
+          RETRY_CONFIG.maxDelay,
+        );
       }
     }
   }
@@ -138,7 +141,10 @@ export async function registerUser(
       synced: true,
     };
   } catch (error) {
-    console.error("Server registration failed, using localStorage fallback:", error);
+    console.error(
+      "Server registration failed, using localStorage fallback:",
+      error,
+    );
 
     // Check if user already exists in localStorage
     const existingUser = getUserFromStorage(data.phone);
@@ -215,7 +221,9 @@ export async function loginUser(data: LoginRequest): Promise<LoginResponse> {
   }
 }
 
-export async function getUser(phone: string): Promise<{ ok: boolean; user?: User; error?: string }> {
+export async function getUser(
+  phone: string,
+): Promise<{ ok: boolean; user?: User; error?: string }> {
   try {
     const response = await retryRequest(async () => {
       const res = await fetch(`/api/users/${phone}`, {
