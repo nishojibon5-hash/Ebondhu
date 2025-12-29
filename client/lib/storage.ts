@@ -129,32 +129,6 @@ export function setPayoutWalletConfig(config: Record<string, any>) {
   localStorage.setItem(STORAGE_KEYS.PAYOUT_WALLET_CONFIG, JSON.stringify(config));
 }
 
-// Manual Topup Requests
-export function getManualTopupRequests(): any[] {
-  try {
-    return JSON.parse(localStorage.getItem(STORAGE_KEYS.MANUAL_TOPUP_REQUESTS) || "[]");
-  } catch {
-    return [];
-  }
-}
-
-export function setManualTopupRequests(requests: any[]) {
-  localStorage.setItem(STORAGE_KEYS.MANUAL_TOPUP_REQUESTS, JSON.stringify(requests));
-}
-
-// Cashout Requests
-export function getCashoutRequests(): any[] {
-  try {
-    return JSON.parse(localStorage.getItem(STORAGE_KEYS.CASHOUT_REQUESTS) || "[]");
-  } catch {
-    return [];
-  }
-}
-
-export function setCashoutRequests(requests: any[]) {
-  localStorage.setItem(STORAGE_KEYS.CASHOUT_REQUESTS, JSON.stringify(requests));
-}
-
 // Admin Wallet Balance
 export function getAdminWalletBalance(): number {
   return parseFloat(localStorage.getItem(STORAGE_KEYS.ADMIN_WALLET_BALANCE) || "0");
