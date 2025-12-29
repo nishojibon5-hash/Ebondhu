@@ -63,7 +63,8 @@ export default function Login() {
     });
 
     if (response.ok && response.user) {
-      setSuccess("সফলভাবে লগিন হয়েছে!");
+      const statusMsg = response.fromCache ? " (অফলাইন মোড)" : "";
+      setSuccess(`সফলভাবে লগিন হয়েছে!${statusMsg}`);
 
       // Store user data in localStorage
       setUserSession({
