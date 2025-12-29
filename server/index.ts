@@ -11,6 +11,7 @@ import {
   handleGetUser,
   handleUpdateUserBalance,
   handleGetAllUsers,
+  handleDeleteUser,
 } from "./routes/users";
 import {
   handleAddTransaction,
