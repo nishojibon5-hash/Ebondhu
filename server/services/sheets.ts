@@ -49,7 +49,10 @@ function getAuth() {
 
   try {
     const auth = google.auth.fromJSON(credentials);
-    console.log("✓ Google auth created successfully for:", credentials.client_email);
+    console.log(
+      "✓ Google auth created successfully for:",
+      credentials.client_email,
+    );
     return auth;
   } catch (error) {
     console.error("✗ Error creating Google auth:", error);
