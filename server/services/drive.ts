@@ -4,11 +4,21 @@ import { Readable } from "stream";
 let driveInstance: drive_v3.Drive | null = null;
 
 function getAuth() {
+  const scopes = [
+    "https://www.googleapis.com/auth/drive",
+    "https://www.googleapis.com/auth/spreadsheets",
+  ];
+
+  let privateKey = process.env.GOOGLE_PRIVATE_KEY || "";
+  if (privateKey.includes("\\n")) {
+    privateKey = privateKey.replace(/\\n/g, "\n");
+  }
+
   const credentials = {
     type: "service_account",
     project_id: process.env.GOOGLE_PROJECT_ID,
     private_key_id: process.env.GOOGLE_PRIVATE_KEY_ID,
-    private_key: process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, "\n"),
+    private_key: privateKey,
     client_email: process.env.GOOGLE_CLIENT_EMAIL,
     client_id: process.env.GOOGLE_CLIENT_ID,
     auth_uri: "https://accounts.google.com/o/oauth2/auth",
@@ -18,7 +28,9 @@ function getAuth() {
     client_x509_cert_url: process.env.GOOGLE_CLIENT_X509_CERT_URL,
   };
 
-  return google.auth.fromJSON(credentials);
+  const auth = google.auth.fromJSON(credentials);
+  auth.scopes = scopes;
+  return auth;
 }
 
 export function getDriveAPI() {
