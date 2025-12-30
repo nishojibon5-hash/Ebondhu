@@ -208,7 +208,7 @@ export default function AddMoney() {
     }
   };
 
-  const simulateSuccessfulPayment = (addAmount: number) => {
+  const simulateSuccessfulPayment = async (addAmount: number) => {
     // Update balance
     const newBalance = currentBalance + addAmount;
     localStorage.setItem("userBalance", newBalance.toString());
@@ -239,6 +239,30 @@ export default function AddMoney() {
     );
     transactions.unshift(transaction);
     localStorage.setItem("transactions", JSON.stringify(transactions));
+
+    // Send to server for Google Sheets persistence
+    try {
+      const fee = selectedMethod ? calculateFee(selectedMethod, addAmount) : 0;
+      await addTransaction({
+        phone: userPhone || "",
+        type: "add_money",
+        amount: addAmount,
+        description: `Added ৳${addAmount} via ${selectedMethod?.name}${selectedMethod?.type === "mfs" ? ` - Account: ${accountNumber}` : ""}`,
+      });
+
+      // Optionally log fee transaction separately
+      if (fee > 0) {
+        await addTransaction({
+          phone: userPhone || "",
+          type: "fee",
+          amount: fee,
+          description: `Fee for adding money via ${selectedMethod?.name}`,
+        });
+      }
+    } catch (error) {
+      console.error("Failed to sync transaction to Google Sheets:", error);
+      // Continue anyway - data is in localStorage
+    }
 
     setCurrentStep(5); // Success step
   };
