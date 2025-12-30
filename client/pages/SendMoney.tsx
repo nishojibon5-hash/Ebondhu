@@ -191,7 +191,10 @@ export default function SendMoney() {
               description: `Received ৳${transferAmount} from ${userPhone}${reference ? ` - Ref: ${reference}` : ""}`,
             });
           } catch (error) {
-            console.error("Failed to sync transaction to Google Sheets:", error);
+            console.error(
+              "Failed to sync transaction to Google Sheets:",
+              error,
+            );
             // Continue anyway - data is in localStorage
           }
 
