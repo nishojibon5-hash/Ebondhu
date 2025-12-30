@@ -95,6 +95,40 @@ export function createServer() {
     res.json({ message: ping });
   });
 
+  // Diagnostic endpoint to test Google Sheets API
+  app.get("/api/debug/sheets", async (_req, res) => {
+    try {
+      const { getSheetsAPI, SHEET_NAMES } = await import("./services/sheets");
+      const sheets = getSheetsAPI();
+
+      const spreadsheetId = process.env.VITE_GOOGLE_SHEETS_ID || "";
+      if (!spreadsheetId) {
+        return res.status(400).json({
+          ok: false,
+          error: "VITE_GOOGLE_SHEETS_ID not configured",
+        });
+      }
+
+      const result = await sheets.spreadsheets.get({
+        spreadsheetId,
+      });
+
+      res.json({
+        ok: true,
+        message: "Google Sheets API is working!",
+        spreadsheetTitle: result.data.properties?.title,
+        sheetCount: result.data.sheets?.length || 0,
+        sheets: result.data.sheets?.map((s) => s.properties?.title),
+      });
+    } catch (error) {
+      console.error("Sheets API error:", error);
+      res.status(500).json({
+        ok: false,
+        error: String(error),
+      });
+    }
+  });
+
   app.get("/api/demo", handleDemo);
 
   // Admin auth endpoints
