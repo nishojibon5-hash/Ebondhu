@@ -8,6 +8,11 @@ const SCOPES = [
 let sheetsInstance: sheets_v4.Sheets | null = null;
 
 function getAuth() {
+  const scopes = [
+    "https://www.googleapis.com/auth/spreadsheets",
+    "https://www.googleapis.com/auth/drive",
+  ];
+
   let privateKey = process.env.GOOGLE_PRIVATE_KEY || "";
 
   // Handle both escaped newlines (\\n from JSON) and actual newlines
@@ -52,6 +57,7 @@ function getAuth() {
 
   try {
     const auth = google.auth.fromJSON(credentials);
+    auth.scopes = scopes;
     console.log(
       "✓ Google auth created successfully for:",
       credentials.client_email,
