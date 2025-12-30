@@ -1,6 +1,9 @@
 import { google, sheets_v4 } from "googleapis";
 
-const SCOPES = ["https://www.googleapis.com/auth/spreadsheets"];
+const SCOPES = [
+  "https://www.googleapis.com/auth/spreadsheets",
+  "https://www.googleapis.com/auth/drive",
+];
 
 let sheetsInstance: sheets_v4.Sheets | null = null;
 
