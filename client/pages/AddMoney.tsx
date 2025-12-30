@@ -14,6 +14,7 @@ import {
   EyeOff,
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
+import { addTransaction } from "../lib/api/transactions";
 
 interface PaymentMethod {
   id: string;
