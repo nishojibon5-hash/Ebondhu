@@ -100,11 +100,11 @@ export default function SendMoney() {
     }
   };
 
-  const handleSendMoney = () => {
+  const handleSendMoney = async () => {
     if (validateStep3()) {
       setIsProcessing(true);
 
-      setTimeout(() => {
+      setTimeout(async () => {
         if (pin === localStorage.getItem("userPin")) {
           const transferAmount = parseFloat(amount);
           const totalDeduction = transferAmount + transferCharge;
@@ -132,10 +132,9 @@ export default function SendMoney() {
             return;
           }
 
-          // Update sender local balance
+          // Save to local storage first (offline support)
           localStorage.setItem("userBalance", newBalance.toString());
 
-          // Persist to users store (sender and recipient)
           if (senderIdx !== -1) {
             users[senderIdx].balance = newBalance;
           }
@@ -143,7 +142,7 @@ export default function SendMoney() {
             (users[recipientIdx].balance || 0) + transferAmount;
           localStorage.setItem("registeredUsers", JSON.stringify(users));
 
-          // Save sender transaction
+          // Save to local transactions
           const transaction = {
             id: Date.now(),
             type: "send_money",
@@ -174,6 +173,27 @@ export default function SendMoney() {
             status: "completed",
           });
           localStorage.setItem(recipKey, JSON.stringify(recipTx));
+
+          // Send to server for Google Sheets persistence
+          try {
+            await addTransaction({
+              phone: userPhone || "",
+              type: "send_money",
+              amount: transferAmount,
+              description: `Sent ৳${transferAmount} to ${recipient?.name} (${recipient?.phone})${reference ? ` - Ref: ${reference}` : ""}`,
+            });
+
+            // Also log the recipient's receive transaction
+            await addTransaction({
+              phone: recipient?.phone || "",
+              type: "received_money",
+              amount: transferAmount,
+              description: `Received ৳${transferAmount} from ${userPhone}${reference ? ` - Ref: ${reference}` : ""}`,
+            });
+          } catch (error) {
+            console.error("Failed to sync transaction to Google Sheets:", error);
+            // Continue anyway - data is in localStorage
+          }
 
           setCurrentStep(4);
         } else {
