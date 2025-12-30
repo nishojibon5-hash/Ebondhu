@@ -48,9 +48,17 @@ function getAuth() {
   }
 
   try {
-    return google.auth.fromJSON(credentials);
+    const auth = google.auth.fromJSON(credentials);
+    console.log("✓ Google auth created successfully for:", credentials.client_email);
+    return auth;
   } catch (error) {
-    console.error("Error creating Google auth:", error);
+    console.error("✗ Error creating Google auth:", error);
+    console.error("Credentials being used:", {
+      project_id: credentials.project_id,
+      client_email: credentials.client_email,
+      client_id: credentials.client_id,
+      private_key_starts_with: credentials.private_key?.substring(0, 50),
+    });
     throw error;
   }
 }
