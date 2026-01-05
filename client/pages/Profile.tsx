@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { Language } from "../App";
+import { uploadUserPhoto } from "../lib/api/media";
 
 interface ProfileProps {
   language: Language;
@@ -145,9 +146,12 @@ export default function Profile({ language }: ProfileProps) {
     setIsEditing(false);
   };
 
-  const handlePhotoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handlePhotoUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     const file = event.target.files?.[0];
     if (file) {
+      // Create a local preview immediately
       const reader = new FileReader();
       reader.onload = (e) => {
         const result = e.target?.result as string;
@@ -156,9 +160,23 @@ export default function Profile({ language }: ProfileProps) {
           ...prev,
           profilePhoto: result,
         }));
-        setShowPhotoUpload(false);
       };
       reader.readAsDataURL(file);
+
+      // Upload to Google Drive asynchronously
+      try {
+        const response = await uploadUserPhoto(file);
+        if (response.ok && response.file) {
+          // Store the file ID for future reference
+          localStorage.setItem("userPhotoId", response.file.id);
+        } else {
+          console.error("Photo upload failed:", response.error);
+        }
+      } catch (error) {
+        console.error("Photo upload error:", error);
+      }
+
+      setShowPhotoUpload(false);
     }
   };
 
