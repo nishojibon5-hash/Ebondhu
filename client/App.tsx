@@ -218,6 +218,14 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            <Route
+              path="/social-feed"
+              element={
+                <ProtectedRoute>
+                  <SocialFeed />
+                </ProtectedRoute>
+              }
+            />
 
             <Route path="*" element={<NotFound />} />
           </Routes>
