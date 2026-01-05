@@ -275,5 +275,28 @@ export function createServer() {
   );
   app.post("/api/media/upload/file", upload.single("file"), handleUploadFile);
 
+  // Social Media Routes - Posts
+  app.post("/api/social/posts", handleCreatePost);
+  app.get("/api/social/feed", handleGetFeed);
+  app.get("/api/social/posts/:userPhone", handleGetUserPosts);
+  app.delete("/api/social/posts/:postId", handleDeletePost);
+
+  // Social Media Routes - Comments
+  app.post("/api/social/comments", handleAddComment);
+  app.get("/api/social/comments/:postId", handleGetPostComments);
+  app.delete("/api/social/comments/:commentId", handleDeleteComment);
+
+  // Social Media Routes - Likes
+  app.post("/api/social/likes", handleToggleLike);
+  app.get("/api/social/likes/:postId", handleGetPostLikes);
+
+  // Social Media Routes - Friends
+  app.post("/api/social/friend-requests", handleSendFriendRequest);
+  app.post("/api/social/friend-requests/:requestId/accept", handleAcceptFriendRequest);
+  app.post("/api/social/friend-requests/:requestId/reject", handleRejectFriendRequest);
+  app.get("/api/social/friend-requests/:userPhone", handleGetFriendRequests);
+  app.get("/api/social/friends/:userPhone", handleGetFriends);
+  app.post("/api/social/friends/remove", handleRemoveFriend);
+
   return app;
 }
