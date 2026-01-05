@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Users } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { CreatePost } from "../components/social/CreatePost";
 import { PostCard } from "../components/social/PostCard";
