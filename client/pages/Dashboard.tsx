@@ -19,6 +19,7 @@ import {
   Lightbulb,
   Gift,
   Wallet,
+  Zap,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Language } from "../App";
