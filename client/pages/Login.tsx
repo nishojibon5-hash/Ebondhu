@@ -72,7 +72,11 @@ export default function Login() {
         userPhone: response.user.phone,
         userName: response.user.name,
         userBalance: response.user.balance,
+        userPin: formData.pin,
       });
+
+      // Also store PIN in backup location for compatibility
+      localStorage.setItem(`pin_${formData.phone}`, formData.pin);
 
       setTimeout(() => {
         navigate("/");
