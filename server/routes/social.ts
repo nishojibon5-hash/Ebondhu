@@ -1,0 +1,745 @@
+import { RequestHandler } from "express";
+import {
+  appendRow,
+  findRows,
+  getRows,
+  updateRow,
+  SHEET_NAMES,
+  findRow,
+  deleteRow,
+} from "../services/sheets";
+import crypto from "crypto";
+
+// ============ POSTS ============
+
+export const handleCreatePost: RequestHandler = async (req, res) => {
+  try {
+    const { userPhone, userName, userPhoto, content, image } = req.body;
+
+    if (!userPhone || !content) {
+      return res.status(400).json({
+        ok: false,
+        error: "User phone and content are required",
+      });
+    }
+
+    const postId = crypto.randomUUID();
+    const now = new Date().toISOString();
+
+    const postData = [
+      postId,
+      userPhone,
+      userName || "",
+      userPhoto || "",
+      content,
+      image || "",
+      "0",
+      "0",
+      now,
+      now,
+    ];
+
+    await appendRow(SHEET_NAMES.POSTS, postData);
+
+    res.status(201).json({
+      ok: true,
+      post: {
+        id: postId,
+        userPhone,
+        userName,
+        userPhoto,
+        content,
+        image,
+        likesCount: 0,
+        commentsCount: 0,
+        createdAt: now,
+      },
+    });
+  } catch (error) {
+    console.error("Create post error:", error);
+    res.status(500).json({
+      ok: false,
+      error: "Internal server error",
+    });
+  }
+};
+
+export const handleGetFeed: RequestHandler = async (req, res) => {
+  try {
+    const { userPhone } = req.query;
+
+    const posts = await getRows(SHEET_NAMES.POSTS);
+    const friendsData = userPhone
+      ? await findRows(SHEET_NAMES.FRIENDS, "userPhone", userPhone as string)
+      : [];
+
+    const friendPhones = friendsData.map((f) => f.friendPhone);
+
+    const feedPosts = posts
+      .filter(
+        (post) =>
+          post.userPhone === userPhone || friendPhones.includes(post.userPhone),
+      )
+      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+      .map((post) => ({
+        id: post.id,
+        userPhone: post.userPhone,
+        userName: post.userName,
+        userPhoto: post.userPhoto,
+        content: post.content,
+        image: post.image,
+        likesCount: parseInt(post.likesCount || "0"),
+        commentsCount: parseInt(post.commentsCount || "0"),
+        createdAt: post.createdAt,
+      }));
+
+    res.json({
+      ok: true,
+      posts: feedPosts,
+    });
+  } catch (error) {
+    console.error("Get feed error:", error);
+    res.status(500).json({
+      ok: false,
+      error: "Internal server error",
+    });
+  }
+};
+
+export const handleGetUserPosts: RequestHandler = async (req, res) => {
+  try {
+    const { userPhone } = req.params;
+
+    const posts = await findRows(SHEET_NAMES.POSTS, "userPhone", userPhone);
+
+    const sortedPosts = posts
+      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+      .map((post) => ({
+        id: post.id,
+        userPhone: post.userPhone,
+        userName: post.userName,
+        userPhoto: post.userPhoto,
+        content: post.content,
+        image: post.image,
+        likesCount: parseInt(post.likesCount || "0"),
+        commentsCount: parseInt(post.commentsCount || "0"),
+        createdAt: post.createdAt,
+      }));
+
+    res.json({
+      ok: true,
+      posts: sortedPosts,
+    });
+  } catch (error) {
+    console.error("Get user posts error:", error);
+    res.status(500).json({
+      ok: false,
+      error: "Internal server error",
+    });
+  }
+};
+
+export const handleDeletePost: RequestHandler = async (req, res) => {
+  try {
+    const { postId } = req.params;
+
+    const posts = await getRows(SHEET_NAMES.POSTS);
+    const postIndex = posts.findIndex((p) => p.id === postId);
+
+    if (postIndex === -1) {
+      return res.status(404).json({
+        ok: false,
+        error: "Post not found",
+      });
+    }
+
+    await deleteRow(SHEET_NAMES.POSTS, postIndex);
+
+    // Delete associated comments and likes
+    const comments = await findRows(SHEET_NAMES.COMMENTS, "postId", postId);
+    const likes = await findRows(SHEET_NAMES.LIKES, "postId", postId);
+
+    for (const comment of comments) {
+      const comments2 = await getRows(SHEET_NAMES.COMMENTS);
+      const commentIndex = comments2.findIndex((c) => c.id === comment.id);
+      if (commentIndex !== -1) {
+        await deleteRow(SHEET_NAMES.COMMENTS, commentIndex);
+      }
+    }
+
+    for (const like of likes) {
+      const likes2 = await getRows(SHEET_NAMES.LIKES);
+      const likeIndex = likes2.findIndex((l) => l.id === like.id);
+      if (likeIndex !== -1) {
+        await deleteRow(SHEET_NAMES.LIKES, likeIndex);
+      }
+    }
+
+    res.json({
+      ok: true,
+      message: "Post deleted successfully",
+    });
+  } catch (error) {
+    console.error("Delete post error:", error);
+    res.status(500).json({
+      ok: false,
+      error: "Internal server error",
+    });
+  }
+};
+
+// ============ COMMENTS ============
+
+export const handleAddComment: RequestHandler = async (req, res) => {
+  try {
+    const { postId, userPhone, userName, userPhoto, content } = req.body;
+
+    if (!postId || !userPhone || !content) {
+      return res.status(400).json({
+        ok: false,
+        error: "Post ID, user phone, and content are required",
+      });
+    }
+
+    const commentId = crypto.randomUUID();
+    const now = new Date().toISOString();
+
+    const commentData = [
+      commentId,
+      postId,
+      userPhone,
+      userName || "",
+      userPhoto || "",
+      content,
+      now,
+    ];
+
+    await appendRow(SHEET_NAMES.COMMENTS, commentData);
+
+    // Update post comments count
+    const posts = await getRows(SHEET_NAMES.POSTS);
+    const postIndex = posts.findIndex((p) => p.id === postId);
+
+    if (postIndex !== -1) {
+      const post = posts[postIndex];
+      const newCommentsCount = (parseInt(post.commentsCount || "0") + 1).toString();
+
+      const updatedPost = [
+        post.id,
+        post.userPhone,
+        post.userName,
+        post.userPhoto,
+        post.content,
+        post.image,
+        post.likesCount,
+        newCommentsCount,
+        post.createdAt,
+        new Date().toISOString(),
+      ];
+
+      await updateRow(SHEET_NAMES.POSTS, postIndex, updatedPost);
+    }
+
+    res.status(201).json({
+      ok: true,
+      comment: {
+        id: commentId,
+        postId,
+        userPhone,
+        userName,
+        userPhoto,
+        content,
+        createdAt: now,
+      },
+    });
+  } catch (error) {
+    console.error("Add comment error:", error);
+    res.status(500).json({
+      ok: false,
+      error: "Internal server error",
+    });
+  }
+};
+
+export const handleGetPostComments: RequestHandler = async (req, res) => {
+  try {
+    const { postId } = req.params;
+
+    const comments = await findRows(SHEET_NAMES.COMMENTS, "postId", postId);
+
+    const sortedComments = comments
+      .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime())
+      .map((comment) => ({
+        id: comment.id,
+        postId: comment.postId,
+        userPhone: comment.userPhone,
+        userName: comment.userName,
+        userPhoto: comment.userPhoto,
+        content: comment.content,
+        createdAt: comment.createdAt,
+      }));
+
+    res.json({
+      ok: true,
+      comments: sortedComments,
+    });
+  } catch (error) {
+    console.error("Get comments error:", error);
+    res.status(500).json({
+      ok: false,
+      error: "Internal server error",
+    });
+  }
+};
+
+export const handleDeleteComment: RequestHandler = async (req, res) => {
+  try {
+    const { commentId } = req.params;
+
+    const comments = await getRows(SHEET_NAMES.COMMENTS);
+    const commentIndex = comments.findIndex((c) => c.id === commentId);
+
+    if (commentIndex === -1) {
+      return res.status(404).json({
+        ok: false,
+        error: "Comment not found",
+      });
+    }
+
+    const comment = comments[commentIndex];
+    await deleteRow(SHEET_NAMES.COMMENTS, commentIndex);
+
+    // Update post comments count
+    const posts = await getRows(SHEET_NAMES.POSTS);
+    const postIndex = posts.findIndex((p) => p.id === comment.postId);
+
+    if (postIndex !== -1) {
+      const post = posts[postIndex];
+      const newCommentsCount = Math.max(0, parseInt(post.commentsCount || "0") - 1).toString();
+
+      const updatedPost = [
+        post.id,
+        post.userPhone,
+        post.userName,
+        post.userPhoto,
+        post.content,
+        post.image,
+        post.likesCount,
+        newCommentsCount,
+        post.createdAt,
+        new Date().toISOString(),
+      ];
+
+      await updateRow(SHEET_NAMES.POSTS, postIndex, updatedPost);
+    }
+
+    res.json({
+      ok: true,
+      message: "Comment deleted successfully",
+    });
+  } catch (error) {
+    console.error("Delete comment error:", error);
+    res.status(500).json({
+      ok: false,
+      error: "Internal server error",
+    });
+  }
+};
+
+// ============ LIKES ============
+
+export const handleToggleLike: RequestHandler = async (req, res) => {
+  try {
+    const { postId, userPhone, userName } = req.body;
+
+    if (!postId || !userPhone) {
+      return res.status(400).json({
+        ok: false,
+        error: "Post ID and user phone are required",
+      });
+    }
+
+    const likes = await getRows(SHEET_NAMES.LIKES);
+    const existingLike = likes.find(
+      (l) => l.postId === postId && l.userPhone === userPhone,
+    );
+
+    if (existingLike) {
+      // Unlike
+      const likeIndex = likes.findIndex(
+        (l) => l.postId === postId && l.userPhone === userPhone,
+      );
+      await deleteRow(SHEET_NAMES.LIKES, likeIndex);
+
+      // Update post likes count
+      const posts = await getRows(SHEET_NAMES.POSTS);
+      const postIndex = posts.findIndex((p) => p.id === postId);
+
+      if (postIndex !== -1) {
+        const post = posts[postIndex];
+        const newLikesCount = Math.max(0, parseInt(post.likesCount || "0") - 1).toString();
+
+        const updatedPost = [
+          post.id,
+          post.userPhone,
+          post.userName,
+          post.userPhoto,
+          post.content,
+          post.image,
+          newLikesCount,
+          post.commentsCount,
+          post.createdAt,
+          new Date().toISOString(),
+        ];
+
+        await updateRow(SHEET_NAMES.POSTS, postIndex, updatedPost);
+      }
+
+      res.json({
+        ok: true,
+        liked: false,
+      });
+    } else {
+      // Like
+      const likeId = crypto.randomUUID();
+      const now = new Date().toISOString();
+
+      const likeData = [likeId, postId, userPhone, userName || "", now];
+
+      await appendRow(SHEET_NAMES.LIKES, likeData);
+
+      // Update post likes count
+      const posts = await getRows(SHEET_NAMES.POSTS);
+      const postIndex = posts.findIndex((p) => p.id === postId);
+
+      if (postIndex !== -1) {
+        const post = posts[postIndex];
+        const newLikesCount = (parseInt(post.likesCount || "0") + 1).toString();
+
+        const updatedPost = [
+          post.id,
+          post.userPhone,
+          post.userName,
+          post.userPhoto,
+          post.content,
+          post.image,
+          newLikesCount,
+          post.commentsCount,
+          post.createdAt,
+          new Date().toISOString(),
+        ];
+
+        await updateRow(SHEET_NAMES.POSTS, postIndex, updatedPost);
+      }
+
+      res.status(201).json({
+        ok: true,
+        liked: true,
+      });
+    }
+  } catch (error) {
+    console.error("Toggle like error:", error);
+    res.status(500).json({
+      ok: false,
+      error: "Internal server error",
+    });
+  }
+};
+
+export const handleGetPostLikes: RequestHandler = async (req, res) => {
+  try {
+    const { postId } = req.params;
+
+    const likes = await findRows(SHEET_NAMES.LIKES, "postId", postId);
+
+    res.json({
+      ok: true,
+      likes: likes.map((like) => ({
+        id: like.id,
+        postId: like.postId,
+        userPhone: like.userPhone,
+        userName: like.userName,
+        createdAt: like.createdAt,
+      })),
+    });
+  } catch (error) {
+    console.error("Get likes error:", error);
+    res.status(500).json({
+      ok: false,
+      error: "Internal server error",
+    });
+  }
+};
+
+// ============ FRIENDS ============
+
+export const handleSendFriendRequest: RequestHandler = async (req, res) => {
+  try {
+    const { fromPhone, toPhone } = req.body;
+
+    if (!fromPhone || !toPhone) {
+      return res.status(400).json({
+        ok: false,
+        error: "Both phone numbers are required",
+      });
+    }
+
+    if (fromPhone === toPhone) {
+      return res.status(400).json({
+        ok: false,
+        error: "Cannot send friend request to yourself",
+      });
+    }
+
+    // Check if already friends
+    const friends = await getRows(SHEET_NAMES.FRIENDS);
+    const isFriend = friends.some(
+      (f) =>
+        (f.userPhone === fromPhone && f.friendPhone === toPhone) ||
+        (f.userPhone === toPhone && f.friendPhone === fromPhone),
+    );
+
+    if (isFriend) {
+      return res.status(400).json({
+        ok: false,
+        error: "Already friends",
+      });
+    }
+
+    // Check if request already exists
+    const requests = await getRows(SHEET_NAMES.FRIEND_REQUESTS);
+    const existingRequest = requests.find(
+      (r) =>
+        r.fromPhone === fromPhone &&
+        r.toPhone === toPhone &&
+        r.status === "pending",
+    );
+
+    if (existingRequest) {
+      return res.status(400).json({
+        ok: false,
+        error: "Friend request already sent",
+      });
+    }
+
+    const requestId = crypto.randomUUID();
+    const now = new Date().toISOString();
+
+    const requestData = [requestId, fromPhone, toPhone, "pending", now];
+
+    await appendRow(SHEET_NAMES.FRIEND_REQUESTS, requestData);
+
+    res.status(201).json({
+      ok: true,
+      request: {
+        id: requestId,
+        fromPhone,
+        toPhone,
+        status: "pending",
+        createdAt: now,
+      },
+    });
+  } catch (error) {
+    console.error("Send friend request error:", error);
+    res.status(500).json({
+      ok: false,
+      error: "Internal server error",
+    });
+  }
+};
+
+export const handleAcceptFriendRequest: RequestHandler = async (req, res) => {
+  try {
+    const { requestId } = req.params;
+
+    const requests = await getRows(SHEET_NAMES.FRIEND_REQUESTS);
+    const requestIndex = requests.findIndex((r) => r.id === requestId);
+
+    if (requestIndex === -1) {
+      return res.status(404).json({
+        ok: false,
+        error: "Friend request not found",
+      });
+    }
+
+    const request = requests[requestIndex];
+
+    // Add friendship
+    const friendshipId = crypto.randomUUID();
+    const now = new Date().toISOString();
+
+    const friendshipData = [
+      friendshipId,
+      request.fromPhone,
+      request.toPhone,
+      now,
+    ];
+
+    await appendRow(SHEET_NAMES.FRIENDS, friendshipData);
+
+    // Update request status
+    const updatedRequest = [
+      request.id,
+      request.fromPhone,
+      request.toPhone,
+      "accepted",
+      request.createdAt,
+    ];
+
+    await updateRow(SHEET_NAMES.FRIEND_REQUESTS, requestIndex, updatedRequest);
+
+    res.json({
+      ok: true,
+      message: "Friend request accepted",
+    });
+  } catch (error) {
+    console.error("Accept friend request error:", error);
+    res.status(500).json({
+      ok: false,
+      error: "Internal server error",
+    });
+  }
+};
+
+export const handleRejectFriendRequest: RequestHandler = async (req, res) => {
+  try {
+    const { requestId } = req.params;
+
+    const requests = await getRows(SHEET_NAMES.FRIEND_REQUESTS);
+    const requestIndex = requests.findIndex((r) => r.id === requestId);
+
+    if (requestIndex === -1) {
+      return res.status(404).json({
+        ok: false,
+        error: "Friend request not found",
+      });
+    }
+
+    const request = requests[requestIndex];
+
+    // Update request status
+    const updatedRequest = [
+      request.id,
+      request.fromPhone,
+      request.toPhone,
+      "rejected",
+      request.createdAt,
+    ];
+
+    await updateRow(SHEET_NAMES.FRIEND_REQUESTS, requestIndex, updatedRequest);
+
+    res.json({
+      ok: true,
+      message: "Friend request rejected",
+    });
+  } catch (error) {
+    console.error("Reject friend request error:", error);
+    res.status(500).json({
+      ok: false,
+      error: "Internal server error",
+    });
+  }
+};
+
+export const handleGetFriendRequests: RequestHandler = async (req, res) => {
+  try {
+    const { userPhone } = req.params;
+
+    const requests = await findRows(
+      SHEET_NAMES.FRIEND_REQUESTS,
+      "toPhone",
+      userPhone,
+    );
+
+    const pendingRequests = requests
+      .filter((r) => r.status === "pending")
+      .map((r) => ({
+        id: r.id,
+        fromPhone: r.fromPhone,
+        toPhone: r.toPhone,
+        status: r.status,
+        createdAt: r.createdAt,
+      }));
+
+    res.json({
+      ok: true,
+      requests: pendingRequests,
+    });
+  } catch (error) {
+    console.error("Get friend requests error:", error);
+    res.status(500).json({
+      ok: false,
+      error: "Internal server error",
+    });
+  }
+};
+
+export const handleGetFriends: RequestHandler = async (req, res) => {
+  try {
+    const { userPhone } = req.params;
+
+    const friends = await getRows(SHEET_NAMES.FRIENDS);
+
+    const userFriends = friends
+      .filter(
+        (f) =>
+          f.userPhone === userPhone || f.friendPhone === userPhone,
+      )
+      .map((f) => ({
+        id: f.id,
+        friendPhone: f.userPhone === userPhone ? f.friendPhone : f.userPhone,
+        createdAt: f.createdAt,
+      }));
+
+    res.json({
+      ok: true,
+      friends: userFriends,
+    });
+  } catch (error) {
+    console.error("Get friends error:", error);
+    res.status(500).json({
+      ok: false,
+      error: "Internal server error",
+    });
+  }
+};
+
+export const handleRemoveFriend: RequestHandler = async (req, res) => {
+  try {
+    const { userPhone, friendPhone } = req.body;
+
+    if (!userPhone || !friendPhone) {
+      return res.status(400).json({
+        ok: false,
+        error: "Both phone numbers are required",
+      });
+    }
+
+    const friends = await getRows(SHEET_NAMES.FRIENDS);
+    const friendIndex = friends.findIndex(
+      (f) =>
+        (f.userPhone === userPhone && f.friendPhone === friendPhone) ||
+        (f.userPhone === friendPhone && f.friendPhone === userPhone),
+    );
+
+    if (friendIndex === -1) {
+      return res.status(404).json({
+        ok: false,
+        error: "Friend not found",
+      });
+    }
+
+    await deleteRow(SHEET_NAMES.FRIENDS, friendIndex);
+
+    res.json({
+      ok: true,
+      message: "Friend removed successfully",
+    });
+  } catch (error) {
+    console.error("Remove friend error:", error);
+    res.status(500).json({
+      ok: false,
+      error: "Internal server error",
+    });
+  }
+};
