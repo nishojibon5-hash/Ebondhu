@@ -213,6 +213,47 @@ async function initializeSheetHeaders() {
       "createdAt",
     ],
     [SHEET_NAMES.PAYOUT_WALLETS]: ["key", "enabled", "reserve", "updatedAt"],
+    [SHEET_NAMES.POSTS]: [
+      "id",
+      "userPhone",
+      "userName",
+      "userPhoto",
+      "content",
+      "image",
+      "likesCount",
+      "commentsCount",
+      "createdAt",
+      "updatedAt",
+    ],
+    [SHEET_NAMES.COMMENTS]: [
+      "id",
+      "postId",
+      "userPhone",
+      "userName",
+      "userPhoto",
+      "content",
+      "createdAt",
+    ],
+    [SHEET_NAMES.LIKES]: [
+      "id",
+      "postId",
+      "userPhone",
+      "userName",
+      "createdAt",
+    ],
+    [SHEET_NAMES.FRIENDS]: [
+      "id",
+      "userPhone",
+      "friendPhone",
+      "createdAt",
+    ],
+    [SHEET_NAMES.FRIEND_REQUESTS]: [
+      "id",
+      "fromPhone",
+      "toPhone",
+      "status",
+      "createdAt",
+    ],
   };
 
   for (const [sheetName, headerRow] of Object.entries(headers)) {
