@@ -21,6 +21,8 @@ import NotFound from "./pages/NotFound";
 import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
 import SocialFeed from "./pages/SocialFeed";
+import Friends from "./pages/Friends";
+import UserProfile from "./pages/UserProfile";
 import { BottomNavigation } from "./components/BottomNavigation";
 import { useState, useEffect } from "react";
 
