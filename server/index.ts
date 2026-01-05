@@ -38,6 +38,23 @@ import {
   handleUploadUserPhoto,
   handleUploadFile,
 } from "./routes/media";
+import {
+  handleCreatePost,
+  handleGetFeed,
+  handleGetUserPosts,
+  handleDeletePost,
+  handleAddComment,
+  handleGetPostComments,
+  handleDeleteComment,
+  handleToggleLike,
+  handleGetPostLikes,
+  handleSendFriendRequest,
+  handleAcceptFriendRequest,
+  handleRejectFriendRequest,
+  handleGetFriendRequests,
+  handleGetFriends,
+  handleRemoveFriend,
+} from "./routes/social";
 
 // Configure multer for file uploads
 const upload = multer({ storage: multer.memoryStorage() });
