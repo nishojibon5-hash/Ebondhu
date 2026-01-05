@@ -142,6 +142,12 @@ export default function Dashboard({ language, setLanguage }: DashboardProps) {
       link: "#",
     },
     {
+      icon: Zap,
+      label: t.earning,
+      iconColor: "text-blue-500",
+      link: "/social-feed",
+    },
+    {
       icon: Gift,
       label: "সেবিংস",
       iconColor: "text-pink-500",
