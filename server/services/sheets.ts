@@ -94,6 +94,12 @@ export const SHEET_NAMES = {
   TASKS: "Tasks",
   NOTIFICATIONS: "Notifications",
   PAYOUT_WALLETS: "PayoutWallets",
+  // Social Media Features
+  POSTS: "Posts",
+  COMMENTS: "Comments",
+  LIKES: "Likes",
+  FRIENDS: "Friends",
+  FRIEND_REQUESTS: "FriendRequests",
 };
 
 export async function initializeSheets() {
