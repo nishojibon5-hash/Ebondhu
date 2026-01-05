@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
+import { getBanners } from "../lib/api/admin";
 
 export type Banner = {
-  id: number;
+  id: string;
   image: string;
   link?: string;
+  createdAt?: string;
 };
 
 export function BannerCarousel() {
@@ -12,20 +14,32 @@ export function BannerCarousel() {
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, align: "start" });
 
   useEffect(() => {
-    const load = () => {
+    const loadBanners = async () => {
       try {
-        const data = JSON.parse(localStorage.getItem("banners") || "[]");
-        setBanners(Array.isArray(data) ? data : []);
-      } catch {
-        setBanners([]);
+        const response = await getBanners();
+        if (response.ok && response.banners) {
+          setBanners(response.banners);
+        } else {
+          // Fallback to localStorage if server fetch fails
+          const data = JSON.parse(localStorage.getItem("banners") || "[]");
+          setBanners(Array.isArray(data) ? data : []);
+        }
+      } catch (error) {
+        console.error("Failed to load banners:", error);
+        // Fallback to localStorage
+        try {
+          const data = JSON.parse(localStorage.getItem("banners") || "[]");
+          setBanners(Array.isArray(data) ? data : []);
+        } catch {
+          setBanners([]);
+        }
       }
     };
-    load();
-    const onStorage = (e: StorageEvent) => {
-      if (e.key === "banners") load();
-    };
-    window.addEventListener("storage", onStorage);
-    return () => window.removeEventListener("storage", onStorage);
+
+    loadBanners();
+    // Refresh banners every 60 seconds
+    const interval = setInterval(loadBanners, 60000);
+    return () => clearInterval(interval);
   }, []);
 
   useEffect(() => {
