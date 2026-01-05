@@ -78,6 +78,7 @@ const translations = {
     taskEarning: "টাস্ক আর্নিং",
     loanService: "লোন সার্ভিস",
     somitiManager: "সমিতি ম্যানেজার",
+    earning: "আর্নিং",
   },
 };
 
