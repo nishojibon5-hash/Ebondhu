@@ -27,7 +27,7 @@ export function BottomNavigation({ language }: BottomNavigationProps) {
 
   const navItems = [
     { path: "/", icon: Home, label: t.home },
-    { path: "/tasks", icon: Briefcase, label: t.earnings },
+    { path: "/earning-dashboard", icon: Briefcase, label: t.earnings },
     { path: "/somiti", icon: Users, label: t.loan },
     { path: "/profile", icon: User, label: t.profile },
   ];
