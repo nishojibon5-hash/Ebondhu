@@ -105,6 +105,14 @@ function App() {
               path="/"
               element={
                 <ProtectedRoute>
+                  <SocialHome />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/earning-dashboard"
+              element={
+                <ProtectedRoute>
                   <Dashboard language={language} setLanguage={setLanguage} />
                 </ProtectedRoute>
               }
