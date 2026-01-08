@@ -165,8 +165,7 @@ export default function FacebookHome() {
                 { icon: MessageCircle, label: "মেসেঞ্জার", path: "/messages" },
                 { icon: Play, label: "ভিডিও", path: "/videos" },
                 { icon: ShoppingBag, label: "মার্কেটপ্লেস", path: "/marketplace" },
-                { icon: Gamepad2, label: "গেমস", path: "/games" },
-                { icon: Clock, label: "স্মৃতি", path: "/memories" },
+                { icon: Clock, label: "ইভেন্টস", path: "/events" },
                 { icon: Bookmark, label: "সংরক্ষিত", path: "/saved" },
               ].map(({ icon: Icon, label, path, active }, index) => (
                 <Link
