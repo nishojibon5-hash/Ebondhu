@@ -105,7 +105,7 @@ function App() {
               path="/"
               element={
                 <ProtectedRoute>
-                  <SocialHome />
+                  <FacebookHome />
                 </ProtectedRoute>
               }
             />
