@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
-import SocialHome from "./pages/SocialHome";
+import FacebookHome from "./pages/FacebookHome";
 import Tasks from "./pages/Tasks";
 import Somiti from "./pages/Somiti";
 import Profile from "./pages/Profile";
