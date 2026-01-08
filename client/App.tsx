@@ -248,6 +248,22 @@ function App() {
               }
             />
             <Route
+              path="/events"
+              element={
+                <ProtectedRoute>
+                  <Events />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/marketplace"
+              element={
+                <ProtectedRoute>
+                  <Marketplace />
+                </ProtectedRoute>
+              }
+            />
+            <Route
               path="/profile/:userPhone"
               element={
                 <ProtectedRoute>
