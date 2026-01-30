@@ -1,0 +1,49 @@
+name: Build Admin APK
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build_admin:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install pnpm
+        run: npm install -g pnpm
+
+      - name: Install Admin Dependencies
+        # এখানে পাথ হিসেবে api/admin ব্যবহার করা হয়েছে
+        run: |
+          cd api/admin
+          pnpm install --no-frozen-lockfile 
+
+      - name: Build Admin Client
+        run: |
+          cd api/admin
+          pnpm run build
+
+      - name: Setup Android for Admin
+        run: |
+          cd api/admin
+          # Capacitor কমান্ড চালানোর জন্য pnpm exec ব্যবহার
+          if [ ! -d "android" ]; then
+            pnpm exec cap add android
+          fi
+          pnpm exec cap sync android
+
+      - name: Build Admin APK
+        run: |
+          cd api/admin/android
+          chmod +x gradlew
+          ./gradlew assembleDebug
+
+      - name: Upload Admin APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: admin-app-apk
+          path: api/admin/android/app/build/outputs/apk/debug/*.apk
