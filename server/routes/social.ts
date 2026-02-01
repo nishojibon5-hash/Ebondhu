@@ -918,6 +918,54 @@ export const handleDeleteStory: RequestHandler = async (req, res) => {
   }
 };
 
+// ============ SEARCH ============
+
+export const handleSearchUsers: RequestHandler = async (req, res) => {
+  try {
+    const { q } = req.query;
+    const currentUserPhone = req.query.currentUserPhone as string;
+
+    if (!q) {
+      return res.status(400).json({
+        ok: false,
+        error: "Query parameter is required",
+      });
+    }
+
+    const users = await getRows(SHEET_NAMES.USERS);
+    const friends = currentUserPhone
+      ? await findRows(SHEET_NAMES.FRIENDS, "userPhone", currentUserPhone)
+      : [];
+
+    const friendPhones = friends.map((f) => f.friendPhone);
+
+    const searchResults = users
+      .filter(
+        (u) =>
+          (u.name?.toLowerCase().includes((q as string).toLowerCase()) ||
+            u.phone.includes(q as string)) &&
+          u.phone !== currentUserPhone
+      )
+      .map((u) => ({
+        phone: u.phone,
+        name: u.name || u.phone,
+        photo: u.photo || "",
+        isFriend: friendPhones.includes(u.phone),
+      }));
+
+    res.json({
+      ok: true,
+      users: searchResults,
+    });
+  } catch (error) {
+    console.error("Search users error:", error);
+    res.status(500).json({
+      ok: false,
+      error: "Internal server error",
+    });
+  }
+};
+
 // ============ MESSAGES ============
 
 export const handleSendMessage: RequestHandler = async (req, res) => {
