@@ -319,5 +319,8 @@ export function createServer() {
   app.get("/api/social/conversations/:userPhone", handleGetConversations);
   app.post("/api/social/messages/:messageId/read", handleMarkMessageAsRead);
 
+  // Social Media Routes - Search
+  app.get("/api/social/search-users", handleSearchUsers);
+
   return app;
 }
