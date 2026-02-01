@@ -62,6 +62,7 @@ export async function createPost(
   userPhoto: string | undefined,
   content: string,
   image?: string,
+  mediaType?: "image" | "video",
 ): Promise<{ ok: boolean; post?: Post; error?: string }> {
   try {
     const response = await fetch("/api/social/posts", {
@@ -73,6 +74,7 @@ export async function createPost(
         userPhoto,
         content,
         image,
+        mediaType: mediaType || "image",
       }),
     });
     return await response.json();
