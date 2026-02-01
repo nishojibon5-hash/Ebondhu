@@ -5,25 +5,25 @@ import {
   Share,
   MoreHorizontal,
   Send,
-  Smile,
-  Image,
   X,
 } from "lucide-react";
+import { Post as APIPost } from "../../lib/api/social";
 
 export interface Post {
   id: string;
-  author: {
-    name: string;
-    phone: string;
-    photo: string;
-  };
+  userPhone: string;
+  userName: string;
+  userPhoto?: string;
   content: string;
   image?: string;
-  timestamp: string;
-  likes: number;
-  comments: Comment[];
-  shares: number;
-  liked: boolean;
+  mediaType?: "image" | "video";
+  likesCount: number;
+  commentsCount: number;
+  createdAt: string;
+  likes?: number;
+  comments?: Comment[];
+  shares?: number;
+  liked?: boolean;
 }
 
 interface Comment {
@@ -39,7 +39,7 @@ interface Comment {
 }
 
 interface EnhancedPostCardProps {
-  post: Post;
+  post: Post | APIPost;
   currentUserName: string;
   currentUserPhone: string;
   currentUserPhoto?: string;
@@ -53,12 +53,18 @@ export function EnhancedPostCard({
   currentUserPhoto,
   onDelete,
 }: EnhancedPostCardProps) {
-  const [liked, setLiked] = useState(post.liked);
-  const [likeCount, setLikeCount] = useState(post.likes);
+  const [liked, setLiked] = useState((post as any).liked || false);
+  const [likeCount, setLikeCount] = useState(
+    (post as any).likes || (post as APIPost).likesCount || 0
+  );
   const [showComments, setShowComments] = useState(false);
   const [newComment, setNewComment] = useState("");
-  const [comments, setComments] = useState<Comment[]>(post.comments);
+  const [comments, setComments] = useState<Comment[]>((post as any).comments || []);
   const [showMenu, setShowMenu] = useState(false);
+
+  // Handle both old and new post interfaces
+  const postData = post as APIPost & { liked?: boolean; comments?: Comment[]; shares?: number };
+  const authorPhoto = postData.userPhoto || `https://api.dicebear.com/7.x/avataaars/svg?seed=${postData.userPhone}`;
 
   const handleLike = () => {
     setLiked(!liked);
@@ -85,21 +91,38 @@ export function EnhancedPostCard({
     }
   };
 
+  const getTimeAgo = (timestamp: string): string => {
+    try {
+      const date = new Date(timestamp);
+      const now = new Date();
+      const seconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+
+      if (seconds < 60) return "এখন";
+      if (seconds < 3600) return `${Math.floor(seconds / 60)} মিনিট আগে`;
+      if (seconds < 86400) return `${Math.floor(seconds / 3600)} ঘণ্টা আগে`;
+      return `${Math.floor(seconds / 86400)} দিন আগে`;
+    } catch {
+      return "এখন";
+    }
+  };
+
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-200 mb-4">
       {/* পোস্ট হেডার */}
       <div className="p-4 flex items-center justify-between border-b border-gray-100">
         <div className="flex items-center gap-3">
           <img
-            src={post.author.photo}
-            alt={post.author.name}
-            className="w-12 h-12 rounded-full cursor-pointer hover:opacity-80"
+            src={authorPhoto}
+            alt={postData.userName}
+            className="w-12 h-12 rounded-full cursor-pointer hover:opacity-80 object-cover"
           />
           <div>
             <p className="font-bold text-gray-900 hover:underline cursor-pointer">
-              {post.author.name}
+              {postData.userName}
             </p>
-            <p className="text-xs text-gray-500">{post.timestamp}</p>
+            <p className="text-xs text-gray-500">
+              {getTimeAgo(postData.createdAt)}
+            </p>
           </div>
         </div>
 
@@ -114,7 +137,7 @@ export function EnhancedPostCard({
 
           {showMenu && (
             <div className="absolute right-0 top-full mt-1 bg-white rounded-lg shadow-lg border border-gray-200 z-10">
-              {post.author.phone === currentUserPhone ? (
+              {postData.userPhone === currentUserPhone ? (
                 <>
                   <button className="w-full text-left px-4 py-2 hover:bg-gray-100 text-sm text-gray-700">
                     পোস্ট সম্পাদনা করুন
@@ -144,31 +167,40 @@ export function EnhancedPostCard({
       {/* পোস্ট কন্টেন্ট */}
       <div className="p-4">
         <p className="text-gray-900 text-base leading-normal break-words">
-          {post.content}
+          {postData.content}
         </p>
 
-        {/* পোস্ট ইমেজ */}
-        {post.image && (
+        {/* পোস্ট মিডিয়া */}
+        {postData.image && (
           <div className="mt-3 rounded-lg overflow-hidden bg-gray-100">
-            <img
-              src={post.image}
-              alt="পোস্ট ইমেজ"
-              className="w-full h-auto max-h-96 object-cover hover:opacity-90 cursor-pointer"
-            />
+            {postData.mediaType === "video" ? (
+              <video
+                src={postData.image}
+                className="w-full h-auto max-h-96 object-cover hover:opacity-90 cursor-pointer"
+                controls
+                controlsList="nodownload"
+              />
+            ) : (
+              <img
+                src={postData.image}
+                alt="পোস্ট ইমেজ"
+                className="w-full h-auto max-h-96 object-cover hover:opacity-90 cursor-pointer"
+              />
+            )}
           </div>
         )}
 
         {/* পোস্ট স্ট্যাটিস্টিক্স */}
         <div className="mt-3 flex items-center justify-between text-sm text-gray-500 border-b border-gray-100 pb-3">
           <div className="flex items-center gap-1">
-            <span className="bg-bkash-500 text-white rounded-full px-2 py-1 text-xs">
+            <span className="bg-red-500 text-white rounded-full px-2 py-1 text-xs">
               ❤️
             </span>
             <span>{likeCount}</span>
           </div>
           <div className="flex items-center gap-4">
             <span>{comments.length} কমেন্ট</span>
-            <span>{post.shares} শেয়ার</span>
+            <span>{(postData as any).shares || 0} শেয়ার</span>
           </div>
         </div>
 
@@ -178,7 +210,7 @@ export function EnhancedPostCard({
             onClick={handleLike}
             className={`py-2 rounded-lg font-semibold text-sm transition-all flex items-center justify-center gap-2 ${
               liked
-                ? "text-bkash-500 bg-bkash-50 hover:bg-bkash-100"
+                ? "text-red-500 bg-red-50 hover:bg-red-100"
                 : "text-gray-600 hover:bg-gray-100"
             }`}
           >
@@ -211,7 +243,7 @@ export function EnhancedPostCard({
                 <img
                   src={comment.author.photo}
                   alt={comment.author.name}
-                  className="w-8 h-8 rounded-full flex-shrink-0"
+                  className="w-8 h-8 rounded-full flex-shrink-0 object-cover"
                 />
                 <div className="flex-1">
                   <div className="bg-gray-100 rounded-lg p-2">
@@ -224,7 +256,7 @@ export function EnhancedPostCard({
                     <span className="text-xs text-gray-500">
                       {comment.timestamp}
                     </span>
-                    <button className="text-xs text-gray-500 hover:text-bkash-500">
+                    <button className="text-xs text-gray-500 hover:text-blue-500">
                       পছন্দ করুন ({comment.likes})
                     </button>
                   </div>
@@ -241,7 +273,7 @@ export function EnhancedPostCard({
                 `https://api.dicebear.com/7.x/avataaars/svg?seed=${currentUserPhone}`
               }
               alt="আপনার প্রোফাইল"
-              className="w-8 h-8 rounded-full flex-shrink-0"
+              className="w-8 h-8 rounded-full flex-shrink-0 object-cover"
             />
             <div className="flex-1 flex items-center gap-2 bg-gray-100 rounded-full px-4 py-2">
               <input
@@ -256,14 +288,11 @@ export function EnhancedPostCard({
                 placeholder="আপনার মতামত শেয়ার করুন..."
                 className="flex-1 bg-transparent outline-none text-sm"
               />
-              <button className="text-gray-500 hover:text-bkash-500">
-                <Smile className="w-5 h-5" />
-              </button>
             </div>
             <button
               onClick={handleCommentSubmit}
               disabled={!newComment.trim()}
-              className="text-bkash-500 hover:text-bkash-600 disabled:text-gray-300"
+              className="text-blue-500 hover:text-blue-600 disabled:text-gray-300"
             >
               <Send className="w-5 h-5" />
             </button>
