@@ -64,6 +64,17 @@ export default function FacebookHome() {
     setIsLoading(false);
   };
 
+  const loadUnreadMessages = async () => {
+    const response = await getConversations(userPhone);
+    if (response.ok && response.conversations) {
+      const totalUnread = response.conversations.reduce(
+        (sum, conv) => sum + (conv.unreadCount || 0),
+        0
+      );
+      setUnreadMessages(totalUnread);
+    }
+  };
+
   const handleLogout = () => {
     localStorage.removeItem("isLoggedIn");
     localStorage.removeItem("userPhone");
