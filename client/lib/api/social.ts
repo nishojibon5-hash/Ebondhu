@@ -348,6 +348,31 @@ export async function removeFriend(
   }
 }
 
+// Search API
+export interface SearchUser {
+  phone: string;
+  name: string;
+  photo?: string;
+  isFriend?: boolean;
+}
+
+export async function searchUsers(query: string): Promise<{
+  ok: boolean;
+  users?: SearchUser[];
+  error?: string;
+}> {
+  try {
+    const response = await fetch(`/api/social/search-users?q=${encodeURIComponent(query)}`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    });
+    return await response.json();
+  } catch (error) {
+    console.error("Search users error:", error);
+    return { ok: false, error: "Network error" };
+  }
+}
+
 // Messages API
 export interface Message {
   id: string;
