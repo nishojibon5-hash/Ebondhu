@@ -62,6 +62,7 @@ import {
   handleGetConversation,
   handleGetConversations,
   handleMarkMessageAsRead,
+  handleSearchUsers,
 } from "./routes/social";
 
 // Configure multer for file uploads
