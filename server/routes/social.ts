@@ -124,6 +124,7 @@ export const handleGetUserPosts: RequestHandler = async (req, res) => {
         userPhoto: post.userPhoto,
         content: post.content,
         image: post.image,
+        mediaType: post.mediaType || "image",
         likesCount: parseInt(post.likesCount || "0"),
         commentsCount: parseInt(post.commentsCount || "0"),
         createdAt: post.createdAt,
