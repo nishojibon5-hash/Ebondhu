@@ -256,6 +256,23 @@ async function initializeSheetHeaders() {
       "status",
       "createdAt",
     ],
+    [SHEET_NAMES.STORIES]: [
+      "id",
+      "userPhone",
+      "userName",
+      "userPhoto",
+      "image",
+      "expiresAt",
+      "createdAt",
+    ],
+    [SHEET_NAMES.MESSAGES]: [
+      "id",
+      "fromPhone",
+      "toPhone",
+      "content",
+      "read",
+      "createdAt",
+    ],
   };
 
   for (const [sheetName, headerRow] of Object.entries(headers)) {
