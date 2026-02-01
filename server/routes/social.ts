@@ -917,3 +917,184 @@ export const handleDeleteStory: RequestHandler = async (req, res) => {
     });
   }
 };
+
+// ============ MESSAGES ============
+
+export const handleSendMessage: RequestHandler = async (req, res) => {
+  try {
+    const { fromPhone, toPhone, content } = req.body;
+
+    if (!fromPhone || !toPhone || !content) {
+      return res.status(400).json({
+        ok: false,
+        error: "All fields are required",
+      });
+    }
+
+    const messageId = crypto.randomUUID();
+    const now = new Date().toISOString();
+
+    const messageData = [messageId, fromPhone, toPhone, content, "false", now];
+
+    await appendRow(SHEET_NAMES.MESSAGES, messageData);
+
+    res.status(201).json({
+      ok: true,
+      message: {
+        id: messageId,
+        fromPhone,
+        toPhone,
+        content,
+        read: false,
+        createdAt: now,
+      },
+    });
+  } catch (error) {
+    console.error("Send message error:", error);
+    res.status(500).json({
+      ok: false,
+      error: "Internal server error",
+    });
+  }
+};
+
+export const handleGetConversation: RequestHandler = async (req, res) => {
+  try {
+    const { userPhone, otherUserPhone } = req.params;
+
+    const messages = await getRows(SHEET_NAMES.MESSAGES);
+
+    const conversation = messages
+      .filter(
+        (m) =>
+          (m.fromPhone === userPhone && m.toPhone === otherUserPhone) ||
+          (m.fromPhone === otherUserPhone && m.toPhone === userPhone)
+      )
+      .sort(
+        (a, b) =>
+          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+      )
+      .map((m) => ({
+        id: m.id,
+        fromPhone: m.fromPhone,
+        toPhone: m.toPhone,
+        content: m.content,
+        read: m.read === "true",
+        createdAt: m.createdAt,
+      }));
+
+    res.json({
+      ok: true,
+      messages: conversation,
+    });
+  } catch (error) {
+    console.error("Get conversation error:", error);
+    res.status(500).json({
+      ok: false,
+      error: "Internal server error",
+    });
+  }
+};
+
+export const handleGetConversations: RequestHandler = async (req, res) => {
+  try {
+    const { userPhone } = req.params;
+
+    const messages = await getRows(SHEET_NAMES.MESSAGES);
+    const users = await getRows(SHEET_NAMES.USERS);
+
+    // Group messages by conversation
+    const conversationMap = new Map<
+      string,
+      { messages: any[]; otherPhone: string }
+    >();
+
+    messages.forEach((msg) => {
+      const otherPhone =
+        msg.fromPhone === userPhone ? msg.toPhone : msg.fromPhone;
+      const key = [userPhone, otherPhone].sort().join("-");
+
+      if (!conversationMap.has(key)) {
+        conversationMap.set(key, { messages: [], otherPhone });
+      }
+
+      conversationMap.get(key)!.messages.push(msg);
+    });
+
+    // Create conversation list
+    const conversations = Array.from(conversationMap.values())
+      .map((conv) => {
+        const lastMsg = conv.messages[conv.messages.length - 1];
+        const unread = conv.messages.filter(
+          (m) => m.toPhone === userPhone && m.read === "false"
+        ).length;
+
+        // Find user info
+        const otherUser = users.find((u) => u.phone === conv.otherPhone);
+
+        return {
+          userPhone: conv.otherPhone,
+          userName: otherUser?.name || "",
+          userPhoto: otherUser?.photo || "",
+          lastMessage: lastMsg?.content || "",
+          lastMessageTime: lastMsg?.createdAt || "",
+          unreadCount: unread,
+        };
+      })
+      .sort(
+        (a, b) =>
+          new Date(b.lastMessageTime).getTime() -
+          new Date(a.lastMessageTime).getTime()
+      );
+
+    res.json({
+      ok: true,
+      conversations,
+    });
+  } catch (error) {
+    console.error("Get conversations error:", error);
+    res.status(500).json({
+      ok: false,
+      error: "Internal server error",
+    });
+  }
+};
+
+export const handleMarkMessageAsRead: RequestHandler = async (req, res) => {
+  try {
+    const { messageId } = req.params;
+
+    const messages = await getRows(SHEET_NAMES.MESSAGES);
+    const messageIndex = messages.findIndex((m) => m.id === messageId);
+
+    if (messageIndex === -1) {
+      return res.status(404).json({
+        ok: false,
+        error: "Message not found",
+      });
+    }
+
+    const message = messages[messageIndex];
+    const updatedMessage = [
+      message.id,
+      message.fromPhone,
+      message.toPhone,
+      message.content,
+      "true",
+      message.createdAt,
+    ];
+
+    await updateRow(SHEET_NAMES.MESSAGES, messageIndex, updatedMessage);
+
+    res.json({
+      ok: true,
+      message: "Message marked as read",
+    });
+  } catch (error) {
+    console.error("Mark message as read error:", error);
+    res.status(500).json({
+      ok: false,
+      error: "Internal server error",
+    });
+  }
+};
