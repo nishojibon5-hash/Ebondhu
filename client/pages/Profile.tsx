@@ -229,6 +229,26 @@ export default function Profile({ language }: ProfileProps) {
     navigate("/login");
   };
 
+  const handleDeleteAccount = () => {
+    if (deleteConfirmText !== t.confirmDelete) {
+      alert("আপনি সম্মতি দিয়ে এগিয়ে যেতে পারবেন না");
+      return;
+    }
+
+    // Remove all user data
+    const userPhone = localStorage.getItem("userPhone");
+    localStorage.clear();
+
+    // Remove from registered users if exists
+    const registeredUsers = JSON.parse(localStorage.getItem("registeredUsers") || "[]");
+    const updatedUsers = registeredUsers.filter((u: any) => u.phone !== userPhone);
+    if (updatedUsers.length > 0) {
+      localStorage.setItem("registeredUsers", JSON.stringify(updatedUsers));
+    }
+
+    navigate("/login");
+  };
+
   // Check if user is logged in
   const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
   if (!isLoggedIn) {
