@@ -81,14 +81,12 @@ export default function FacebookHome() {
 
           {/* সার্চ বার */}
           <div className="hidden md:flex flex-1 max-w-xs mx-4">
-            <div className="w-full relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-              <input
-                type="text"
-                placeholder="অনুসন্ধান করুন..."
-                className="w-full pl-10 pr-4 py-2 bg-gray-100 rounded-full outline-none text-sm focus:bg-gray-50"
-              />
-            </div>
+            <SearchUsers
+              currentUserPhone={userPhone}
+              onUserSelect={(user) => {
+                navigate(`/profile/${user.phone}`);
+              }}
+            />
           </div>
 
           {/* ডান দিকের বাটনগুলি */}
