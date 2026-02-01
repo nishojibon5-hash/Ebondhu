@@ -1,5 +1,15 @@
 // Social Media API Service
 
+export interface Story {
+  id: string;
+  userPhone: string;
+  userName: string;
+  userPhoto?: string;
+  image: string;
+  expiresAt: string;
+  createdAt: string;
+}
+
 export interface Post {
   id: string;
   userPhone: string;
