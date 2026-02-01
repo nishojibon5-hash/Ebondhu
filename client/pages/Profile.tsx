@@ -52,6 +52,9 @@ const translations = {
     cancel: "বাতিল",
     changePhoto: "ছবি পরিবর্তন",
     uploadPhoto: "ছবি আপলোড",
+    deleteAccount: "অ্যাকাউন্ট মুছুন",
+    deleteAccountWarning: "এটি স্থায়ী এবং পুনরুদ্ধারযোগ্য নয়",
+    confirmDelete: "আমি বুঝি এবং আমার অ্যাকাউন্ট মুছতে চাই",
   },
   bn: {
     profile: "প্রোফাইল",
@@ -77,6 +80,9 @@ const translations = {
     cancel: "বাতিল",
     changePhoto: "ছবি পরিবর্তন",
     uploadPhoto: "ছবি আপলোড",
+    deleteAccount: "অ্যাকাউন্ট মুছুন",
+    deleteAccountWarning: "এটি স্থায়ী এবং পুনরুদ্ধারযোগ্য নয়",
+    confirmDelete: "আমি বুঝি এবং আমার অ্যাকাউন্ট মুছতে চাই",
   },
 };
 
