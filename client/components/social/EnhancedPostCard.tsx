@@ -95,6 +95,15 @@ export function EnhancedPostCard({
     }
   };
 
+  const emotions = [
+    { emoji: "👍", name: "পছন্দ" },
+    { emoji: "❤️", name: "ভালোবাসা" },
+    { emoji: "😂", name: "হাসি" },
+    { emoji: "😮", name: "অবাক" },
+    { emoji: "😢", name: "দুঃখ" },
+    { emoji: "😠", name: "রাগ" },
+  ];
+
   const getTimeAgo = (timestamp: string): string => {
     try {
       const date = new Date(timestamp);
@@ -108,6 +117,24 @@ export function EnhancedPostCard({
     } catch {
       return "এখন";
     }
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (reactionRef.current && !reactionRef.current.contains(event.target as Node)) {
+        setShowReactions(false);
+      }
+    };
+
+    if (showReactions) {
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => document.removeEventListener("mousedown", handleClickOutside);
+    }
+  }, [showReactions]);
+
+  const handleReaction = (emoji: string) => {
+    setUserReaction(userReaction === emoji ? null : emoji);
+    setShowReactions(false);
   };
 
   return (
