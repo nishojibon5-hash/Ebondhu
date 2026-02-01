@@ -107,9 +107,17 @@ export default function FacebookHome() {
 
           {/* ডান দিকের বাটনগুলি */}
           <div className="flex items-center gap-2">
-            <button className="p-2 hover:bg-gray-100 rounded-full transition-colors hidden sm:flex">
+            <Link
+              to="/messages"
+              className="p-2 hover:bg-gray-100 rounded-full transition-colors hidden sm:flex relative"
+            >
               <MessageCircle className="w-6 h-6 text-gray-700" />
-            </button>
+              {unreadMessages > 0 && (
+                <span className="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
+                  {unreadMessages > 9 ? "9+" : unreadMessages}
+                </span>
+              )}
+            </Link>
             <Link
               to="/notifications"
               className="p-2 hover:bg-gray-100 rounded-full transition-colors hidden sm:flex relative"
