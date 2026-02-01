@@ -54,6 +54,10 @@ import {
   handleGetFriendRequests,
   handleGetFriends,
   handleRemoveFriend,
+  handleCreateStory,
+  handleGetStories,
+  handleGetUserStories,
+  handleDeleteStory,
 } from "./routes/social";
 
 // Configure multer for file uploads
