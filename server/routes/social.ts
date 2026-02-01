@@ -14,7 +14,7 @@ import crypto from "crypto";
 
 export const handleCreatePost: RequestHandler = async (req, res) => {
   try {
-    const { userPhone, userName, userPhoto, content, image } = req.body;
+    const { userPhone, userName, userPhoto, content, image, mediaType } = req.body;
 
     if (!userPhone || !content) {
       return res.status(400).json({
@@ -33,6 +33,7 @@ export const handleCreatePost: RequestHandler = async (req, res) => {
       userPhoto || "",
       content,
       image || "",
+      mediaType || "image",
       "0",
       "0",
       now,
@@ -50,6 +51,7 @@ export const handleCreatePost: RequestHandler = async (req, res) => {
         userPhoto,
         content,
         image,
+        mediaType: mediaType || "image",
         likesCount: 0,
         commentsCount: 0,
         createdAt: now,
