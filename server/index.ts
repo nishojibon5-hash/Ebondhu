@@ -312,5 +312,11 @@ export function createServer() {
   app.get("/api/social/stories/:userPhone", handleGetUserStories);
   app.delete("/api/social/stories/:storyId", handleDeleteStory);
 
+  // Social Media Routes - Messages
+  app.post("/api/social/messages", handleSendMessage);
+  app.get("/api/social/messages/:userPhone/:otherUserPhone", handleGetConversation);
+  app.get("/api/social/conversations/:userPhone", handleGetConversations);
+  app.post("/api/social/messages/:messageId/read", handleMarkMessageAsRead);
+
   return app;
 }
