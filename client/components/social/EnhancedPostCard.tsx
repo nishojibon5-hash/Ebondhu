@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import {
   Heart,
   MessageCircle,
@@ -6,6 +6,7 @@ import {
   MoreHorizontal,
   Send,
   X,
+  Smile,
 } from "lucide-react";
 import { Post as APIPost } from "../../lib/api/social";
 
