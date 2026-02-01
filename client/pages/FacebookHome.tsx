@@ -25,7 +25,7 @@ import { EnhancedPostCard, Post } from "../components/social/EnhancedPostCard";
 import { StorySection } from "../components/social/StorySection";
 import { Sidebar } from "../components/social/Sidebar";
 import { SearchUsers } from "../components/social/SearchUsers";
-import { getFeed } from "../lib/api/social";
+import { getFeed, getConversations } from "../lib/api/social";
 
 export default function FacebookHome() {
   const navigate = useNavigate();
