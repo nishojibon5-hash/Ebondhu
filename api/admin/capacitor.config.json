@@ -1,0 +1,6 @@
+{
+  "appId": "com.ebondhu.admin",
+  "appName": "Ebondhu Admin",
+  "webDir": "dist",
+  "bundledWebRuntime": false
+}
