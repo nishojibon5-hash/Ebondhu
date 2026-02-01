@@ -100,6 +100,8 @@ export const SHEET_NAMES = {
   LIKES: "Likes",
   FRIENDS: "Friends",
   FRIEND_REQUESTS: "FriendRequests",
+  STORIES: "Stories",
+  MESSAGES: "Messages",
 };
 
 export async function initializeSheets() {
