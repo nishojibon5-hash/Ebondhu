@@ -17,6 +17,7 @@ export interface Post {
   userPhoto?: string;
   content: string;
   image?: string;
+  mediaType?: "image" | "video";
   likesCount: number;
   commentsCount: number;
   createdAt: string;
