@@ -236,18 +236,37 @@ export function EnhancedPostCard({
         </div>
 
         {/* অ্যাকশন বাটন */}
-        <div className="grid grid-cols-3 gap-2 py-2">
-          <button
-            onClick={handleLike}
-            className={`py-2 rounded-lg font-semibold text-sm transition-all flex items-center justify-center gap-2 ${
-              liked
-                ? "text-red-500 bg-red-50 hover:bg-red-100"
-                : "text-gray-600 hover:bg-gray-100"
-            }`}
-          >
-            <Heart className={`w-5 h-5 ${liked ? "fill-current" : ""}`} />
-            পছন্দ
-          </button>
+        <div className="grid grid-cols-3 gap-2 py-2 relative">
+          {/* রিঅ্যাকশন বাটন */}
+          <div ref={reactionRef} className="relative">
+            <button
+              onClick={() => setShowReactions(!showReactions)}
+              className={`w-full py-2 rounded-lg font-semibold text-sm transition-all flex items-center justify-center gap-2 ${
+                userReaction
+                  ? "text-blue-500 bg-blue-50 hover:bg-blue-100"
+                  : "text-gray-600 hover:bg-gray-100"
+              }`}
+            >
+              <span className="text-lg">{userReaction || "👍"}</span>
+              পছন্দ
+            </button>
+
+            {/* ইমোজি প্যানেল */}
+            {showReactions && (
+              <div className="absolute bottom-full left-0 mb-2 bg-white rounded-lg shadow-lg border border-gray-200 p-2 flex gap-1 z-20">
+                {emotions.map((emotion) => (
+                  <button
+                    key={emotion.emoji}
+                    onClick={() => handleReaction(emotion.emoji)}
+                    className="text-2xl p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                    title={emotion.name}
+                  >
+                    {emotion.emoji}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
 
           <button
             onClick={() => setShowComments(!showComments)}
