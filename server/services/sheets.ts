@@ -237,19 +237,8 @@ async function initializeSheetHeaders() {
       "content",
       "createdAt",
     ],
-    [SHEET_NAMES.LIKES]: [
-      "id",
-      "postId",
-      "userPhone",
-      "userName",
-      "createdAt",
-    ],
-    [SHEET_NAMES.FRIENDS]: [
-      "id",
-      "userPhone",
-      "friendPhone",
-      "createdAt",
-    ],
+    [SHEET_NAMES.LIKES]: ["id", "postId", "userPhone", "userName", "createdAt"],
+    [SHEET_NAMES.FRIENDS]: ["id", "userPhone", "friendPhone", "createdAt"],
     [SHEET_NAMES.FRIEND_REQUESTS]: [
       "id",
       "fromPhone",

@@ -362,10 +362,13 @@ export async function searchUsers(query: string): Promise<{
   error?: string;
 }> {
   try {
-    const response = await fetch(`/api/social/search-users?q=${encodeURIComponent(query)}`, {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    });
+    const response = await fetch(
+      `/api/social/search-users?q=${encodeURIComponent(query)}`,
+      {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      },
+    );
     return await response.json();
   } catch (error) {
     console.error("Search users error:", error);
@@ -395,7 +398,7 @@ export interface Conversation {
 export async function sendMessage(
   fromPhone: string,
   toPhone: string,
-  content: string
+  content: string,
 ): Promise<{ ok: boolean; message?: Message; error?: string }> {
   try {
     const response = await fetch("/api/social/messages", {
@@ -416,7 +419,7 @@ export async function sendMessage(
 
 export async function getConversation(
   userPhone: string,
-  otherUserPhone: string
+  otherUserPhone: string,
 ): Promise<{ ok: boolean; messages?: Message[]; error?: string }> {
   try {
     const response = await fetch(
@@ -424,7 +427,7 @@ export async function getConversation(
       {
         method: "GET",
         headers: { "Content-Type": "application/json" },
-      }
+      },
     );
     return await response.json();
   } catch (error) {

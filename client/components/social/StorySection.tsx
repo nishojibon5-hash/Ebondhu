@@ -91,7 +91,10 @@ export function StorySection({
         </button>
 
         {/* স্টোরি কন্টেইনার */}
-        <div className="flex gap-2 overflow-x-hidden scroll-smooth" id="story-scroll">
+        <div
+          className="flex gap-2 overflow-x-hidden scroll-smooth"
+          id="story-scroll"
+        >
           {/* নিজের স্টোরি বাটন */}
           <button
             onClick={() => setShowCreateStory(true)}

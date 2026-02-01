@@ -240,8 +240,12 @@ export default function Profile({ language }: ProfileProps) {
     localStorage.clear();
 
     // Remove from registered users if exists
-    const registeredUsers = JSON.parse(localStorage.getItem("registeredUsers") || "[]");
-    const updatedUsers = registeredUsers.filter((u: any) => u.phone !== userPhone);
+    const registeredUsers = JSON.parse(
+      localStorage.getItem("registeredUsers") || "[]",
+    );
+    const updatedUsers = registeredUsers.filter(
+      (u: any) => u.phone !== userPhone,
+    );
     if (updatedUsers.length > 0) {
       localStorage.setItem("registeredUsers", JSON.stringify(updatedUsers));
     }

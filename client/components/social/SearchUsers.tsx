@@ -1,13 +1,20 @@
 import { useState, useRef, useEffect } from "react";
 import { Search, X, UserPlus, UserCheck } from "lucide-react";
-import { searchUsers, SearchUser, sendFriendRequest } from "../../lib/api/social";
+import {
+  searchUsers,
+  SearchUser,
+  sendFriendRequest,
+} from "../../lib/api/social";
 
 interface SearchUsersProps {
   currentUserPhone: string;
   onUserSelect?: (user: SearchUser) => void;
 }
 
-export function SearchUsers({ currentUserPhone, onUserSelect }: SearchUsersProps) {
+export function SearchUsers({
+  currentUserPhone,
+  onUserSelect,
+}: SearchUsersProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<SearchUser[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -16,14 +23,18 @@ export function SearchUsers({ currentUserPhone, onUserSelect }: SearchUsersProps
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
+      if (
+        searchRef.current &&
+        !searchRef.current.contains(event.target as Node)
+      ) {
         setShowResults(false);
       }
     };
 
     if (showResults) {
       document.addEventListener("mousedown", handleClickOutside);
-      return () => document.removeEventListener("mousedown", handleClickOutside);
+      return () =>
+        document.removeEventListener("mousedown", handleClickOutside);
     }
   }, [showResults]);
 
@@ -58,8 +69,8 @@ export function SearchUsers({ currentUserPhone, onUserSelect }: SearchUsersProps
         // Update the search results to mark as friend request sent
         setSearchResults(
           searchResults.map((u) =>
-            u.phone === userPhone ? { ...u, isFriend: true } : u
-          )
+            u.phone === userPhone ? { ...u, isFriend: true } : u,
+          ),
         );
       }
     } catch (error) {
@@ -106,9 +117,7 @@ export function SearchUsers({ currentUserPhone, onUserSelect }: SearchUsersProps
       {showResults && (
         <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-lg shadow-lg border border-gray-200 z-50 max-h-96 overflow-y-auto">
           {isLoading ? (
-            <div className="p-4 text-center text-gray-500">
-              লোড হচ্ছে...
-            </div>
+            <div className="p-4 text-center text-gray-500">লোড হচ্ছে...</div>
           ) : searchResults.length > 0 ? (
             <div className="divide-y divide-gray-200">
               {searchResults.map((user) => (

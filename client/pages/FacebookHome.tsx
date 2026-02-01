@@ -58,7 +58,7 @@ export default function FacebookHome() {
           shares: Math.floor(Math.random() * 20),
           liked: false,
           comments: [],
-        }))
+        })),
       );
     }
     setIsLoading(false);
@@ -69,7 +69,7 @@ export default function FacebookHome() {
     if (response.ok && response.conversations) {
       const totalUnread = response.conversations.reduce(
         (sum, conv) => sum + (conv.unreadCount || 0),
-        0
+        0,
       );
       setUnreadMessages(totalUnread);
     }
@@ -187,7 +187,11 @@ export default function FacebookHome() {
                 { icon: Users, label: "বন্ধুরা", path: "/friends" },
                 { icon: MessageCircle, label: "মেসেঞ্জার", path: "/messages" },
                 { icon: Play, label: "ভিডিও", path: "/videos" },
-                { icon: ShoppingBag, label: "মার্কেটপ্লেস", path: "/marketplace" },
+                {
+                  icon: ShoppingBag,
+                  label: "মার্কেটপ্লেস",
+                  path: "/marketplace",
+                },
                 { icon: Clock, label: "ইভেন্টস", path: "/events" },
                 { icon: Bookmark, label: "সংরক্ষিত", path: "/saved" },
               ].map(({ icon: Icon, label, path, active }, index) => (
@@ -284,7 +288,9 @@ export default function FacebookHome() {
             ) : posts.length === 0 ? (
               <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8 text-center">
                 <div className="text-4xl mb-3">📝</div>
-                <p className="text-gray-600 mb-2 font-semibold">এখনও কোন পোস্ট নেই</p>
+                <p className="text-gray-600 mb-2 font-semibold">
+                  এখনও কোন পোস্ট নেই
+                </p>
                 <p className="text-sm text-gray-500">
                   আপনার চিন্তা শেয়ার করুন এবং অন্যদের সাথে সংযুক্ত হন
                 </p>

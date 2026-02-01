@@ -19,7 +19,8 @@ import {
 export default function Messages() {
   const navigate = useNavigate();
   const [conversations, setConversations] = useState<Conversation[]>([]);
-  const [selectedConversation, setSelectedConversation] = useState<Conversation | null>(null);
+  const [selectedConversation, setSelectedConversation] =
+    useState<Conversation | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
   const [messageInput, setMessageInput] = useState("");
   const [isLoading, setIsLoading] = useState(true);
@@ -63,7 +64,11 @@ export default function Messages() {
   const handleSendMessage = async () => {
     if (!messageInput.trim() || !selectedConversation) return;
 
-    const response = await sendMessage(userPhone, selectedConversation.userPhone, messageInput);
+    const response = await sendMessage(
+      userPhone,
+      selectedConversation.userPhone,
+      messageInput,
+    );
     if (response.ok && response.message) {
       setMessages([...messages, response.message]);
       setMessageInput("");
@@ -76,8 +81,9 @@ export default function Messages() {
 
   const filteredConversations = conversations.filter(
     (conv) =>
-      (conv.userName?.toLowerCase() || "").includes(searchQuery.toLowerCase()) ||
-      conv.userPhone.includes(searchQuery)
+      (conv.userName?.toLowerCase() || "").includes(
+        searchQuery.toLowerCase(),
+      ) || conv.userPhone.includes(searchQuery),
   );
 
   const getTimeFormat = (timestamp: string): string => {
@@ -116,7 +122,9 @@ export default function Messages() {
           <div className="lg:col-span-1 bg-white rounded-lg shadow-sm border border-gray-200 flex flex-col">
             {/* হেডার */}
             <div className="p-4 border-b border-gray-200">
-              <h2 className="text-xl font-bold text-gray-900 mb-4">মেসেঞ্জার</h2>
+              <h2 className="text-xl font-bold text-gray-900 mb-4">
+                মেসেঞ্জার
+              </h2>
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <input
@@ -228,7 +236,9 @@ export default function Messages() {
                     <div
                       key={message.id}
                       className={`flex ${
-                        message.fromPhone === userPhone ? "justify-end" : "justify-start"
+                        message.fromPhone === userPhone
+                          ? "justify-end"
+                          : "justify-start"
                       }`}
                     >
                       <div
@@ -251,7 +261,7 @@ export default function Messages() {
                             {
                               hour: "2-digit",
                               minute: "2-digit",
-                            }
+                            },
                           )}
                         </p>
                       </div>
@@ -294,7 +304,9 @@ export default function Messages() {
           ) : (
             <div className="hidden lg:flex lg:col-span-2 bg-white rounded-lg shadow-sm border border-gray-200 items-center justify-center">
               <div className="text-center text-gray-500">
-                <p className="text-lg font-semibold mb-2">কোন কথোপকথন নির্বাচিত</p>
+                <p className="text-lg font-semibold mb-2">
+                  কোন কথোপকথন নির্বাচিত
+                </p>
                 <p>বার্তা শুরু করতে একটি কথোপকথন বেছে নিন</p>
               </div>
             </div>

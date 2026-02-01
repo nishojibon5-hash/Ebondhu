@@ -155,11 +155,15 @@ export default function UserProfile() {
             {/* Stats */}
             <div className="grid grid-cols-3 gap-4 mb-4 py-4 border-t border-b border-gray-200">
               <div className="text-center">
-                <p className="text-2xl font-bold text-blue-600">{friendsCount}</p>
+                <p className="text-2xl font-bold text-blue-600">
+                  {friendsCount}
+                </p>
                 <p className="text-sm text-gray-600">বন্ধু</p>
               </div>
               <div className="text-center">
-                <p className="text-2xl font-bold text-blue-600">{posts.length}</p>
+                <p className="text-2xl font-bold text-blue-600">
+                  {posts.length}
+                </p>
                 <p className="text-sm text-gray-600">পোস্ট</p>
               </div>
               <div className="text-center">
@@ -179,7 +183,9 @@ export default function UserProfile() {
           </div>
         ) : posts.length > 0 ? (
           <div className="mt-4 space-y-4">
-            <h2 className="text-xl font-bold text-gray-900 px-4">সাম্প্রতিক পোস্টসমূহ</h2>
+            <h2 className="text-xl font-bold text-gray-900 px-4">
+              সাম্প্রতিক পোস্টসমূহ
+            </h2>
             {posts.map((post) => (
               <div
                 key={post.id}
@@ -241,7 +247,9 @@ export default function UserProfile() {
           </div>
         ) : (
           <div className="mt-4 bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <h2 className="font-bold text-gray-900 mb-4">সাম্প্রতিক পোস্টসমূহ</h2>
+            <h2 className="font-bold text-gray-900 mb-4">
+              সাম্প্রতিক পোস্টসমূহ
+            </h2>
             <p className="text-gray-600 text-center py-8">
               এই ব্যবহারকারীর কোন পোস্ট নেই
             </p>

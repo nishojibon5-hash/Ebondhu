@@ -56,19 +56,27 @@ export function EnhancedPostCard({
 }: EnhancedPostCardProps) {
   const [liked, setLiked] = useState((post as any).liked || false);
   const [likeCount, setLikeCount] = useState(
-    (post as any).likes || (post as APIPost).likesCount || 0
+    (post as any).likes || (post as APIPost).likesCount || 0,
   );
   const [showComments, setShowComments] = useState(false);
   const [newComment, setNewComment] = useState("");
-  const [comments, setComments] = useState<Comment[]>((post as any).comments || []);
+  const [comments, setComments] = useState<Comment[]>(
+    (post as any).comments || [],
+  );
   const [showMenu, setShowMenu] = useState(false);
   const [showReactions, setShowReactions] = useState(false);
   const [userReaction, setUserReaction] = useState<string | null>(null);
   const reactionRef = useRef<HTMLDivElement>(null);
 
   // Handle both old and new post interfaces
-  const postData = post as APIPost & { liked?: boolean; comments?: Comment[]; shares?: number };
-  const authorPhoto = postData.userPhoto || `https://api.dicebear.com/7.x/avataaars/svg?seed=${postData.userPhone}`;
+  const postData = post as APIPost & {
+    liked?: boolean;
+    comments?: Comment[];
+    shares?: number;
+  };
+  const authorPhoto =
+    postData.userPhoto ||
+    `https://api.dicebear.com/7.x/avataaars/svg?seed=${postData.userPhone}`;
 
   const handleLike = () => {
     setLiked(!liked);
@@ -121,14 +129,18 @@ export function EnhancedPostCard({
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (reactionRef.current && !reactionRef.current.contains(event.target as Node)) {
+      if (
+        reactionRef.current &&
+        !reactionRef.current.contains(event.target as Node)
+      ) {
         setShowReactions(false);
       }
     };
 
     if (showReactions) {
       document.addEventListener("mousedown", handleClickOutside);
-      return () => document.removeEventListener("mousedown", handleClickOutside);
+      return () =>
+        document.removeEventListener("mousedown", handleClickOutside);
     }
   }, [showReactions]);
 

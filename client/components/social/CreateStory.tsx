@@ -72,7 +72,7 @@ export function CreateStory({
                 userPhone,
                 userName,
                 userPhoto,
-                imageId
+                imageId,
               );
 
               if (storyResponse.ok) {
@@ -143,12 +143,8 @@ export function CreateStory({
                 />
                 <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center cursor-pointer hover:border-blue-500 hover:bg-blue-50 transition-colors">
                   <Upload className="w-10 h-10 text-gray-400 mx-auto mb-2" />
-                  <p className="text-gray-600 font-medium">
-                    ছবি নির্বাচন করুন
-                  </p>
-                  <p className="text-sm text-gray-500">
-                    বা এখানে টেনে আনুন
-                  </p>
+                  <p className="text-gray-600 font-medium">ছবি নির্বাচন করুন</p>
+                  <p className="text-sm text-gray-500">বা এখানে টেনে আনুন</p>
                 </div>
               </label>
             </div>

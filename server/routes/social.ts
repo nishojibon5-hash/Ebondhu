@@ -14,7 +14,8 @@ import crypto from "crypto";
 
 export const handleCreatePost: RequestHandler = async (req, res) => {
   try {
-    const { userPhone, userName, userPhoto, content, image, mediaType } = req.body;
+    const { userPhone, userName, userPhoto, content, image, mediaType } =
+      req.body;
 
     if (!userPhone || !content) {
       return res.status(400).json({
@@ -82,7 +83,10 @@ export const handleGetFeed: RequestHandler = async (req, res) => {
         (post) =>
           post.userPhone === userPhone || friendPhones.includes(post.userPhone),
       )
-      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+      .sort(
+        (a, b) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+      )
       .map((post) => ({
         id: post.id,
         userPhone: post.userPhone,
@@ -116,7 +120,10 @@ export const handleGetUserPosts: RequestHandler = async (req, res) => {
     const posts = await findRows(SHEET_NAMES.POSTS, "userPhone", userPhone);
 
     const sortedPosts = posts
-      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+      .sort(
+        (a, b) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+      )
       .map((post) => ({
         id: post.id,
         userPhone: post.userPhone,
@@ -226,7 +233,9 @@ export const handleAddComment: RequestHandler = async (req, res) => {
 
     if (postIndex !== -1) {
       const post = posts[postIndex];
-      const newCommentsCount = (parseInt(post.commentsCount || "0") + 1).toString();
+      const newCommentsCount = (
+        parseInt(post.commentsCount || "0") + 1
+      ).toString();
 
       const updatedPost = [
         post.id,
@@ -272,7 +281,10 @@ export const handleGetPostComments: RequestHandler = async (req, res) => {
     const comments = await findRows(SHEET_NAMES.COMMENTS, "postId", postId);
 
     const sortedComments = comments
-      .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime())
+      .sort(
+        (a, b) =>
+          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+      )
       .map((comment) => ({
         id: comment.id,
         postId: comment.postId,
@@ -319,7 +331,10 @@ export const handleDeleteComment: RequestHandler = async (req, res) => {
 
     if (postIndex !== -1) {
       const post = posts[postIndex];
-      const newCommentsCount = Math.max(0, parseInt(post.commentsCount || "0") - 1).toString();
+      const newCommentsCount = Math.max(
+        0,
+        parseInt(post.commentsCount || "0") - 1,
+      ).toString();
 
       const updatedPost = [
         post.id,
@@ -381,7 +396,10 @@ export const handleToggleLike: RequestHandler = async (req, res) => {
 
       if (postIndex !== -1) {
         const post = posts[postIndex];
-        const newLikesCount = Math.max(0, parseInt(post.likesCount || "0") - 1).toString();
+        const newLikesCount = Math.max(
+          0,
+          parseInt(post.likesCount || "0") - 1,
+        ).toString();
 
         const updatedPost = [
           post.id,
@@ -685,10 +703,7 @@ export const handleGetFriends: RequestHandler = async (req, res) => {
     const friends = await getRows(SHEET_NAMES.FRIENDS);
 
     const userFriends = friends
-      .filter(
-        (f) =>
-          f.userPhone === userPhone || f.friendPhone === userPhone,
-      )
+      .filter((f) => f.userPhone === userPhone || f.friendPhone === userPhone)
       .map((f) => ({
         id: f.id,
         friendPhone: f.userPhone === userPhone ? f.friendPhone : f.userPhone,
@@ -817,18 +832,22 @@ export const handleGetStories: RequestHandler = async (req, res) => {
       const friends = await findRows(
         SHEET_NAMES.FRIENDS,
         "userPhone",
-        userPhone as string
+        userPhone as string,
       );
       const friendPhones = friends.map((f) => f.friendPhone);
 
       feedStories = validStories.filter(
         (story) =>
-          story.userPhone === userPhone || friendPhones.includes(story.userPhone)
+          story.userPhone === userPhone ||
+          friendPhones.includes(story.userPhone),
       );
     }
 
     const sortedStories = feedStories
-      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+      .sort(
+        (a, b) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+      )
       .map((story) => ({
         id: story.id,
         userPhone: story.userPhone,
@@ -865,7 +884,10 @@ export const handleGetUserStories: RequestHandler = async (req, res) => {
     });
 
     const sortedStories = validStories
-      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+      .sort(
+        (a, b) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+      )
       .map((story) => ({
         id: story.id,
         userPhone: story.userPhone,
@@ -944,7 +966,7 @@ export const handleSearchUsers: RequestHandler = async (req, res) => {
         (u) =>
           (u.name?.toLowerCase().includes((q as string).toLowerCase()) ||
             u.phone.includes(q as string)) &&
-          u.phone !== currentUserPhone
+          u.phone !== currentUserPhone,
       )
       .map((u) => ({
         phone: u.phone,
@@ -1016,11 +1038,11 @@ export const handleGetConversation: RequestHandler = async (req, res) => {
       .filter(
         (m) =>
           (m.fromPhone === userPhone && m.toPhone === otherUserPhone) ||
-          (m.fromPhone === otherUserPhone && m.toPhone === userPhone)
+          (m.fromPhone === otherUserPhone && m.toPhone === userPhone),
       )
       .sort(
         (a, b) =>
-          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
       )
       .map((m) => ({
         id: m.id,
@@ -1074,7 +1096,7 @@ export const handleGetConversations: RequestHandler = async (req, res) => {
       .map((conv) => {
         const lastMsg = conv.messages[conv.messages.length - 1];
         const unread = conv.messages.filter(
-          (m) => m.toPhone === userPhone && m.read === "false"
+          (m) => m.toPhone === userPhone && m.read === "false",
         ).length;
 
         // Find user info
@@ -1092,7 +1114,7 @@ export const handleGetConversations: RequestHandler = async (req, res) => {
       .sort(
         (a, b) =>
           new Date(b.lastMessageTime).getTime() -
-          new Date(a.lastMessageTime).getTime()
+          new Date(a.lastMessageTime).getTime(),
       );
 
     res.json({

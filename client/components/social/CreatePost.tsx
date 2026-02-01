@@ -1,5 +1,12 @@
 import { useState } from "react";
-import { Heart, MessageCircle, Share2, Image as ImageIcon, Video as VideoIcon, X } from "lucide-react";
+import {
+  Heart,
+  MessageCircle,
+  Share2,
+  Image as ImageIcon,
+  Video as VideoIcon,
+  X,
+} from "lucide-react";
 import { createPost } from "../../lib/api/social";
 import { uploadImage, uploadVideo } from "../../lib/api/media";
 
@@ -17,17 +24,25 @@ export function CreatePost({
   onPostCreated,
 }: CreatePostProps) {
   const [content, setContent] = useState("");
-  const [media, setMedia] = useState<{ type: "image" | "video"; data: string } | null>(null);
+  const [media, setMedia] = useState<{
+    type: "image" | "video";
+    data: string;
+  } | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const handleMediaSelect = (e: React.ChangeEvent<HTMLInputElement>, type: "image" | "video") => {
+  const handleMediaSelect = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    type: "image" | "video",
+  ) => {
     const file = e.target.files?.[0];
     if (file) {
       // Validate file size (max 50MB for video, 10MB for image)
       const maxSize = type === "video" ? 50 * 1024 * 1024 : 10 * 1024 * 1024;
       if (file.size > maxSize) {
-        setError(`ফাইলটি খুব বড় (সর্বোচ্চ ${type === "video" ? "50" : "10"}MB)`);
+        setError(
+          `ফাইলটি খুব বড় (সর্বোচ্চ ${type === "video" ? "50" : "10"}MB)`,
+        );
         return;
       }
 
@@ -70,7 +85,9 @@ export function CreatePost({
 
             canvas.toBlob(async (blob) => {
               if (blob) {
-                const file = new File([blob], "post-image.jpg", { type: "image/jpeg" });
+                const file = new File([blob], "post-image.jpg", {
+                  type: "image/jpeg",
+                });
                 const uploadResponse = await uploadImage(file);
 
                 if (uploadResponse.ok && uploadResponse.file) {
@@ -94,7 +111,8 @@ export function CreatePost({
           // Upload video directly
           const dataURItoBlob = (dataURI: string) => {
             const byteString = atob(dataURI.split(",")[1]);
-            const mimeString = dataURI.split(",")[0].match(/:(.*?);/)?.[1] || "video/mp4";
+            const mimeString =
+              dataURI.split(",")[0].match(/:(.*?);/)?.[1] || "video/mp4";
             const ab = new ArrayBuffer(byteString.length);
             const ia = new Uint8Array(ab);
             for (let i = 0; i < byteString.length; i++) {
@@ -104,7 +122,9 @@ export function CreatePost({
           };
 
           const videoBlob = dataURItoBlob(media.data);
-          const videoFile = new File([videoBlob], "post-video.mp4", { type: "video/mp4" });
+          const videoFile = new File([videoBlob], "post-video.mp4", {
+            type: "video/mp4",
+          });
           const uploadResponse = await uploadVideo(videoFile);
 
           if (uploadResponse.ok && uploadResponse.file) {
@@ -131,7 +151,7 @@ export function CreatePost({
       userPhoto,
       content,
       mediaUrl,
-      mediaType as "image" | "video" | ""
+      mediaType as "image" | "video" | "",
     );
 
     if (response.ok) {

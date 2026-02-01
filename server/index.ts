@@ -301,8 +301,14 @@ export function createServer() {
 
   // Social Media Routes - Friends
   app.post("/api/social/friend-requests", handleSendFriendRequest);
-  app.post("/api/social/friend-requests/:requestId/accept", handleAcceptFriendRequest);
-  app.post("/api/social/friend-requests/:requestId/reject", handleRejectFriendRequest);
+  app.post(
+    "/api/social/friend-requests/:requestId/accept",
+    handleAcceptFriendRequest,
+  );
+  app.post(
+    "/api/social/friend-requests/:requestId/reject",
+    handleRejectFriendRequest,
+  );
   app.get("/api/social/friend-requests/:userPhone", handleGetFriendRequests);
   app.get("/api/social/friends/:userPhone", handleGetFriends);
   app.post("/api/social/friends/remove", handleRemoveFriend);
@@ -315,7 +321,10 @@ export function createServer() {
 
   // Social Media Routes - Messages
   app.post("/api/social/messages", handleSendMessage);
-  app.get("/api/social/messages/:userPhone/:otherUserPhone", handleGetConversation);
+  app.get(
+    "/api/social/messages/:userPhone/:otherUserPhone",
+    handleGetConversation,
+  );
   app.get("/api/social/conversations/:userPhone", handleGetConversations);
   app.post("/api/social/messages/:messageId/read", handleMarkMessageAsRead);
 
