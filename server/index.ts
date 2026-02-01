@@ -58,6 +58,10 @@ import {
   handleGetStories,
   handleGetUserStories,
   handleDeleteStory,
+  handleSendMessage,
+  handleGetConversation,
+  handleGetConversations,
+  handleMarkMessageAsRead,
 } from "./routes/social";
 
 // Configure multer for file uploads
