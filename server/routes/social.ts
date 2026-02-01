@@ -743,3 +743,173 @@ export const handleRemoveFriend: RequestHandler = async (req, res) => {
     });
   }
 };
+
+// ============ STORIES ============
+
+export const handleCreateStory: RequestHandler = async (req, res) => {
+  try {
+    const { userPhone, userName, userPhoto, image } = req.body;
+
+    if (!userPhone || !image) {
+      return res.status(400).json({
+        ok: false,
+        error: "User phone and image are required",
+      });
+    }
+
+    const storyId = crypto.randomUUID();
+    const now = new Date().toISOString();
+    const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(); // 24 hours
+
+    const storyData = [
+      storyId,
+      userPhone,
+      userName || "",
+      userPhoto || "",
+      image,
+      expiresAt,
+      now,
+    ];
+
+    await appendRow(SHEET_NAMES.STORIES, storyData);
+
+    res.status(201).json({
+      ok: true,
+      story: {
+        id: storyId,
+        userPhone,
+        userName,
+        userPhoto,
+        image,
+        expiresAt,
+        createdAt: now,
+      },
+    });
+  } catch (error) {
+    console.error("Create story error:", error);
+    res.status(500).json({
+      ok: false,
+      error: "Internal server error",
+    });
+  }
+};
+
+export const handleGetStories: RequestHandler = async (req, res) => {
+  try {
+    const { userPhone } = req.query;
+
+    const stories = await getRows(SHEET_NAMES.STORIES);
+    const now = new Date().toISOString();
+
+    // Filter non-expired stories
+    const validStories = stories.filter((story) => {
+      return new Date(story.expiresAt) > new Date(now);
+    });
+
+    let feedStories = validStories;
+
+    // If userPhone provided, include user's friends' stories
+    if (userPhone) {
+      const friends = await findRows(
+        SHEET_NAMES.FRIENDS,
+        "userPhone",
+        userPhone as string
+      );
+      const friendPhones = friends.map((f) => f.friendPhone);
+
+      feedStories = validStories.filter(
+        (story) =>
+          story.userPhone === userPhone || friendPhones.includes(story.userPhone)
+      );
+    }
+
+    const sortedStories = feedStories
+      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+      .map((story) => ({
+        id: story.id,
+        userPhone: story.userPhone,
+        userName: story.userName,
+        userPhoto: story.userPhoto,
+        image: story.image,
+        expiresAt: story.expiresAt,
+        createdAt: story.createdAt,
+      }));
+
+    res.json({
+      ok: true,
+      stories: sortedStories,
+    });
+  } catch (error) {
+    console.error("Get stories error:", error);
+    res.status(500).json({
+      ok: false,
+      error: "Internal server error",
+    });
+  }
+};
+
+export const handleGetUserStories: RequestHandler = async (req, res) => {
+  try {
+    const { userPhone } = req.params;
+
+    const stories = await findRows(SHEET_NAMES.STORIES, "userPhone", userPhone);
+    const now = new Date().toISOString();
+
+    // Filter non-expired stories
+    const validStories = stories.filter((story) => {
+      return new Date(story.expiresAt) > new Date(now);
+    });
+
+    const sortedStories = validStories
+      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+      .map((story) => ({
+        id: story.id,
+        userPhone: story.userPhone,
+        userName: story.userName,
+        userPhoto: story.userPhoto,
+        image: story.image,
+        expiresAt: story.expiresAt,
+        createdAt: story.createdAt,
+      }));
+
+    res.json({
+      ok: true,
+      stories: sortedStories,
+    });
+  } catch (error) {
+    console.error("Get user stories error:", error);
+    res.status(500).json({
+      ok: false,
+      error: "Internal server error",
+    });
+  }
+};
+
+export const handleDeleteStory: RequestHandler = async (req, res) => {
+  try {
+    const { storyId } = req.params;
+
+    const stories = await getRows(SHEET_NAMES.STORIES);
+    const storyIndex = stories.findIndex((s) => s.id === storyId);
+
+    if (storyIndex === -1) {
+      return res.status(404).json({
+        ok: false,
+        error: "Story not found",
+      });
+    }
+
+    await deleteRow(SHEET_NAMES.STORIES, storyIndex);
+
+    res.json({
+      ok: true,
+      message: "Story deleted successfully",
+    });
+  } catch (error) {
+    console.error("Delete story error:", error);
+    res.status(500).json({
+      ok: false,
+      error: "Internal server error",
+    });
+  }
+};
