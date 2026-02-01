@@ -33,6 +33,7 @@ export default function FacebookHome() {
   const [isLoading, setIsLoading] = useState(true);
   const [showMenu, setShowMenu] = useState(false);
   const [showCreateStory, setShowCreateStory] = useState(false);
+  const [unreadMessages, setUnreadMessages] = useState(0);
 
   const userPhone = localStorage.getItem("userPhone") || "";
   const userName = localStorage.getItem("userName") || "ব্যবহারকারী";
@@ -40,7 +41,11 @@ export default function FacebookHome() {
 
   useEffect(() => {
     loadFeed();
-  }, []);
+    loadUnreadMessages();
+    // Refresh unread messages every 10 seconds
+    const interval = setInterval(loadUnreadMessages, 10000);
+    return () => clearInterval(interval);
+  }, [userPhone]);
 
   const loadFeed = async () => {
     setIsLoading(true);
