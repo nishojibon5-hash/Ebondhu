@@ -62,6 +62,9 @@ export function EnhancedPostCard({
   const [newComment, setNewComment] = useState("");
   const [comments, setComments] = useState<Comment[]>((post as any).comments || []);
   const [showMenu, setShowMenu] = useState(false);
+  const [showReactions, setShowReactions] = useState(false);
+  const [userReaction, setUserReaction] = useState<string | null>(null);
+  const reactionRef = useRef<HTMLDivElement>(null);
 
   // Handle both old and new post interfaces
   const postData = post as APIPost & { liked?: boolean; comments?: Comment[]; shares?: number };
