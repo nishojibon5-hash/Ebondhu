@@ -222,6 +222,7 @@ async function initializeSheetHeaders() {
       "userPhoto",
       "content",
       "image",
+      "mediaType",
       "likesCount",
       "commentsCount",
       "createdAt",
