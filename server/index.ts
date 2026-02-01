@@ -302,5 +302,11 @@ export function createServer() {
   app.get("/api/social/friends/:userPhone", handleGetFriends);
   app.post("/api/social/friends/remove", handleRemoveFriend);
 
+  // Social Media Routes - Stories
+  app.post("/api/social/stories", handleCreateStory);
+  app.get("/api/social/stories", handleGetStories);
+  app.get("/api/social/stories/:userPhone", handleGetUserStories);
+  app.delete("/api/social/stories/:storyId", handleDeleteStory);
+
   return app;
 }
