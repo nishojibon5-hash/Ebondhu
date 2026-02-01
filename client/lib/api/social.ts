@@ -344,3 +344,79 @@ export async function removeFriend(
     return { ok: false, error: "Network error" };
   }
 }
+
+// Stories API
+export async function createStory(
+  userPhone: string,
+  userName: string,
+  userPhoto: string | undefined,
+  image: string,
+): Promise<{ ok: boolean; story?: Story; error?: string }> {
+  try {
+    const response = await fetch("/api/social/stories", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        userPhone,
+        userName,
+        userPhoto,
+        image,
+      }),
+    });
+    return await response.json();
+  } catch (error) {
+    console.error("Create story error:", error);
+    return { ok: false, error: "Network error" };
+  }
+}
+
+export async function getStories(userPhone?: string): Promise<{
+  ok: boolean;
+  stories?: Story[];
+  error?: string;
+}> {
+  try {
+    const query = userPhone ? `?userPhone=${userPhone}` : "";
+    const response = await fetch(`/api/social/stories${query}`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    });
+    return await response.json();
+  } catch (error) {
+    console.error("Get stories error:", error);
+    return { ok: false, error: "Network error" };
+  }
+}
+
+export async function getUserStories(userPhone: string): Promise<{
+  ok: boolean;
+  stories?: Story[];
+  error?: string;
+}> {
+  try {
+    const response = await fetch(`/api/social/stories/${userPhone}`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    });
+    return await response.json();
+  } catch (error) {
+    console.error("Get user stories error:", error);
+    return { ok: false, error: "Network error" };
+  }
+}
+
+export async function deleteStory(storyId: string): Promise<{
+  ok: boolean;
+  error?: string;
+}> {
+  try {
+    const response = await fetch(`/api/social/stories/${storyId}`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+    });
+    return await response.json();
+  } catch (error) {
+    console.error("Delete story error:", error);
+    return { ok: false, error: "Network error" };
+  }
+}
