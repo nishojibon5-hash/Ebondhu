@@ -348,6 +348,99 @@ export async function removeFriend(
   }
 }
 
+// Messages API
+export interface Message {
+  id: string;
+  fromPhone: string;
+  toPhone: string;
+  content: string;
+  read: boolean;
+  createdAt: string;
+}
+
+export interface Conversation {
+  userPhone: string;
+  userName?: string;
+  userPhoto?: string;
+  lastMessage: string;
+  lastMessageTime: string;
+  unreadCount: number;
+}
+
+export async function sendMessage(
+  fromPhone: string,
+  toPhone: string,
+  content: string
+): Promise<{ ok: boolean; message?: Message; error?: string }> {
+  try {
+    const response = await fetch("/api/social/messages", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        fromPhone,
+        toPhone,
+        content,
+      }),
+    });
+    return await response.json();
+  } catch (error) {
+    console.error("Send message error:", error);
+    return { ok: false, error: "Network error" };
+  }
+}
+
+export async function getConversation(
+  userPhone: string,
+  otherUserPhone: string
+): Promise<{ ok: boolean; messages?: Message[]; error?: string }> {
+  try {
+    const response = await fetch(
+      `/api/social/messages/${userPhone}/${otherUserPhone}`,
+      {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+    return await response.json();
+  } catch (error) {
+    console.error("Get conversation error:", error);
+    return { ok: false, error: "Network error" };
+  }
+}
+
+export async function getConversations(userPhone: string): Promise<{
+  ok: boolean;
+  conversations?: Conversation[];
+  error?: string;
+}> {
+  try {
+    const response = await fetch(`/api/social/conversations/${userPhone}`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    });
+    return await response.json();
+  } catch (error) {
+    console.error("Get conversations error:", error);
+    return { ok: false, error: "Network error" };
+  }
+}
+
+export async function markMessageAsRead(messageId: string): Promise<{
+  ok: boolean;
+  error?: string;
+}> {
+  try {
+    const response = await fetch(`/api/social/messages/${messageId}/read`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+    });
+    return await response.json();
+  } catch (error) {
+    console.error("Mark message as read error:", error);
+    return { ok: false, error: "Network error" };
+  }
+}
+
 // Stories API
 export async function createStory(
   userPhone: string,
