@@ -94,6 +94,8 @@ export default function Profile({ language }: ProfileProps) {
   const [showPhotoUpload, setShowPhotoUpload] = useState(false);
   const [showPin, setShowPin] = useState(false);
   const [showNewPin, setShowNewPin] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [deleteConfirmText, setDeleteConfirmText] = useState("");
 
   const [userInfo, setUserInfo] = useState({
     name: "",
