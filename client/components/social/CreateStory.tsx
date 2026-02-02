@@ -49,56 +49,89 @@ export function CreateStory({
     setError("");
 
     try {
-      // Convert base64 to blob
+      // Process image and upload with proper async handling
+      const result = await processAndUploadStoryImage(image);
+
+      if (!result.success) {
+        setError(result.error || "ছবি আপলোড ব্যর্থ");
+        setIsLoading(false);
+        return;
+      }
+
+      const imageId = result.fileId;
+
+      // Create story in database
+      const storyResponse = await createStory(
+        userPhone,
+        userName,
+        userPhoto,
+        imageId,
+      );
+
+      if (storyResponse.ok) {
+        setImage(null);
+        onStoryCreated();
+        onClose();
+      } else {
+        setError(storyResponse.error || "স্টোরি তৈরি ব্যর্থ হয়েছে");
+      }
+
+      setIsLoading(false);
+    } catch (err) {
+      console.error("Story upload error:", err);
+      setError("স্টোরি তৈরিতে ত্রুটি হয়েছে");
+      setIsLoading(false);
+    }
+  };
+
+  const processAndUploadStoryImage = (imageData: string): Promise<{ success: boolean; fileId?: string; error?: string }> => {
+    return new Promise((resolve) => {
       const canvas = document.createElement("canvas");
       const ctx = canvas.getContext("2d");
       const img = new Image();
 
       img.onload = async () => {
-        canvas.width = img.width;
-        canvas.height = img.height;
-        ctx?.drawImage(img, 0, 0);
+        try {
+          canvas.width = img.width;
+          canvas.height = img.height;
+          ctx?.drawImage(img, 0, 0);
 
-        canvas.toBlob(async (blob) => {
-          if (blob) {
-            const file = new File([blob], "story.jpg", { type: "image/jpeg" });
-            const uploadResponse = await uploadImage(file);
-
-            if (uploadResponse.ok && uploadResponse.file) {
-              const imageId = uploadResponse.file.id;
-
-              // Create story in database
-              const storyResponse = await createStory(
-                userPhone,
-                userName,
-                userPhoto,
-                imageId,
-              );
-
-              if (storyResponse.ok) {
-                onStoryCreated();
-                onClose();
-              } else {
-                setError(storyResponse.error || "স্টোরি তৈরি ব্যর্থ");
+          canvas.toBlob(async (blob) => {
+            try {
+              if (!blob) {
+                resolve({ success: false, error: "ছবি প্রক্রিয়া করতে ব্যর্থ" });
+                return;
               }
-            } else {
-              setError(uploadResponse.error || "ছবি আপলোড ব্যর্থ");
+
+              const file = new File([blob], "story.jpg", { type: "image/jpeg" });
+
+              try {
+                const uploadResponse = await uploadImage(file);
+
+                if (uploadResponse.ok && uploadResponse.file) {
+                  resolve({ success: true, fileId: uploadResponse.file.id });
+                } else {
+                  resolve({ success: false, error: uploadResponse.error || "ছবি আপলোড ব্যর্থ" });
+                }
+              } catch (uploadErr) {
+                console.error("Upload error:", uploadErr);
+                resolve({ success: false, error: "নেটওয়ার্ক ত্রুটি - অনুগ্রহ করে আবার চেষ্টা করুন" });
+              }
+            } catch (blobErr) {
+              resolve({ success: false, error: "ছবি প্রক্রিয়া করতে ব্যর্থ" });
             }
-          }
-          setIsLoading(false);
-        }, "image/jpeg");
+          }, "image/jpeg", 0.9);
+        } catch (err) {
+          resolve({ success: false, error: "ছবি প্রক্রিয়া করতে ব্যর্থ" });
+        }
       };
 
       img.onerror = () => {
-        setError("ছবি লোড করতে পারা যায়নি");
-        setIsLoading(false);
+        resolve({ success: false, error: "ছবি লোড করতে পারা যায়নি" });
       };
 
-      img.src = image;
-    } catch (err) {
-      setError("স্টোরি তৈরিতে ত্রুটি হয়েছে");
-      setIsLoading(false);
-    }
+      img.src = imageData;
+    });
   };
 
   return (
