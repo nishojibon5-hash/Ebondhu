@@ -246,37 +246,14 @@ export default function FacebookHome() {
               onCreateStory={() => setShowCreateStory(!showCreateStory)}
             />
 
-            {/* পোস্ট তৈরি */}
+            {/* পোস্ট তৈরি - সম্পূর্ণ কার্যকারিতা সহ */}
             {userPhone && (
-              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-4">
-                <div className="flex items-center gap-3">
-                  <img
-                    src={
-                      userPhoto ||
-                      `https://api.dicebear.com/7.x/avataaars/svg?seed=${userPhone}`
-                    }
-                    alt="আপনার প্রোফাইল"
-                    className="w-10 h-10 rounded-full flex-shrink-0"
-                  />
-                  <input
-                    type="text"
-                    placeholder={`${userName}, আপনার চিন্তা শেয়ার করুন...`}
-                    className="flex-1 bg-gray-100 rounded-full px-4 py-2 text-sm outline-none focus:bg-gray-50"
-                  />
-                </div>
-                <hr className="my-3" />
-                <div className="flex items-center justify-around gap-2">
-                  <button className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 rounded-lg text-gray-700 text-sm font-semibold flex-1 justify-center">
-                    🎥 লাইভ ভিডিও
-                  </button>
-                  <button className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 rounded-lg text-gray-700 text-sm font-semibold flex-1 justify-center">
-                    🖼️ ছবি/ভিডিও
-                  </button>
-                  <button className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 rounded-lg text-gray-700 text-sm font-semibold flex-1 justify-center">
-                    😊 অনুভূতি
-                  </button>
-                </div>
-              </div>
+              <CreatePost
+                userPhone={userPhone}
+                userName={userName}
+                userPhoto={userPhoto}
+                onPostCreated={() => loadFeed()}
+              />
             )}
 
             {/* পোস্ট ফিড */}
