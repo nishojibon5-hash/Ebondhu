@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { X, Upload } from "lucide-react";
+import { X, Upload, AlertCircle } from "lucide-react";
 import { createStory } from "../../lib/api/social";
 import { uploadImage } from "../../lib/api/media";
 
@@ -21,22 +21,61 @@ export function CreateStory({
   const [image, setImage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
 
   const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      if (!file.type.startsWith("image/")) {
-        setError("অনুগ্রহ করে একটি ছবি নির্বাচন করুন");
-        return;
-      }
+    if (!file) return;
 
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        setImage(event.target?.result as string);
-        setError("");
-      };
-      reader.readAsDataURL(file);
+    if (!file.type.startsWith("image/")) {
+      setError("অনুগ্রহ করে একটি ছবি নির্বাচন করুন");
+      return;
     }
+
+    if (file.size > 10 * 1024 * 1024) {
+      setError("ছবি খুব বড় (সর্বোচ্চ 10MB)");
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      setImage(event.target?.result as string);
+      setError("");
+    };
+    reader.onerror = () => {
+      setError("ছবি পড়তে ব্যর্থ হয়েছে");
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const processImage = (imageData: string): Promise<Blob | null> => {
+    return new Promise((resolve) => {
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+      const img = new Image();
+
+      img.onload = () => {
+        try {
+          canvas.width = img.width;
+          canvas.height = img.height;
+          ctx?.drawImage(img, 0, 0);
+
+          canvas.toBlob((blob) => {
+            resolve(blob);
+          }, "image/jpeg", 0.9);
+        } catch (err) {
+          console.error("Image processing error:", err);
+          resolve(null);
+        }
+      };
+
+      img.onerror = () => {
+        console.error("Image load error");
+        resolve(null);
+      };
+
+      img.src = imageData;
+    });
   };
 
   const handleUpload = async () => {
@@ -47,20 +86,28 @@ export function CreateStory({
 
     setIsLoading(true);
     setError("");
+    setSuccessMessage("");
 
     try {
-      // Process image and upload with proper async handling
-      const result = await processAndUploadStoryImage(image);
-
-      if (!result.success) {
-        setError(result.error || "ছবি আপলোড ব্যর্থ");
-        setIsLoading(false);
-        return;
+      // Process image
+      const imageBlob = await processImage(image);
+      if (!imageBlob) {
+        throw new Error("ছবি প্রক্রিয়া করতে ব্যর্থ হয়েছে");
       }
 
-      const imageId = result.fileId;
+      // Upload image
+      const imageFile = new File([imageBlob], "story.jpg", {
+        type: "image/jpeg",
+      });
+      
+      const uploadResponse = await uploadImage(imageFile);
+      if (!uploadResponse.ok || !uploadResponse.file) {
+        throw new Error(uploadResponse.error || "ছবি আপলোড ব্যর্থ");
+      }
 
-      // Create story in database
+      const imageId = uploadResponse.file.id;
+
+      // Create story
       const storyResponse = await createStory(
         userPhone,
         userName,
@@ -68,70 +115,25 @@ export function CreateStory({
         imageId,
       );
 
-      if (storyResponse.ok) {
+      if (!storyResponse.ok) {
+        throw new Error(storyResponse.error || "স্টোরি তৈরি ব্যর্থ");
+      }
+
+      setSuccessMessage("স্টোরি সফলভাবে শেয়ার করা হয়েছে! ✓");
+      
+      setTimeout(() => {
         setImage(null);
         onStoryCreated();
         onClose();
-      } else {
-        setError(storyResponse.error || "স্টোরি তৈরি ব্যর্থ হয়েছে");
-      }
-
-      setIsLoading(false);
+      }, 500);
     } catch (err) {
+      const errorMsg =
+        err instanceof Error ? err.message : "স্টোরি তৈরিতে ত্রুটি হয়েছে";
       console.error("Story upload error:", err);
-      setError("স্টোরি তৈরিতে ত্রুটি হয়েছে");
+      setError(errorMsg);
+    } finally {
       setIsLoading(false);
     }
-  };
-
-  const processAndUploadStoryImage = (imageData: string): Promise<{ success: boolean; fileId?: string; error?: string }> => {
-    return new Promise((resolve) => {
-      const canvas = document.createElement("canvas");
-      const ctx = canvas.getContext("2d");
-      const img = new Image();
-
-      img.onload = async () => {
-        try {
-          canvas.width = img.width;
-          canvas.height = img.height;
-          ctx?.drawImage(img, 0, 0);
-
-          canvas.toBlob(async (blob) => {
-            try {
-              if (!blob) {
-                resolve({ success: false, error: "ছবি প্রক্রিয়া করতে ব্যর্থ" });
-                return;
-              }
-
-              const file = new File([blob], "story.jpg", { type: "image/jpeg" });
-
-              try {
-                const uploadResponse = await uploadImage(file);
-
-                if (uploadResponse.ok && uploadResponse.file) {
-                  resolve({ success: true, fileId: uploadResponse.file.id });
-                } else {
-                  resolve({ success: false, error: uploadResponse.error || "ছবি আপলোড ব্যর্থ" });
-                }
-              } catch (uploadErr) {
-                console.error("Upload error:", uploadErr);
-                resolve({ success: false, error: "নেটওয়ার্ক ত্রুটি - অনুগ্রহ করে আবার চেষ্টা করুন" });
-              }
-            } catch (blobErr) {
-              resolve({ success: false, error: "ছবি প্রক্রিয়া করতে ব্যর্থ" });
-            }
-          }, "image/jpeg", 0.9);
-        } catch (err) {
-          resolve({ success: false, error: "ছবি প্রক্রিয়া করতে ব্যর্থ" });
-        }
-      };
-
-      img.onerror = () => {
-        resolve({ success: false, error: "ছবি লোড করতে পারা যায়নি" });
-      };
-
-      img.src = imageData;
-    });
   };
 
   return (
@@ -142,7 +144,8 @@ export function CreateStory({
           <h2 className="text-lg font-bold text-gray-900">নতুন স্টোরি</h2>
           <button
             onClick={onClose}
-            className="p-1 hover:bg-gray-100 rounded-full"
+            disabled={isLoading}
+            className="p-1 hover:bg-gray-100 rounded-full disabled:opacity-50"
           >
             <X className="w-5 h-5 text-gray-700" />
           </button>
@@ -159,7 +162,8 @@ export function CreateStory({
               />
               <button
                 onClick={() => setImage(null)}
-                className="w-full py-2 px-4 border border-gray-300 rounded-lg hover:bg-gray-50 font-medium"
+                disabled={isLoading}
+                className="w-full py-2 px-4 border border-gray-300 rounded-lg hover:bg-gray-50 font-medium disabled:opacity-50"
               >
                 অন্য ছবি বেছে নিন
               </button>
@@ -173,6 +177,7 @@ export function CreateStory({
                   onChange={handleImageSelect}
                   className="hidden"
                   id="story-image"
+                  disabled={isLoading}
                 />
                 <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center cursor-pointer hover:border-blue-500 hover:bg-blue-50 transition-colors">
                   <Upload className="w-10 h-10 text-gray-400 mx-auto mb-2" />
@@ -183,8 +188,19 @@ export function CreateStory({
             </div>
           )}
 
+          {/* এরর মেসেজ */}
           {error && (
-            <p className="text-red-500 text-sm mt-4 text-center">{error}</p>
+            <div className="mt-4 flex items-start gap-2 p-3 bg-red-50 border border-red-200 rounded-lg">
+              <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
+              <p className="text-red-700 text-sm">{error}</p>
+            </div>
+          )}
+
+          {/* সাফল্যের মেসেজ */}
+          {successMessage && (
+            <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded-lg">
+              <p className="text-green-700 text-sm font-medium">{successMessage}</p>
+            </div>
           )}
         </div>
 
@@ -192,16 +208,24 @@ export function CreateStory({
         <div className="flex gap-2 p-4 border-t border-gray-200">
           <button
             onClick={onClose}
-            className="flex-1 py-2 px-4 border border-gray-300 rounded-lg hover:bg-gray-50 font-medium"
+            disabled={isLoading}
+            className="flex-1 py-2 px-4 border border-gray-300 rounded-lg hover:bg-gray-50 font-medium disabled:opacity-50"
           >
             বাতিল
           </button>
           <button
             onClick={handleUpload}
             disabled={!image || isLoading}
-            className="flex-1 py-2 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed font-medium"
+            className="flex-1 py-2 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed font-medium flex items-center justify-center gap-2"
           >
-            {isLoading ? "আপলোড করছি..." : "স্টোরি শেয়ার করুন"}
+            {isLoading ? (
+              <>
+                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                আপলোড করছি...
+              </>
+            ) : (
+              "স্টোরি শেয়ার করুন"
+            )}
           </button>
         </div>
       </div>
