@@ -716,7 +716,8 @@ export default function Profile({ language }: ProfileProps) {
                 {t.deleteAccountWarning}
               </p>
               <p className="text-sm text-red-700">
-                আপনার সমস্ত ডেটা, পোস্ট এবং অ্যাকাউন্ট তথ্য চিরকালের জন্য মুছে ফেলা হবে।
+                আপনার সমস্ত ডেটা, পোস্ট এবং অ্যাকাউন্ট তথ্য চিরকালের জন্য মুছে
+                ফেলা হবে।
               </p>
             </div>
 
