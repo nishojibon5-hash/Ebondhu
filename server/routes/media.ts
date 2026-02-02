@@ -123,9 +123,17 @@ export const handleUploadVideo: RequestHandler = async (req, res) => {
     const fileName = `${crypto.randomUUID()}-${Date.now()}.${extension}`;
 
     console.log("Uploading video:", fileName);
-    const fileId = await uploadVideo(fileName, req.file.buffer);
 
-    console.log("Video uploaded successfully:", fileId);
+    let fileId: string;
+    try {
+      fileId = await uploadVideo(fileName, req.file.buffer);
+      console.log("Video uploaded successfully to Google Drive:", fileId);
+    } catch (driveError) {
+      console.warn("Google Drive upload failed for video, using fallback Base64:", driveError);
+      // Fallback: use Base64 encoded data
+      fileId = `data:${req.file.mimetype};base64,${req.file.buffer.toString("base64")}`;
+    }
+
     res.status(201).json({
       ok: true,
       file: {
