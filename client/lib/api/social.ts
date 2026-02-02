@@ -496,10 +496,19 @@ export async function createStory(
         image,
       }),
     });
-    return await response.json();
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error("Create story response error:", response.status, errorText);
+      return { ok: false, error: `স্টোরি তৈরি ব্যর্থ: ${response.status}` };
+    }
+
+    const data = await response.json();
+    return data;
   } catch (error) {
     console.error("Create story error:", error);
-    return { ok: false, error: "Network error" };
+    const errorMsg = error instanceof Error ? error.message : "নেটওয়ার্ক সংযোগ ত্রুটি";
+    return { ok: false, error: errorMsg };
   }
 }
 
