@@ -46,9 +46,13 @@ export function CreatePost({
           canvas.height = img.height;
           ctx?.drawImage(img, 0, 0);
 
-          canvas.toBlob((blob) => {
-            resolve(blob);
-          }, "image/jpeg", 0.9);
+          canvas.toBlob(
+            (blob) => {
+              resolve(blob);
+            },
+            "image/jpeg",
+            0.9,
+          );
         } catch (err) {
           console.error("Image processing error:", err);
           resolve(null);
@@ -73,9 +77,7 @@ export function CreatePost({
 
     const maxSize = type === "video" ? 50 * 1024 * 1024 : 10 * 1024 * 1024;
     if (file.size > maxSize) {
-      setError(
-        `ফাইলটি খুব বড় (সর্বোচ্চ ${type === "video" ? "50" : "10"}MB)`,
-      );
+      setError(`ফাইলটি খুব বড় (সর্বোচ্চ ${type === "video" ? "50" : "10"}MB)`);
       return;
     }
 
@@ -181,14 +183,15 @@ export function CreatePost({
       setContent("");
       setMedia(null);
       setSuccessMessage("পোস্ট সফলভাবে শেয়ার করা হয়েছে! ✓");
-      
+
       // Reload feed after a short delay
       setTimeout(() => {
         onPostCreated();
         setSuccessMessage("");
       }, 500);
     } catch (err) {
-      const errorMsg = err instanceof Error ? err.message : "পোস্ট তৈরিতে ত্রুটি হয়েছে";
+      const errorMsg =
+        err instanceof Error ? err.message : "পোস্ট তৈরিতে ত্রুটি হয়েছে";
       setError(errorMsg);
     } finally {
       setIsLoading(false);

@@ -60,9 +60,13 @@ export function CreateStory({
           canvas.height = img.height;
           ctx?.drawImage(img, 0, 0);
 
-          canvas.toBlob((blob) => {
-            resolve(blob);
-          }, "image/jpeg", 0.9);
+          canvas.toBlob(
+            (blob) => {
+              resolve(blob);
+            },
+            "image/jpeg",
+            0.9,
+          );
         } catch (err) {
           console.error("Image processing error:", err);
           resolve(null);
@@ -99,7 +103,7 @@ export function CreateStory({
       const imageFile = new File([imageBlob], "story.jpg", {
         type: "image/jpeg",
       });
-      
+
       const uploadResponse = await uploadImage(imageFile);
       if (!uploadResponse.ok || !uploadResponse.file) {
         throw new Error(uploadResponse.error || "ছবি আপলোড ব্যর্থ");
@@ -120,7 +124,7 @@ export function CreateStory({
       }
 
       setSuccessMessage("স্টোরি সফলভাবে শেয়ার করা হয়েছে! ✓");
-      
+
       setTimeout(() => {
         setImage(null);
         onStoryCreated();
@@ -199,7 +203,9 @@ export function CreateStory({
           {/* সাফল্যের মেসেজ */}
           {successMessage && (
             <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded-lg">
-              <p className="text-green-700 text-sm font-medium">{successMessage}</p>
+              <p className="text-green-700 text-sm font-medium">
+                {successMessage}
+              </p>
             </div>
           )}
         </div>
