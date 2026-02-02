@@ -64,10 +64,19 @@ export async function uploadVideo(file: File): Promise<UploadResponse> {
       method: "POST",
       body: formData,
     });
-    return await response.json();
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error("Upload video response error:", response.status, errorText);
+      return { ok: false, error: `ভিডিও আপলোড ব্যর্থ: ${response.status}` };
+    }
+
+    const data = await response.json();
+    return data;
   } catch (error) {
     console.error("Upload video error:", error);
-    return { ok: false, error: "Network error" };
+    const errorMsg = error instanceof Error ? error.message : "নেটওয়ার্ক সংযোগ ত্রুটি";
+    return { ok: false, error: errorMsg };
   }
 }
 
