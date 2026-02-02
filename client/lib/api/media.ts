@@ -23,10 +23,19 @@ export async function uploadImage(file: File): Promise<UploadResponse> {
       method: "POST",
       body: formData,
     });
-    return await response.json();
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error("Upload image response error:", response.status, errorText);
+      return { ok: false, error: `আপলোড ব্যর্থ: ${response.status}` };
+    }
+
+    const data = await response.json();
+    return data;
   } catch (error) {
     console.error("Upload image error:", error);
-    return { ok: false, error: "Network error" };
+    const errorMsg = error instanceof Error ? error.message : "নেটওয়ার্ক সংযোগ ত্রুটি";
+    return { ok: false, error: errorMsg };
   }
 }
 
