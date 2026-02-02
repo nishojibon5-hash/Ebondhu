@@ -58,6 +58,11 @@ async function ensureFolderExists(folderName: string): Promise<string> {
     return folderMap[folderName];
   }
 
+  if (!FOLDER_ID) {
+    console.error("VITE_GOOGLE_DRIVE_FOLDER_ID environment variable is not set");
+    throw new Error("ড্রাইভ ফোল্ডার আইডি কনফিগার করা হয়নি");
+  }
+
   const drive = getDriveAPI();
 
   try {
