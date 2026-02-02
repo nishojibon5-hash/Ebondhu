@@ -697,6 +697,65 @@ export default function Profile({ language }: ProfileProps) {
           </div>
         </div>
       )}
+
+      {/* Delete Account Confirmation Modal */}
+      {showDeleteConfirm && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-2xl p-4 w-full max-w-md">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="font-bold text-gray-900 text-lg">
+                {t.deleteAccount}?
+              </h3>
+              <button onClick={() => setShowDeleteConfirm(false)}>
+                <X className="h-5 w-5 text-gray-500" />
+              </button>
+            </div>
+
+            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+              <p className="text-red-800 font-semibold mb-2">
+                {t.deleteAccountWarning}
+              </p>
+              <p className="text-sm text-red-700">
+                আপনার সমস্ত ডেটা, পোস্ট এবং অ্যাকাউন্ট তথ্য চিরকালের জন্য মুছে ফেলা হবে।
+              </p>
+            </div>
+
+            <div className="space-y-4 mb-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  নিশ্চিতকরণ টেক্সট টাইপ করুন:
+                </label>
+                <p className="text-sm text-gray-600 mb-2 p-3 bg-gray-50 rounded-lg">
+                  "{t.confirmDelete}"
+                </p>
+                <textarea
+                  value={deleteConfirmText}
+                  onChange={(e) => setDeleteConfirmText(e.target.value)}
+                  placeholder="এখানে উপরের পাঠ্য টাইপ করুন"
+                  className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-transparent text-sm"
+                  rows={2}
+                />
+              </div>
+            </div>
+
+            <div className="flex space-x-3">
+              <button
+                onClick={() => setShowDeleteConfirm(false)}
+                className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 py-3 rounded-xl font-medium transition-colors"
+              >
+                {t.cancel}
+              </button>
+              <button
+                onClick={handleDeleteAccount}
+                disabled={deleteConfirmText !== t.confirmDelete}
+                className="flex-1 bg-red-600 hover:bg-red-700 disabled:bg-gray-300 text-white py-3 rounded-xl font-medium transition-colors disabled:cursor-not-allowed"
+              >
+                {t.deleteAccount}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
