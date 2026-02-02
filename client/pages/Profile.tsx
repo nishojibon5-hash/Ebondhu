@@ -474,6 +474,19 @@ export default function Profile({ language }: ProfileProps) {
           </div>
         ))}
 
+        {/* Delete Account Button */}
+        <button
+          onClick={() => setShowDeleteConfirm(true)}
+          className="w-full bg-white rounded-2xl p-4 shadow-sm border border-gray-100 hover:bg-red-50 transition-colors"
+        >
+          <div className="flex items-center justify-center space-x-3">
+            <div className="p-2 bg-red-100 rounded-full">
+              <X className="h-5 w-5 text-red-600" />
+            </div>
+            <span className="font-bold text-red-600">{t.deleteAccount}</span>
+          </div>
+        </button>
+
         {/* Sign Out Button */}
         <button
           onClick={handleSignOut}
