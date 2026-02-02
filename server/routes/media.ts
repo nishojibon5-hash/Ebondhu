@@ -35,7 +35,7 @@ export const handleUploadImage: RequestHandler = async (req, res) => {
     if (!req.file) {
       return res.status(400).json({
         ok: false,
-        error: "No file provided",
+        error: "কোনো ফাইল প্রদান করা হয়নি",
       });
     }
 
@@ -43,8 +43,10 @@ export const handleUploadImage: RequestHandler = async (req, res) => {
     const extension = getFileExtension(req.file.mimetype);
     const fileName = `${crypto.randomUUID()}-${Date.now()}.${extension}`;
 
+    console.log("Uploading image:", fileName);
     const fileId = await uploadImage(fileName, req.file.buffer);
 
+    console.log("Image uploaded successfully:", fileId);
     res.status(201).json({
       ok: true,
       file: {
@@ -57,9 +59,10 @@ export const handleUploadImage: RequestHandler = async (req, res) => {
     });
   } catch (error) {
     console.error("Upload image error:", error);
+    const errorMessage = error instanceof Error ? error.message : "ছবি আপলোড করতে ব্যর্থ";
     res.status(500).json({
       ok: false,
-      error: "Failed to upload image",
+      error: `ছবি আপলোড ব্যর্থ: ${errorMessage}`,
     });
   }
 };
