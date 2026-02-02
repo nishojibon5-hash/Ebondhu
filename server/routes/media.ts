@@ -106,7 +106,7 @@ export const handleUploadVideo: RequestHandler = async (req, res) => {
     if (!req.file) {
       return res.status(400).json({
         ok: false,
-        error: "No file provided",
+        error: "কোনো ফাইল প্রদান করা হয়নি",
       });
     }
 
@@ -114,8 +114,10 @@ export const handleUploadVideo: RequestHandler = async (req, res) => {
     const extension = getFileExtension(req.file.mimetype);
     const fileName = `${crypto.randomUUID()}-${Date.now()}.${extension}`;
 
+    console.log("Uploading video:", fileName);
     const fileId = await uploadVideo(fileName, req.file.buffer);
 
+    console.log("Video uploaded successfully:", fileId);
     res.status(201).json({
       ok: true,
       file: {
@@ -128,9 +130,10 @@ export const handleUploadVideo: RequestHandler = async (req, res) => {
     });
   } catch (error) {
     console.error("Upload video error:", error);
+    const errorMessage = error instanceof Error ? error.message : "ভিডিও আপলোড করতে ব্যর্থ";
     res.status(500).json({
       ok: false,
-      error: "Failed to upload video",
+      error: `ভিডিও আপলোড ব্যর্থ: ${errorMessage}`,
     });
   }
 };
