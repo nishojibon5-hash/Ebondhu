@@ -185,24 +185,30 @@ export function CreatePost({
   };
 
   const createPostData = async (mediaUrl: string, mediaType: string) => {
-    const response = await createPost(
-      userPhone,
-      userName,
-      userPhoto,
-      content,
-      mediaUrl,
-      mediaType as "image" | "video" | "",
-    );
+    try {
+      const response = await createPost(
+        userPhone,
+        userName,
+        userPhoto,
+        content,
+        mediaUrl,
+        mediaType as "image" | "video" | "",
+      );
 
-    if (response.ok) {
-      setContent("");
-      setMedia(null);
-      onPostCreated();
-    } else {
-      setError(response.error || "পোস্ট তৈরি ব্যর্থ");
+      if (response.ok) {
+        setContent("");
+        setMedia(null);
+        setError("");
+        onPostCreated();
+      } else {
+        setError(response.error || "পোস্ট তৈরি ব্যর্থ হয়েছে");
+      }
+    } catch (err) {
+      console.error("Post creation error:", err);
+      setError("পোস্ট তৈরিতে ত্রুটি হয়েছে");
+    } finally {
+      setIsLoading(false);
     }
-
-    setIsLoading(false);
   };
 
   return (
