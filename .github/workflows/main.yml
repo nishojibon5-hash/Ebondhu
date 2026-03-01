@@ -28,7 +28,14 @@ jobs:
         run: pnpm install
 
       - name: Web Build
+        # এখানে আমরা সিক্রেটগুলো যোগ করছি যাতে বিল্ডের সময় এগুলো অ্যাপে চলে যায়
         run: pnpm run build:client
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          # যদি আপনার কোডে VITE_ ছাড়া নাম থাকে তবে নিচের দুটিও রাখতে পারেন
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
 
       - name: Add and Sync Android
         run: |
