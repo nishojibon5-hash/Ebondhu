@@ -78,13 +78,29 @@ export async function createPost(
       }),
     });
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error("Create post response error:", response.status, errorText);
-      return { ok: false, error: `পোস্ট তৈরি ব্যর্থ: ${response.status}` };
+    const contentType = response.headers.get("content-type");
+    let data;
+
+    if (contentType && contentType.includes("application/json")) {
+      data = await response.json();
+    } else {
+      const text = await response.text();
+      console.error(
+        "Non-JSON response from server:",
+        response.status,
+        text.substring(0, 200),
+      );
+      return {
+        ok: false,
+        error: `সার্ভার ত্রুটি (${response.status}): অবৈধ প্রতিক্রিয়া`,
+      };
     }
 
-    const data = await response.json();
+    if (!response.ok) {
+      console.error("Create post response error:", response.status, data);
+      return { ok: false, error: data.error || `পোস্ট তৈরি ব্যর্থ: ${response.status}` };
+    }
+
     return data;
   } catch (error) {
     console.error("Create post error:", error);
@@ -497,13 +513,29 @@ export async function createStory(
       }),
     });
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error("Create story response error:", response.status, errorText);
-      return { ok: false, error: `স্টোরি তৈরি ব্যর্থ: ${response.status}` };
+    const contentType = response.headers.get("content-type");
+    let data;
+
+    if (contentType && contentType.includes("application/json")) {
+      data = await response.json();
+    } else {
+      const text = await response.text();
+      console.error(
+        "Non-JSON response from server:",
+        response.status,
+        text.substring(0, 200),
+      );
+      return {
+        ok: false,
+        error: `সার্ভার ত্রুটি (${response.status}): অবৈধ প্রতিক্রিয়া`,
+      };
     }
 
-    const data = await response.json();
+    if (!response.ok) {
+      console.error("Create story response error:", response.status, data);
+      return { ok: false, error: data.error || `স্টোরি তৈরি ব্যর্থ: ${response.status}` };
+    }
+
     return data;
   } catch (error) {
     console.error("Create story error:", error);

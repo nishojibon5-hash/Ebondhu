@@ -102,6 +102,11 @@ export const SHEET_NAMES = {
   FRIEND_REQUESTS: "FriendRequests",
   STORIES: "Stories",
   MESSAGES: "Messages",
+  // Advertising Features
+  ADVERTISEMENTS: "Advertisements",
+  AD_IMPRESSIONS: "AdImpressions",
+  AD_CLICKS: "AdClicks",
+  USER_AD_SETTINGS: "UserAdSettings",
 };
 
 export async function initializeSheets() {
@@ -262,6 +267,40 @@ async function initializeSheetHeaders() {
       "content",
       "read",
       "createdAt",
+    ],
+    [SHEET_NAMES.ADVERTISEMENTS]: [
+      "id",
+      "advertiserPhone",
+      "title",
+      "description",
+      "image",
+      "videoUrl",
+      "category",
+      "dailyBudget",
+      "pricePerMille",
+      "status",
+      "impressions",
+      "clicks",
+      "createdAt",
+      "updatedAt",
+    ],
+    [SHEET_NAMES.AD_IMPRESSIONS]: [
+      "id",
+      "adId",
+      "userPhone",
+      "viewedAt",
+    ],
+    [SHEET_NAMES.AD_CLICKS]: [
+      "id",
+      "adId",
+      "userPhone",
+      "clickedAt",
+    ],
+    [SHEET_NAMES.USER_AD_SETTINGS]: [
+      "userPhone",
+      "contentMonetizeEnabled",
+      "createdAt",
+      "updatedAt",
     ],
   };
 

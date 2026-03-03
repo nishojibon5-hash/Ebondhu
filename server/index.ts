@@ -64,6 +64,16 @@ import {
   handleMarkMessageAsRead,
   handleSearchUsers,
 } from "./routes/social";
+import {
+  handleCreateAd,
+  handleGetAdvertiserAds,
+  handleGetFeedAds,
+  handleLogAdImpression,
+  handleLogAdClick,
+  handleUpdateAdStatus,
+  handleUpdateMonetizeSettings,
+  handleGetMonetizeSettings,
+} from "./routes/ads";
 
 // Configure multer for file uploads
 const upload = multer({ storage: multer.memoryStorage() });
@@ -330,6 +340,18 @@ export function createServer() {
 
   // Social Media Routes - Search
   app.get("/api/social/search-users", handleSearchUsers);
+
+  // Advertising Routes
+  app.post("/api/ads", handleCreateAd);
+  app.get("/api/ads/advertiser/:advertiserPhone", handleGetAdvertiserAds);
+  app.get("/api/ads/feed", handleGetFeedAds);
+  app.post("/api/ads/impression", handleLogAdImpression);
+  app.post("/api/ads/click", handleLogAdClick);
+  app.post("/api/ads/status", handleUpdateAdStatus);
+
+  // User Ad Settings Routes
+  app.post("/api/ads/settings", handleUpdateMonetizeSettings);
+  app.get("/api/ads/settings/:userPhone", handleGetMonetizeSettings);
 
   return app;
 }

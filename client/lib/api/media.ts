@@ -24,13 +24,29 @@ export async function uploadImage(file: File): Promise<UploadResponse> {
       body: formData,
     });
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error("Upload image response error:", response.status, errorText);
-      return { ok: false, error: `আপলোড ব্যর্থ: ${response.status}` };
+    const contentType = response.headers.get("content-type");
+    let data;
+
+    if (contentType && contentType.includes("application/json")) {
+      data = await response.json();
+    } else {
+      const text = await response.text();
+      console.error(
+        "Non-JSON response from upload:",
+        response.status,
+        text.substring(0, 200),
+      );
+      return {
+        ok: false,
+        error: `সার্ভার ত্রুটি (${response.status})`,
+      };
     }
 
-    const data = await response.json();
+    if (!response.ok) {
+      console.error("Upload image response error:", response.status, data);
+      return { ok: false, error: data.error || `আপলোড ব্যর্থ: ${response.status}` };
+    }
+
     return data;
   } catch (error) {
     console.error("Upload image error:", error);
@@ -65,13 +81,29 @@ export async function uploadVideo(file: File): Promise<UploadResponse> {
       body: formData,
     });
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error("Upload video response error:", response.status, errorText);
-      return { ok: false, error: `ভিডিও আপলোড ব্যর্থ: ${response.status}` };
+    const contentType = response.headers.get("content-type");
+    let data;
+
+    if (contentType && contentType.includes("application/json")) {
+      data = await response.json();
+    } else {
+      const text = await response.text();
+      console.error(
+        "Non-JSON response from upload:",
+        response.status,
+        text.substring(0, 200),
+      );
+      return {
+        ok: false,
+        error: `সার্ভার ত্রুটি (${response.status})`,
+      };
     }
 
-    const data = await response.json();
+    if (!response.ok) {
+      console.error("Upload video response error:", response.status, data);
+      return { ok: false, error: data.error || `ভিডিও আপলোড ব্যর্থ: ${response.status}` };
+    }
+
     return data;
   } catch (error) {
     console.error("Upload video error:", error);
