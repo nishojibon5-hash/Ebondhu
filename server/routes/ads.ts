@@ -30,13 +30,66 @@ export const handleCreateAd: RequestHandler = async (req, res) => {
       });
     }
 
-    // Check advertiser's balance
-    const user = await findRow(SHEET_NAMES.USERS, "phone", advertiserPhone);
-    if (!user) {
+    // Check advertiser's existing ads
+    const existingAds = await findRows(
+      SHEET_NAMES.ADVERTISEMENTS,
+      "advertiserPhone",
+      advertiserPhone,
+    );
+
+    // Get user for balance check
+    const users = await getRows(SHEET_NAMES.USERS);
+    const userIndex = users.findIndex((u) => u.phone === advertiserPhone);
+    if (userIndex === -1) {
       return res.status(404).json({
         ok: false,
         error: "ব্যবহারকারী পাওয়া যায়নি",
       });
+    }
+
+    const user = users[userIndex];
+    const currentBalance = parseFloat(user.balance || "0");
+    const dailyBudgetAmount = parseFloat(dailyBudget || "0");
+    const pricePerMilleAmount = parseFloat(pricePerMille || "10");
+
+    // Free tier: first 2 ads are free
+    const FREE_AD_LIMIT = 2;
+    const isFreeTier = existingAds.length < FREE_AD_LIMIT;
+
+    if (!isFreeTier) {
+      // Paid tier: charge based on daily budget
+      if (dailyBudgetAmount <= 0) {
+        return res.status(400).json({
+          ok: false,
+          error: "বাজেট ০ এর চেয়ে বেশি হতে হবে",
+        });
+      }
+
+      // Deduct first day's budget from balance
+      if (currentBalance < dailyBudgetAmount) {
+        return res.status(400).json({
+          ok: false,
+          error: `অপর্যাপ্ত ব্যালেন্স। আপনার ব্যালেন্স ৳${currentBalance.toFixed(2)} কিন্তু আপনার দৈনিক বাজেট ৳${dailyBudgetAmount}`,
+          requiredBalance: dailyBudgetAmount,
+          currentBalance,
+        });
+      }
+
+      // Deduct from balance
+      const newBalance = currentBalance - dailyBudgetAmount;
+      const updatedUser = [
+        user.phone,
+        user.name,
+        user.email || "",
+        user.photo || "",
+        newBalance.toString(),
+        user.nid || "",
+        user.bankAccount || "",
+        user.createdAt,
+        new Date().toISOString(),
+      ];
+
+      await updateRow(SHEET_NAMES.USERS, userIndex, updatedUser);
     }
 
     const adId = crypto.randomUUID();
@@ -77,6 +130,11 @@ export const handleCreateAd: RequestHandler = async (req, res) => {
         clicks: 0,
         createdAt: now,
       },
+      isFreeTier,
+      remainingFreeAds: Math.max(0, FREE_AD_LIMIT - existingAds.length - 1),
+      message: isFreeTier
+        ? `বিজ্ঞাপন তৈরি হয়েছে! আপনার কাছে ${Math.max(0, FREE_AD_LIMIT - existingAds.length - 1)} টি বিনামূল্যে বিজ্ঞাপন বাকি আছে`
+        : `বিজ্ঞাপন তৈরি হয়েছে! ৳${dailyBudgetAmount} আপনার ব্যালেন্স থেকে কেটে নেওয়া হয়েছে`,
     });
   } catch (error) {
     console.error("Create ad error:", error);

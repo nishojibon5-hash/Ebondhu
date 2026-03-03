@@ -25,11 +25,14 @@ import { EnhancedPostCard, Post } from "../components/social/EnhancedPostCard";
 import { StorySection } from "../components/social/StorySection";
 import { Sidebar } from "../components/social/Sidebar";
 import { SearchUsers } from "../components/social/SearchUsers";
+import { FeedAd } from "../components/social/FeedAd";
 import { getFeed, getConversations } from "../lib/api/social";
+import { getFeedAds } from "../lib/api/ads";
 
 export default function FacebookHome() {
   const navigate = useNavigate();
   const [posts, setPosts] = useState<Post[]>([]);
+  const [ads, setAds] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showMenu, setShowMenu] = useState(false);
   const [showCreateStory, setShowCreateStory] = useState(false);
@@ -61,6 +64,13 @@ export default function FacebookHome() {
         })),
       );
     }
+
+    // Load ads for the feed
+    const adsResponse = await getFeedAds(userPhone);
+    if (adsResponse.ok && adsResponse.ads) {
+      setAds(adsResponse.ads);
+    }
+
     setIsLoading(false);
   };
 
@@ -274,15 +284,33 @@ export default function FacebookHome() {
               </div>
             ) : (
               <div>
-                {posts.map((post) => (
-                  <EnhancedPostCard
-                    key={post.id}
-                    post={post}
-                    currentUserName={userName}
-                    currentUserPhone={userPhone}
-                    currentUserPhoto={userPhoto}
-                  />
-                ))}
+                {posts.length > 0 && ads.length > 0
+                  ? posts.map((post, index) => (
+                      <div key={post.id}>
+                        <EnhancedPostCard
+                          post={post}
+                          currentUserName={userName}
+                          currentUserPhone={userPhone}
+                          currentUserPhoto={userPhoto}
+                        />
+                        {/* Display ad every 2 posts */}
+                        {index % 2 === 1 && ads[Math.floor(index / 2)] && (
+                          <FeedAd
+                            ad={ads[Math.floor(index / 2)]}
+                            userPhone={userPhone}
+                          />
+                        )}
+                      </div>
+                    ))
+                  : posts.map((post) => (
+                      <EnhancedPostCard
+                        key={post.id}
+                        post={post}
+                        currentUserName={userName}
+                        currentUserPhone={userPhone}
+                        currentUserPhoto={userPhoto}
+                      />
+                    ))}
               </div>
             )}
           </div>

@@ -159,7 +159,10 @@ export function AdsCreator({
         throw new Error(adResponse.error || "বিজ্ঞাপন তৈরি ব্যর্থ");
       }
 
-      setSuccessMessage("বিজ্ঞাপন সফলভাবে তৈরি হয়েছে! ✓");
+      setSuccessMessage(
+        (adResponse as any).message ||
+          "বিজ্ঞাপন সফলভাবে তৈরি হয়েছে! ✓",
+      );
       setTitle("");
       setDescription("");
       setCategory("সাধারণ");
@@ -188,6 +191,9 @@ export function AdsCreator({
       setAdsLoaded(true);
     }
   };
+
+  const freeAdCount = Math.max(0, 2 - ads.length);
+  const isPaidAd = ads.length >= 2;
 
   const toggleAd = async (adId: string, currentStatus: string) => {
     const newStatus = currentStatus === "সক্রিয়" ? "নিষ্ক্রিয়" : "সক্রিয়";
