@@ -24,21 +24,19 @@ export async function uploadImage(file: File): Promise<UploadResponse> {
       body: formData,
     });
 
-    const contentType = response.headers.get("content-type");
     let data;
-
-    if (contentType && contentType.includes("application/json")) {
+    try {
       data = await response.json();
-    } else {
+    } catch (parseError) {
       const text = await response.text();
       console.error(
-        "Non-JSON response from upload:",
+        "Failed to parse image upload response:",
         response.status,
-        text.substring(0, 200),
+        text.substring(0, 500),
       );
       return {
         ok: false,
-        error: `সার্ভার ত্রুটি (${response.status})`,
+        error: `সার্ভার ত্রুটি: অবৈধ প্রতিক্রিয়া`,
       };
     }
 
@@ -81,21 +79,19 @@ export async function uploadVideo(file: File): Promise<UploadResponse> {
       body: formData,
     });
 
-    const contentType = response.headers.get("content-type");
     let data;
-
-    if (contentType && contentType.includes("application/json")) {
+    try {
       data = await response.json();
-    } else {
+    } catch (parseError) {
       const text = await response.text();
       console.error(
-        "Non-JSON response from upload:",
+        "Failed to parse video upload response:",
         response.status,
-        text.substring(0, 200),
+        text.substring(0, 500),
       );
       return {
         ok: false,
-        error: `সার্ভার ত্রুটি (${response.status})`,
+        error: `সার্ভার ত্রুটি: অবৈধ প্রতিক্রিয়া`,
       };
     }
 

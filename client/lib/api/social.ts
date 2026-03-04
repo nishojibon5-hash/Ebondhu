@@ -78,21 +78,19 @@ export async function createPost(
       }),
     });
 
-    const contentType = response.headers.get("content-type");
     let data;
-
-    if (contentType && contentType.includes("application/json")) {
+    try {
       data = await response.json();
-    } else {
+    } catch (parseError) {
       const text = await response.text();
       console.error(
-        "Non-JSON response from server:",
+        "Failed to parse JSON response:",
         response.status,
-        text.substring(0, 200),
+        text.substring(0, 500),
       );
       return {
         ok: false,
-        error: `সার্ভার ত্রুটি (${response.status}): অবৈধ প্রতিক্রিয়া`,
+        error: `সার্ভার ত্রুটি: অবৈধ প্রতিক্রিয়া ফরম্যাট`,
       };
     }
 
@@ -513,21 +511,19 @@ export async function createStory(
       }),
     });
 
-    const contentType = response.headers.get("content-type");
     let data;
-
-    if (contentType && contentType.includes("application/json")) {
+    try {
       data = await response.json();
-    } else {
+    } catch (parseError) {
       const text = await response.text();
       console.error(
-        "Non-JSON response from server:",
+        "Failed to parse JSON response:",
         response.status,
-        text.substring(0, 200),
+        text.substring(0, 500),
       );
       return {
         ok: false,
-        error: `সার্ভার ত্রুটি (${response.status}): অবৈধ প্রতিক্রিয়া`,
+        error: `সার্ভার ত্রুটি: অবৈধ প্রতিক্রিয়া ফরম্যাট`,
       };
     }
 
