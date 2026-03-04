@@ -78,10 +78,10 @@ export const handleCreateAd: RequestHandler = async (req, res) => {
       // Deduct from balance
       const newBalance = currentBalance - dailyBudgetAmount;
       const updatedUser = [
+        user.id,
         user.phone,
         user.name,
-        user.email || "",
-        user.photo || "",
+        user.pin || "",
         newBalance.toString(),
         user.nid || "",
         user.bankAccount || "",
@@ -264,39 +264,31 @@ export const handleLogAdImpression: RequestHandler = async (req, res) => {
       // Calculate cost (price per 1000 impressions)
       const costInPaisa = (pricePerMille * 100) / 1000; // Convert to paisa
 
-      // Deduct from advertiser's balance
-      const advertiser = await findRow(
-        SHEET_NAMES.USERS,
-        "phone",
-        ad.advertiserPhone,
+      // Deduct from advertiser's balance for impressions
+      const allUsers = await getRows(SHEET_NAMES.USERS);
+      const advertiserIndex = allUsers.findIndex(
+        (u) => u.phone === ad.advertiserPhone,
       );
-      if (advertiser) {
+      if (advertiserIndex !== -1) {
+        const advertiser = allUsers[advertiserIndex];
         const currentBalance = parseFloat(advertiser.balance || "0");
-        const newBalance = Math.max(0, currentBalance - costInPaisa / 100); // Convert back to taka
+        const costInPaisa = (pricePerMille * 100) / 1000; // Cost in paisa
+        const costInTaka = costInPaisa / 100; // Convert to taka
+        const newBalance = Math.max(0, currentBalance - costInTaka);
 
         const updatedAdvertiser = [
+          advertiser.id,
           advertiser.phone,
           advertiser.name,
-          advertiser.email,
-          advertiser.photo,
+          advertiser.pin || "",
           newBalance.toString(),
-          advertiser.nid,
-          advertiser.bankAccount,
+          advertiser.nid || "",
+          advertiser.bankAccount || "",
           advertiser.createdAt,
           new Date().toISOString(),
         ];
 
-        const advertiserIndex = ads.findIndex(
-          (a) => a.id === adId,
-        );
-        // Actually we need to find in USERS table, not ADVERTISEMENTS
-        const allUsers = await getRows(SHEET_NAMES.USERS);
-        const userIndex = allUsers.findIndex(
-          (u) => u.phone === ad.advertiserPhone,
-        );
-        if (userIndex !== -1) {
-          await updateRow(SHEET_NAMES.USERS, userIndex, updatedAdvertiser);
-        }
+        await updateRow(SHEET_NAMES.USERS, advertiserIndex, updatedAdvertiser);
       }
 
       // Update ad

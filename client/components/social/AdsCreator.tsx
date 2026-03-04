@@ -224,6 +224,27 @@ export function AdsCreator({
 
   return (
     <div className="space-y-4">
+      {/* Balance Info Header */}
+      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-4">
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="text-sm text-gray-600">আপনার বর্তমান ব্যালেন্স</p>
+            <p className="text-2xl font-bold text-blue-600">
+              ৳{userBalance.toFixed(2)}
+            </p>
+          </div>
+          <div className="text-right">
+            <p className="text-sm text-gray-600">তৈরি করা বিজ্ঞাপন</p>
+            <p className="text-2xl font-bold text-gray-900">{ads.length}</p>
+            <p className="text-xs text-gray-500">
+              {freeAdCount > 0
+                ? `${freeAdCount} টি বিনামূল্যে বাকি`
+                : "পেইড সদস্য"}
+            </p>
+          </div>
+        </div>
+      </div>
+
       {/* Create Ad Form Modal */}
       {showCreateForm && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -360,6 +381,44 @@ export function AdsCreator({
                 />
               </div>
 
+              {/* Free Ad Info */}
+              {freeAdCount > 0 && (
+                <div className="bg-green-50 border border-green-200 rounded-lg p-3">
+                  <p className="text-green-700 text-sm font-semibold">
+                    ✓ এই বিজ্ঞাপন বিনামূল্যে হবে
+                  </p>
+                  <p className="text-green-600 text-xs mt-1">
+                    আপনার কাছে {freeAdCount} টি বিনামূল্যে বিজ্ঞাপন বাকি আছে
+                  </p>
+                </div>
+              )}
+
+              {/* Paid Ad Info */}
+              {isPaidAd && (
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+                  <p className="text-blue-700 text-sm font-semibold">
+                    এই বিজ্ঞাপনের জন্য পেমেন্ট প্রয়োজন
+                  </p>
+                  <div className="text-blue-600 text-xs mt-2 space-y-1">
+                    <p>
+                      দৈনিক খরচ: <span className="font-bold">৳{dailyBudget}</span>
+                    </p>
+                    <p>
+                      আপনার বর্তমান ব্যালেন্স:
+                      <span className="font-bold">
+                        {" "}
+                        ৳{userBalance.toFixed(2)}
+                      </span>
+                    </p>
+                    {userBalance < parseFloat(dailyBudget) && (
+                      <p className="text-red-600 font-semibold">
+                        ⚠️ অপর্যাপ্ত ব্যালেন্স! টাকা যোগ করতে হবে
+                      </p>
+                    )}
+                  </div>
+                </div>
+              )}
+
               {/* Error Message */}
               {error && (
                 <div className="flex items-start gap-2 p-3 bg-red-50 border border-red-200 rounded-lg">
@@ -395,7 +454,13 @@ export function AdsCreator({
               </button>
               <button
                 onClick={handleCreateAd}
-                disabled={!title || !description || !image || isLoading}
+                disabled={
+                  !title ||
+                  !description ||
+                  !image ||
+                  isLoading ||
+                  (isPaidAd && userBalance < parseFloat(dailyBudget))
+                }
                 className="flex-1 py-2 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed font-medium flex items-center justify-center gap-2"
               >
                 {isLoading ? (
@@ -403,6 +468,8 @@ export function AdsCreator({
                     <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                     তৈরি করছি...
                   </>
+                ) : isPaidAd && userBalance < parseFloat(dailyBudget) ? (
+                  "টাকা যোগ করুন"
                 ) : (
                   "বিজ্ঞাপন তৈরি করুন"
                 )}
