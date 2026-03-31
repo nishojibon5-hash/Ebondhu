@@ -25,6 +25,7 @@ import { Link } from "react-router-dom";
 import { Language } from "../App";
 import { DrawerMenu, DrawerMenuButton } from "../components/DrawerMenu";
 import { BannerCarousel } from "../components/BannerCarousel";
+import { AdsCreator } from "../components/social/AdsCreator";
 import { getUserSession, getFeatureFlags, getBanners } from "../lib/storage";
 
 interface DashboardProps {
@@ -590,6 +591,16 @@ export default function Dashboard({ language, setLanguage }: DashboardProps) {
               <span className="text-xs font-medium text-gray-700 text-center">পুরস্কার</span>
             </div>
           </div>
+        </div>
+
+        {/* Ads Creator Section */}
+        <div className="mb-6">
+          <AdsCreator
+            userPhone={localStorage.getItem("userPhone") || ""}
+            userName={userName}
+            userPhoto={localStorage.getItem("userPhoto") || undefined}
+            userBalance={userBalance}
+          />
         </div>
 
         {/* Recent Transactions */}

@@ -78,15 +78,13 @@ export const handleGetFeed: RequestHandler = async (req, res) => {
 
     const friendPhones = friendsData.map((f) => f.friendPhone);
 
+    // Show posts from user, friends, and all recent posts (discover feed)
     const feedPosts = posts
-      .filter(
-        (post) =>
-          post.userPhone === userPhone || friendPhones.includes(post.userPhone),
-      )
       .sort(
         (a, b) =>
           new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
       )
+      .slice(0, 100) // Limit to 100 most recent posts
       .map((post) => ({
         id: post.id,
         userPhone: post.userPhone,

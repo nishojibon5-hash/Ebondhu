@@ -22,6 +22,7 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import { Language } from "../App";
 import { uploadUserPhoto } from "../lib/api/media";
+import { ContentMonetizeSettings } from "../components/social/ContentMonetizeSettings";
 
 interface ProfileProps {
   language: Language;
@@ -473,6 +474,12 @@ export default function Profile({ language }: ProfileProps) {
             </div>
           </div>
         ))}
+
+        {/* Content Monetization Settings */}
+        <ContentMonetizeSettings
+          userPhone={localStorage.getItem("userPhone") || ""}
+          userName={userInfo.name || localStorage.getItem("userName") || ""}
+        />
 
         {/* Delete Account Button */}
         <button
