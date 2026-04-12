@@ -18,9 +18,10 @@ export const handleCreatePost: RequestHandler = async (req, res) => {
       req.body;
 
     if (!userPhone || !content) {
+      console.log("Invalid post request:", { userPhone, content });
       return res.status(400).json({
         ok: false,
-        error: "User phone and content are required",
+        error: "ব্যবহারকারী ফোন এবং বিষয়বস্তু প্রয়োজন",
       });
     }
 
@@ -41,9 +42,11 @@ export const handleCreatePost: RequestHandler = async (req, res) => {
       now,
     ];
 
+    console.log("Creating post with data:", postData);
     await appendRow(SHEET_NAMES.POSTS, postData);
+    console.log("Post created successfully:", postId);
 
-    res.status(201).json({
+    const response = {
       ok: true,
       post: {
         id: postId,
@@ -57,12 +60,15 @@ export const handleCreatePost: RequestHandler = async (req, res) => {
         commentsCount: 0,
         createdAt: now,
       },
-    });
+    };
+
+    res.status(201).json(response);
   } catch (error) {
     console.error("Create post error:", error);
+    const errorMessage = error instanceof Error ? error.message : "পোস্ট তৈরিতে ত্রুটি";
     res.status(500).json({
       ok: false,
-      error: "Internal server error",
+      error: `পোস্ট তৈরি ব্যর্থ: ${errorMessage}`,
     });
   }
 };
@@ -772,9 +778,10 @@ export const handleCreateStory: RequestHandler = async (req, res) => {
     const { userPhone, userName, userPhoto, image } = req.body;
 
     if (!userPhone || !image) {
+      console.log("Invalid story request:", { userPhone, image });
       return res.status(400).json({
         ok: false,
-        error: "User phone and image are required",
+        error: "ব্যবহারকারী ফোন এবং ছবি প্রয়োজন",
       });
     }
 
@@ -792,9 +799,11 @@ export const handleCreateStory: RequestHandler = async (req, res) => {
       now,
     ];
 
+    console.log("Creating story with data:", storyData);
     await appendRow(SHEET_NAMES.STORIES, storyData);
+    console.log("Story created successfully:", storyId);
 
-    res.status(201).json({
+    const response = {
       ok: true,
       story: {
         id: storyId,
@@ -805,12 +814,15 @@ export const handleCreateStory: RequestHandler = async (req, res) => {
         expiresAt,
         createdAt: now,
       },
-    });
+    };
+
+    res.status(201).json(response);
   } catch (error) {
     console.error("Create story error:", error);
+    const errorMessage = error instanceof Error ? error.message : "স্টোরি তৈরিতে ত্রুটি";
     res.status(500).json({
       ok: false,
-      error: "Internal server error",
+      error: `স্টোরি তৈরি ব্যর্থ: ${errorMessage}`,
     });
   }
 };

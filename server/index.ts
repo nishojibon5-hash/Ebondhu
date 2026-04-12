@@ -117,6 +117,15 @@ export function createServer() {
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
 
+  // Ensure Content-Type is set to JSON for all responses
+  app.use((_req, res, next) => {
+    // Only set if not already set by a specific handler
+    if (!res.getHeader("Content-Type")) {
+      res.setHeader("Content-Type", "application/json");
+    }
+    next();
+  });
+
   // Initialize Google Sheets on startup (non-blocking)
   initializeSheets().catch((error) => {
     console.warn(
@@ -352,6 +361,23 @@ export function createServer() {
   // User Ad Settings Routes
   app.post("/api/ads/settings", handleUpdateMonetizeSettings);
   app.get("/api/ads/settings/:userPhone", handleGetMonetizeSettings);
+
+  // 404 handler
+  app.use((_req, res) => {
+    res.status(404).json({
+      ok: false,
+      error: "এন্ডপয়েন্ট পাওয়া যায়নি",
+    });
+  });
+
+  // Global error handler
+  app.use((err: any, _req: Request, res: any, _next: any) => {
+    console.error("Global error handler:", err);
+    res.status(err.status || 500).json({
+      ok: false,
+      error: err.message || "অভ্যন্তরীণ সার্ভার ত্রুটি",
+    });
+  });
 
   return app;
 }

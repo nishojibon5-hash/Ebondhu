@@ -65,6 +65,13 @@ export async function createPost(
   mediaType?: "image" | "video",
 ): Promise<{ ok: boolean; post?: Post; error?: string }> {
   try {
+    console.log("Creating post with data:", {
+      userPhone,
+      userName,
+      content,
+      image: image ? "present" : "none",
+    });
+
     const response = await fetch("/api/social/posts", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -78,19 +85,26 @@ export async function createPost(
       }),
     });
 
+    console.log("Post response status:", response.status);
+    console.log("Post response headers:", {
+      contentType: response.headers.get("content-type"),
+    });
+
     let data;
+    const responseText = await response.text();
+    console.log("Post response text:", responseText.substring(0, 500));
+
     try {
-      data = await response.json();
+      data = responseText ? JSON.parse(responseText) : {};
     } catch (parseError) {
-      const text = await response.text();
       console.error(
         "Failed to parse JSON response:",
         response.status,
-        text.substring(0, 500),
+        responseText.substring(0, 500),
       );
       return {
         ok: false,
-        error: `সার্ভার ত্রুটি: অবৈধ প্রতিক্রিয়া ফরম্যাট`,
+        error: `সার্ভার ত্রুটি: বৈধ প্রতিক্রিয়া পাওয়া যায়নি`,
       };
     }
 
@@ -500,6 +514,12 @@ export async function createStory(
   image: string,
 ): Promise<{ ok: boolean; story?: Story; error?: string }> {
   try {
+    console.log("Creating story with data:", {
+      userPhone,
+      userName,
+      image: image ? "present" : "none",
+    });
+
     const response = await fetch("/api/social/stories", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -511,19 +531,26 @@ export async function createStory(
       }),
     });
 
+    console.log("Story response status:", response.status);
+    console.log("Story response headers:", {
+      contentType: response.headers.get("content-type"),
+    });
+
     let data;
+    const responseText = await response.text();
+    console.log("Story response text:", responseText.substring(0, 500));
+
     try {
-      data = await response.json();
+      data = responseText ? JSON.parse(responseText) : {};
     } catch (parseError) {
-      const text = await response.text();
       console.error(
-        "Failed to parse JSON response:",
+        "Failed to parse story response:",
         response.status,
-        text.substring(0, 500),
+        responseText.substring(0, 500),
       );
       return {
         ok: false,
-        error: `সার্ভার ত্রুটি: অবৈধ প্রতিক্রিয়া ফরম্যাট`,
+        error: `সার্ভার ত্রুটি: বৈধ প্রতিক্রিয়া পাওয়া যায়নি`,
       };
     }
 
