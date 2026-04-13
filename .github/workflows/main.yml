@@ -2,10 +2,13 @@ name: Build Android APK
 on:
   push:
     branches: [ main ]
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 60
+
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -15,41 +18,113 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
+          cache: gradle
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+        with:
+          api-level: 34
+          build-tools-version: 34.0.0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: 'npm'
 
       - name: Install pnpm
         run: npm install -g pnpm
 
       - name: Install dependencies
-        run: pnpm install
-
-      - name: Web Build
-        # এখানে আমরা সিক্রেটগুলো যোগ করছি যাতে বিল্ডের সময় এগুলো অ্যাপে চলে যায়
-        run: pnpm run build:client
-        env:
-          VITE_SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          VITE_SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
-          # যদি আপনার কোডে VITE_ ছাড়া নাম থাকে তবে নিচের দুটিও রাখতে পারেন
-          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
-
-      - name: Add and Sync Android
         run: |
-          npx cap add android || echo "Android already added"
-          npx cap sync android
+          echo "Installing project dependencies..."
+          pnpm install --no-frozen-lockfile
 
-      - name: Build APK
+      - name: Build Web Application
+        run: |
+          echo "Building web application..."
+          npm run build:client
+        env:
+          VITE_GOOGLE_SHEETS_ID: ${{ secrets.VITE_GOOGLE_SHEETS_ID }}
+          VITE_GOOGLE_DRIVE_FOLDER_ID: ${{ secrets.VITE_GOOGLE_DRIVE_FOLDER_ID }}
+          VITE_GOOGLE_CLIENT_ID: ${{ secrets.VITE_GOOGLE_CLIENT_ID }}
+
+      - name: Verify Web Build Output
+        run: |
+          echo "Verifying web build output..."
+          if [ -d "dist/spa" ]; then
+            echo "✓ dist/spa directory exists"
+            ls -la dist/spa/
+          else
+            echo "✗ dist/spa directory not found!"
+            exit 1
+          fi
+
+      - name: Initialize Android Platform
+        run: |
+          echo "Setting up Capacitor Android..."
+          if [ ! -d "android" ]; then
+            echo "Adding Android platform..."
+            npx @capacitor/cli@latest add android
+          else
+            echo "Android platform already exists"
+          fi
+
+      - name: Sync Android Project
+        run: |
+          echo "Syncing Android files..."
+          npx @capacitor/cli@latest sync android
+
+      - name: Verify Android Directory
+        run: |
+          echo "Android directory structure:"
+          ls -la android/ || echo "Android directory not found"
+          if [ -f "android/gradlew" ]; then
+            echo "✓ gradlew found"
+            chmod +x android/gradlew
+          else
+            echo "✗ gradlew not found"
+            exit 1
+          fi
+
+      - name: Setup Gradle Wrapper Permissions
         run: |
           cd android
           chmod +x gradlew
-          ./gradlew assembleDebug
+          ./gradlew --version
 
-      - name: Upload APK
+      - name: Build Debug APK
+        run: |
+          cd android
+          echo "Building APK..."
+          ./gradlew assembleDebug --no-daemon --stacktrace
+        timeout-minutes: 30
+
+      - name: Verify APK Output
+        run: |
+          echo "Checking APK output..."
+          if [ -f "android/app/build/outputs/apk/debug/app-debug.apk" ]; then
+            echo "✓ APK built successfully"
+            ls -lh android/app/build/outputs/apk/debug/app-debug.apk
+          else
+            echo "✗ APK not found, listing available files:"
+            find android -name "*.apk" 2>/dev/null || echo "No APK files found"
+            exit 1
+          fi
+
+      - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
+        if: success()
         with:
           name: debug-apk
           path: android/app/build/outputs/apk/debug/app-debug.apk
+          retention-days: 30
+
+      - name: Print Build Summary
+        if: always()
+        run: |
+          echo "========== BUILD SUMMARY =========="
+          echo "Workflow Status: ${{ job.status }}"
+          echo "Build Time: $(date)"
+          echo "APK Location: android/app/build/outputs/apk/debug/app-debug.apk"
+          echo "===================================="

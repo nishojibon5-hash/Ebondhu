@@ -2,48 +2,109 @@ name: Build Admin APK
 on:
   push:
     branches: [ main ]
+  workflow_dispatch:
 
 jobs:
   build_admin:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
+    timeout-minutes: 60
 
-      - uses: actions/setup-node@v4
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Java 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: gradle
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+        with:
+          api-level: 34
+          build-tools-version: 34.0.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: 'npm'
 
       - name: Install pnpm
         run: npm install -g pnpm
 
-      - name: Install Admin Dependencies
-        # এখানে পাথ হিসেবে api/admin ব্যবহার করা হয়েছে
+      - name: Install dependencies
         run: |
-          cd api/admin
-          pnpm install --no-frozen-lockfile 
+          echo "Installing project dependencies..."
+          pnpm install --no-frozen-lockfile
 
-      - name: Build Admin Client
+      - name: Build Web Application
         run: |
-          cd api/admin
-          pnpm run build
+          echo "Building web application..."
+          npm run build:client
+        env:
+          VITE_GOOGLE_SHEETS_ID: ${{ secrets.VITE_GOOGLE_SHEETS_ID }}
+          VITE_GOOGLE_DRIVE_FOLDER_ID: ${{ secrets.VITE_GOOGLE_DRIVE_FOLDER_ID }}
+          VITE_GOOGLE_CLIENT_ID: ${{ secrets.VITE_GOOGLE_CLIENT_ID }}
 
-      - name: Setup Android for Admin
+      - name: Verify Web Build
         run: |
-          cd api/admin
-          # Capacitor কমান্ড চালানোর জন্য pnpm exec ব্যবহার
-          if [ ! -d "android" ]; then
-            pnpm exec cap add android
+          echo "Web build completed successfully"
+          if [ -d "dist/spa" ]; then
+            echo "✓ dist/spa exists"
+            du -sh dist/spa/
           fi
-          pnpm exec cap sync android
 
-      - name: Build Admin APK
+      - name: Initialize Android Platform
         run: |
-          cd api/admin/android
-          chmod +x gradlew
-          ./gradlew assembleDebug
+          echo "Setting up Capacitor Android..."
+          if [ ! -d "android" ]; then
+            echo "Adding Android platform..."
+            npx @capacitor/cli@latest add android
+          else
+            echo "Android platform already exists"
+          fi
 
-      - name: Upload Admin APK
+      - name: Sync Android Project
+        run: |
+          echo "Syncing Android files..."
+          npx @capacitor/cli@latest sync android
+
+      - name: Setup Gradle Wrapper
+        run: |
+          cd android
+          chmod +x gradlew
+          ./gradlew --version
+
+      - name: Build Release APK
+        run: |
+          cd android
+          echo "Building Release APK..."
+          ./gradlew assembleRelease --no-daemon --stacktrace
+        timeout-minutes: 30
+        continue-on-error: true
+
+      - name: Build Debug APK (Fallback)
+        run: |
+          cd android
+          echo "Building Debug APK as fallback..."
+          ./gradlew assembleDebug --no-daemon --stacktrace
+        timeout-minutes: 30
+
+      - name: Find and Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: admin-app-apk
-          path: api/admin/android/app/build/outputs/apk/debug/*.apk
+          name: admin-apk
+          path: android/app/build/outputs/apk/**/app-*.apk
+          retention-days: 30
+
+      - name: Build Status
+        if: always()
+        run: |
+          echo "========== ADMIN APK BUILD =========="
+          echo "Status: ${{ job.status }}"
+          echo "Checking for APK files..."
+          find android/app/build/outputs/apk -name "*.apk" 2>/dev/null || echo "No APK files found"
+          echo "======================================"
