@@ -24,16 +24,14 @@ export async function uploadImage(file: File): Promise<UploadResponse> {
       body: formData,
     });
 
+    // Read response as text ONCE - don't read body stream twice
+    const responseText = await response.text();
+
     let data;
     try {
-      data = await response.json();
+      data = responseText ? JSON.parse(responseText) : { ok: false };
     } catch (parseError) {
-      const text = await response.text();
-      console.error(
-        "Failed to parse image upload response:",
-        response.status,
-        text.substring(0, 500),
-      );
+      console.error("JSON parse error:", parseError, "Response:", responseText?.substring(0, 200));
       return {
         ok: false,
         error: `সার্ভার ত্রুটি: অবৈধ প্রতিক্রিয়া`,
@@ -41,7 +39,6 @@ export async function uploadImage(file: File): Promise<UploadResponse> {
     }
 
     if (!response.ok) {
-      console.error("Upload image response error:", response.status, data);
       return { ok: false, error: data.error || `আপলোড ব্যর্থ: ${response.status}` };
     }
 
@@ -79,16 +76,14 @@ export async function uploadVideo(file: File): Promise<UploadResponse> {
       body: formData,
     });
 
+    // Read response as text ONCE - don't read body stream twice
+    const responseText = await response.text();
+
     let data;
     try {
-      data = await response.json();
+      data = responseText ? JSON.parse(responseText) : { ok: false };
     } catch (parseError) {
-      const text = await response.text();
-      console.error(
-        "Failed to parse video upload response:",
-        response.status,
-        text.substring(0, 500),
-      );
+      console.error("JSON parse error:", parseError, "Response:", responseText?.substring(0, 200));
       return {
         ok: false,
         error: `সার্ভার ত্রুটি: অবৈধ প্রতিক্রিয়া`,
@@ -96,7 +91,6 @@ export async function uploadVideo(file: File): Promise<UploadResponse> {
     }
 
     if (!response.ok) {
-      console.error("Upload video response error:", response.status, data);
       return { ok: false, error: data.error || `ভিডিও আপলোড ব্যর্থ: ${response.status}` };
     }
 

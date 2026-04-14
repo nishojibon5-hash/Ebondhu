@@ -65,13 +65,6 @@ export async function createPost(
   mediaType?: "image" | "video",
 ): Promise<{ ok: boolean; post?: Post; error?: string }> {
   try {
-    console.log("Creating post with data:", {
-      userPhone,
-      userName,
-      content,
-      image: image ? "present" : "none",
-    });
-
     const response = await fetch("/api/social/posts", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -85,31 +78,21 @@ export async function createPost(
       }),
     });
 
-    console.log("Post response status:", response.status);
-    console.log("Post response headers:", {
-      contentType: response.headers.get("content-type"),
-    });
+    // Read response as text ONCE - don't read body stream twice
+    const responseText = await response.text();
 
     let data;
-    const responseText = await response.text();
-    console.log("Post response text:", responseText.substring(0, 500));
-
     try {
-      data = responseText ? JSON.parse(responseText) : {};
+      data = responseText ? JSON.parse(responseText) : { ok: false };
     } catch (parseError) {
-      console.error(
-        "Failed to parse JSON response:",
-        response.status,
-        responseText.substring(0, 500),
-      );
+      console.error("JSON parse error:", parseError, "Response:", responseText?.substring(0, 200));
       return {
         ok: false,
-        error: `সার্ভার ত্রুটি: বৈধ প্রতিক্রিয়া পাওয়া যায়নি`,
+        error: `অবৈধ সার্ভার প্রতিক্রিয়া`,
       };
     }
 
     if (!response.ok) {
-      console.error("Create post response error:", response.status, data);
       return { ok: false, error: data.error || `পোস্ট তৈরি ব্যর্থ: ${response.status}` };
     }
 
@@ -514,12 +497,6 @@ export async function createStory(
   image: string,
 ): Promise<{ ok: boolean; story?: Story; error?: string }> {
   try {
-    console.log("Creating story with data:", {
-      userPhone,
-      userName,
-      image: image ? "present" : "none",
-    });
-
     const response = await fetch("/api/social/stories", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -531,31 +508,21 @@ export async function createStory(
       }),
     });
 
-    console.log("Story response status:", response.status);
-    console.log("Story response headers:", {
-      contentType: response.headers.get("content-type"),
-    });
+    // Read response as text ONCE - don't read body stream twice
+    const responseText = await response.text();
 
     let data;
-    const responseText = await response.text();
-    console.log("Story response text:", responseText.substring(0, 500));
-
     try {
-      data = responseText ? JSON.parse(responseText) : {};
+      data = responseText ? JSON.parse(responseText) : { ok: false };
     } catch (parseError) {
-      console.error(
-        "Failed to parse story response:",
-        response.status,
-        responseText.substring(0, 500),
-      );
+      console.error("JSON parse error:", parseError, "Response:", responseText?.substring(0, 200));
       return {
         ok: false,
-        error: `সার্ভার ত্রুটি: বৈধ প্রতিক্রিয়া পাওয়া যায়নি`,
+        error: `অবৈধ সার্ভার প্রতিক্রিয়া`,
       };
     }
 
     if (!response.ok) {
-      console.error("Create story response error:", response.status, data);
       return { ok: false, error: data.error || `স্টোরি তৈরি ব্যর্থ: ${response.status}` };
     }
 
